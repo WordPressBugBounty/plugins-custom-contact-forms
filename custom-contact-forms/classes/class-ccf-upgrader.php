@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CCF_Upgrader {
 
 	/**
@@ -76,7 +80,7 @@ class CCF_Upgrader {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( $_GET['nonce'], 'ccf_upgrade' ) ) {
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['nonce'] ) ), 'ccf_upgrade' ) ) {
 			return;
 		}
 
@@ -141,7 +145,7 @@ class CCF_Upgrader {
 				$form_fields = array();
 
 				foreach ( $fields as $field_id ) {
-					$field = $wpdb->get_row( sprintf( "SELECT * FROM {$wpdb->prefix}customcontactforms_fields WHERE ID='%d'", (int) $field_id ) );
+					$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}customcontactforms_fields WHERE ID=%d", (int) $field_id ) );
 
 					$type = $field->field_type;
 
@@ -180,7 +184,7 @@ class CCF_Upgrader {
 							$new_choices = array();
 
 							foreach ( $choices as $choice_id ) {
-								$choice = $wpdb->get_row( sprintf( "SELECT * FROM {$wpdb->prefix}customcontactforms_field_options WHERE ID='%d'", (int) $choice_id ) );
+								$choice = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}customcontactforms_field_options WHERE ID=%d", (int) $choice_id ) );
 
 								$label = $choice->option_label;
 								$value = $choice->option_value;
@@ -211,14 +215,14 @@ class CCF_Upgrader {
 			 * Move submissions over
 			 */
 
-			$submissions = $wpdb->get_results( sprintf( "SELECT * FROM {$wpdb->prefix}customcontactforms_user_data WHERE data_formid = '%d'" , (int) $form->id ) );
+			$submissions = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}customcontactforms_user_data WHERE data_formid = %d", (int) $form->id ) );
 
 			foreach ( $submissions as $submission ) {
 				$submission_id = wp_insert_post( array(
 					'post_type' => 'ccf_submission',
 					'post_parent' => $form_id,
 					'post_status' => 'publish',
-					'post_date' => date( 'Y-m-d H:m:s', $submission->data_time ),
+					'post_date' => gmdate( 'Y-m-d H:i:s', $submission->data_time ),
 				) );
 
 				$data = $submission->data_value;

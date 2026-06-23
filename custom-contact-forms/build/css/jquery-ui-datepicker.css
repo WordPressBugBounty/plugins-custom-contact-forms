@@ -1,0 +1,122 @@
+/**
+ * Minimal jQuery UI Datepicker styles for Custom Contact Forms.
+ * Replaces external Google CDN dependency.
+ * Only includes datepicker-specific layout — visual overrides in ccf-modern.css.
+ */
+.ui-datepicker {
+  width: 17em;
+  padding: .2em .2em 0;
+  display: none;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  z-index: 9999 !important;
+}
+.ui-datepicker .ui-datepicker-header {
+  position: relative;
+  padding: .4em 0;
+  background: #f6f7f7;
+  border-bottom: 1px solid #dcdcde;
+  border-radius: 4px 4px 0 0;
+}
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+  position: absolute;
+  top: .4em;
+  width: 1.8em;
+  height: 1.8em;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.8em;
+  border-radius: 3px;
+}
+.ui-datepicker .ui-datepicker-prev {
+  left: 2px;
+}
+.ui-datepicker .ui-datepicker-next {
+  right: 2px;
+}
+.ui-datepicker .ui-datepicker-prev:hover,
+.ui-datepicker .ui-datepicker-next:hover {
+  background: #dcdcde;
+}
+.ui-datepicker .ui-datepicker-prev span,
+.ui-datepicker .ui-datepicker-next span {
+  display: block;
+  position: absolute;
+  left: 50%;
+  margin-left: -8px;
+  top: 50%;
+  margin-top: -8px;
+}
+.ui-datepicker .ui-datepicker-title {
+  margin: 0 2.3em;
+  line-height: 1.8em;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+.ui-datepicker .ui-datepicker-title select {
+  font-size: 0.9em;
+  margin: 1px 0;
+}
+.ui-datepicker table {
+  width: 100%;
+  font-size: .9em;
+  border-collapse: collapse;
+  margin: 0 0 .4em;
+}
+.ui-datepicker th {
+  padding: .5em .3em;
+  text-align: center;
+  font-weight: 600;
+  border: 0;
+  font-size: 0.8em;
+  color: #50575e;
+}
+.ui-datepicker td {
+  border: 0;
+  padding: 1px;
+}
+.ui-datepicker td span,
+.ui-datepicker td a {
+  display: block;
+  padding: .3em;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 3px;
+  color: #1e1e1e;
+}
+.ui-datepicker td a:hover {
+  background: #f0f0f1;
+}
+.ui-datepicker .ui-datepicker-current-day a {
+  background: #2271b1;
+  color: #fff;
+}
+.ui-datepicker .ui-datepicker-today a {
+  font-weight: 700;
+}
+.ui-datepicker .ui-datepicker-unselectable span {
+  color: #a7aaad;
+}
+.ui-datepicker-prev .ui-icon,
+.ui-datepicker-next .ui-icon {
+  background-image: none;
+}
+.ui-datepicker-prev .ui-icon::before {
+  content: "\2039";
+  font-size: 1.4em;
+}
+.ui-datepicker-next .ui-icon::before {
+  content: "\203A";
+  font-size: 1.4em;
+}
+.ui-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  text-indent: 0;
+  overflow: visible;
+}

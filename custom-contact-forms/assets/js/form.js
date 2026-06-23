@@ -393,6 +393,22 @@
 				var fieldsBySlug = {};
 				var fieldSubscriptions = {};
 
+				// Load conditionals from data attribute (replaces inline script)
+				window.wp = window.wp || {};
+				wp.ccf = wp.ccf || {};
+				wp.ccf.conditionals = wp.ccf.conditionals || [];
+				var condData = formWrapper.getAttribute( 'data-conditionals' );
+				if ( condData ) {
+					try {
+						wp.ccf.conditionals[formId] = JSON.parse( condData );
+					} catch(e) {
+						wp.ccf.conditionals[formId] = {};
+					}
+				}
+				if ( ! wp.ccf.conditionals[formId] ) {
+					wp.ccf.conditionals[formId] = {};
+				}
+
 				$frame.on( 'load', function() {
 					var data,
 						content = $frame.contents().find( 'body' ).text();

@@ -1,0 +1,855 @@
+/**
+ * Custom Contact Forms — Modern Styles v7.9.0
+ * Complete override for all field types, themes, and states.
+ * Works in both frontend and Gutenberg editor preview.
+ */
+
+/* ========================================
+   Base Reset & Container
+   ======================================== */
+
+.ccf-form-wrapper {
+  margin: 1.5em 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1e1e1e;
+}
+
+.ccf-form-wrapper *,
+.ccf-form-wrapper *::before,
+.ccf-form-wrapper *::after {
+  box-sizing: border-box;
+}
+
+.ccf-form-wrapper .ccf-form {
+  max-width: 640px;
+}
+
+.ccf-form-wrapper .ccf-form-frame {
+  display: none !important;
+}
+
+.ccf-form-wrapper .ccf-clear {
+  clear: both;
+}
+
+.ccf-form-wrapper .ccf-clear::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ========================================
+   Title & Description
+   ======================================== */
+
+.ccf-form-wrapper .form-title {
+  font-size: 1.5em;
+  font-weight: 600;
+  padding: 0 0 0.3em 0;
+  margin: 0 0 0.5em 0;
+  color: #1e1e1e;
+  letter-spacing: -0.01em;
+}
+
+.ccf-form-wrapper .form-description {
+  padding: 0 0 1.25em 0;
+  color: #50575e;
+  font-size: 0.95em;
+  margin: 0;
+}
+
+/* ========================================
+   All Fields — Common Layout
+   ======================================== */
+
+.ccf-form-wrapper .field {
+  margin-bottom: 1.5em;
+  clear: both;
+}
+
+.ccf-form-wrapper .field::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ========================================
+   Labels — All Types
+   ======================================== */
+
+.ccf-form-wrapper .field label.main-label {
+  display: block;
+  clear: both;
+  margin-bottom: 0.4em;
+  font-weight: 600;
+  font-size: 0.925em;
+  color: #1e1e1e;
+  line-height: 1.4;
+}
+
+.ccf-form-wrapper .field label.main-label .required {
+  color: #d63638;
+  padding-right: 0.15em;
+  font-weight: 700;
+}
+
+.ccf-form-wrapper .field .sub-label,
+.ccf-form-wrapper .field label.sub-label {
+  display: block;
+  margin-top: 0.3em;
+  font-size: 0.8em;
+  color: #757575;
+  font-weight: 400;
+  clear: none;
+  line-height: 1.4;
+}
+
+.ccf-form-wrapper .field-description,
+.ccf-form-wrapper .field .field-description,
+.ccf-form-wrapper .field .help-block {
+  font-size: 0.825em;
+  color: #757575;
+  margin-top: 0.4em;
+  clear: left;
+  line-height: 1.5;
+}
+
+/* ========================================
+   Text Inputs — single-line, phone, website, email, date
+   ======================================== */
+
+.ccf-form-wrapper .field input[type="text"],
+.ccf-form-wrapper .field input[type="email"],
+.ccf-form-wrapper .field input[type="url"],
+.ccf-form-wrapper .field input[type="tel"],
+.ccf-form-wrapper .field input[type="number"],
+.ccf-form-wrapper .field input[type="password"],
+.ccf-form-wrapper .field input.field-input,
+.ccf-form-wrapper .field input.form-control {
+  width: 100%;
+  padding: 0.55em 0.75em;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+  color: #1e1e1e;
+  font-size: 0.95em;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.ccf-form-wrapper .field input[type="text"]:focus,
+.ccf-form-wrapper .field input[type="email"]:focus,
+.ccf-form-wrapper .field input[type="url"]:focus,
+.ccf-form-wrapper .field input[type="tel"]:focus,
+.ccf-form-wrapper .field input[type="number"]:focus,
+.ccf-form-wrapper .field input[type="password"]:focus,
+.ccf-form-wrapper .field input.field-input:focus,
+.ccf-form-wrapper .field input.form-control:focus {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+.ccf-form-wrapper .field input::placeholder,
+.ccf-form-wrapper .field textarea::placeholder {
+  color: #a7aaad;
+}
+
+/* ========================================
+   Textarea — paragraph-text
+   ======================================== */
+
+.ccf-form-wrapper .field textarea,
+.ccf-form-wrapper .field textarea.form-control,
+.ccf-form-wrapper .field textarea.field-input {
+  width: 100%;
+  min-height: 130px;
+  padding: 0.6em 0.75em;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background: #fff;
+  color: #1e1e1e;
+  font-size: 0.95em;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.ccf-form-wrapper .field textarea:focus,
+.ccf-form-wrapper .field textarea.form-control:focus {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+/* ========================================
+   Select / Dropdown
+   ======================================== */
+
+.ccf-form-wrapper .field select,
+.ccf-form-wrapper .field select.form-control,
+.ccf-form-wrapper .field select.field-input {
+  display: block;
+  width: 100%;
+  padding: 0.55em 2.25em 0.55em 0.75em;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23757575' d='M6 8.825L1.175 4 2.238 2.938 6 6.7 9.763 2.937 10.825 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75em center;
+  background-size: 12px;
+  color: #1e1e1e;
+  font-size: 0.95em;
+  font-family: inherit;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.ccf-form-wrapper .field select:focus {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+/* Multi-select (listbox) */
+.ccf-form-wrapper .field select[multiple] {
+  padding-right: 0.75em;
+  background-image: none;
+  height: auto;
+  min-height: 6em;
+}
+
+.ccf-form-wrapper .field select[multiple] option {
+  padding: 0.4em 0.6em;
+  border-radius: 2px;
+}
+
+.ccf-form-wrapper .field select[multiple] option:checked {
+  background: #2271b1;
+  color: #fff;
+}
+
+/* ========================================
+   Checkboxes
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-checkboxes .choice {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5em;
+}
+
+.ccf-form-wrapper .field.field-type-checkboxes .choice label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 0.925em;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.ccf-form-wrapper .field.field-type-checkboxes input[type="checkbox"] {
+  width: 1.15em;
+  height: 1.15em;
+  margin: 0.1em 0 0 0;
+  flex-shrink: 0;
+  accent-color: #2271b1;
+  cursor: pointer;
+  -webkit-appearance: checkbox !important;
+  appearance: auto !important;
+}
+
+/* ========================================
+   Radio Buttons
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-radio .choice {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5em;
+}
+
+.ccf-form-wrapper .field.field-type-radio .choice label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 0.925em;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.ccf-form-wrapper .field.field-type-radio input[type="radio"] {
+  width: 1.15em;
+  height: 1.15em;
+  margin: 0.1em 0 0 0;
+  flex-shrink: 0;
+  accent-color: #2271b1;
+  cursor: pointer;
+  -webkit-appearance: radio !important;
+  appearance: auto !important;
+}
+
+/* ========================================
+   File Upload
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-file input[type="file"],
+.ccf-form-wrapper .field input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 0.75em 1em;
+  border: 2px dashed #c3c4c7;
+  border-radius: 6px;
+  background: #f9f9f9;
+  color: #50575e;
+  font-size: 0.9em;
+  font-family: inherit;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.ccf-form-wrapper .field.field-type-file input[type="file"]:hover,
+.ccf-form-wrapper .field input[type="file"]:hover {
+  border-color: #2271b1;
+  background: #f0f6fc;
+}
+
+.ccf-form-wrapper .field.field-type-file input[type="file"]:focus,
+.ccf-form-wrapper .field input[type="file"]:focus {
+  border-color: #2271b1;
+  outline: none;
+}
+
+/* ========================================
+   Name Field (side-by-side)
+   ======================================== */
+
+.ccf-form-wrapper .field .left,
+.ccf-form-wrapper .field .right {
+  width: 50%;
+  float: left;
+  box-sizing: border-box;
+}
+
+.ccf-form-wrapper .field .left {
+  padding-right: 0.5em;
+  clear: both;
+}
+
+.ccf-form-wrapper .field .right {
+  padding-left: 0.5em;
+}
+
+/* ========================================
+   Address Field
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-address .full {
+  margin-bottom: 0.75em;
+}
+
+.ccf-form-wrapper .field.field-type-address .left,
+.ccf-form-wrapper .field.field-type-address .right {
+  margin-bottom: 0.75em;
+}
+
+.ccf-form-wrapper .field.field-type-address select {
+  width: 100%;
+}
+
+/* ========================================
+   Email Confirmation (side-by-side)
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-email .left,
+.ccf-form-wrapper .field.field-type-email .right {
+  margin-bottom: 0.5em;
+}
+
+/* ========================================
+   Date & Time
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-date .hour,
+.ccf-form-wrapper .field.field-type-date .minute {
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.ccf-form-wrapper .field.field-type-date .hour input,
+.ccf-form-wrapper .field.field-type-date .minute input {
+  width: 4em;
+  text-align: center;
+}
+
+.ccf-form-wrapper .field.field-type-date .hour label,
+.ccf-form-wrapper .field.field-type-date .minute label {
+  font-weight: 400;
+}
+
+.ccf-form-wrapper .field.field-type-date .am-pm {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.ccf-form-wrapper .field.field-type-date .am-pm select {
+  width: auto;
+  min-width: auto;
+  padding-right: 2em;
+}
+
+/* ========================================
+   Section Headers
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-section-header {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  padding: 0;
+}
+
+.ccf-form-wrapper .field.field-type-section-header .heading {
+  font-size: 1.15em;
+  font-weight: 600;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.4em;
+  color: #1e1e1e;
+}
+
+.ccf-form-wrapper .field.field-type-section-header .subheading {
+  margin-top: 0.5em;
+  font-size: 0.875em;
+  font-style: italic;
+  color: #757575;
+}
+
+/* ========================================
+   HTML Field
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-html {
+  padding: 0.5em 0;
+}
+
+/* ========================================
+   reCAPTCHA
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-recaptcha {
+  margin-bottom: 1.5em;
+}
+
+.ccf-form-wrapper .ccf-recaptcha-wrapper {
+  margin: 0.4em 0;
+}
+
+/* ========================================
+   Simple Captcha
+   ======================================== */
+
+.ccf-form-wrapper .field.field-type-simple-captcha {
+  margin-bottom: 1.5em;
+}
+
+.ccf-form-wrapper .ccf-simple-captcha-wrapper {
+  margin: 0.5em 0;
+  display: inline-block;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #c3c4c7;
+  line-height: 0;
+}
+
+.ccf-form-wrapper .ccf-simple-captcha-wrapper img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.ccf-form-wrapper .field.field-type-simple-captcha input[type="text"] {
+  margin-top: 0.5em;
+}
+
+/* ========================================
+   Errors
+   ======================================== */
+
+.ccf-form-wrapper .error {
+  color: #d63638;
+  font-size: 0.825em;
+  margin-top: 0.35em;
+  float: none;
+  font-weight: 500;
+  line-height: 1.4;
+  clear: both;
+}
+
+.ccf-form-wrapper .error.right-error {
+  float: none;
+}
+
+.ccf-form-wrapper .field .field-error-input,
+.ccf-form-wrapper .field input.field-error-input,
+.ccf-form-wrapper .field select.field-error-input,
+.ccf-form-wrapper .field textarea.field-error-input {
+  border-color: #d63638 !important;
+  box-shadow: 0 0 0 1px #d63638 !important;
+}
+
+.ccf-form-wrapper .field.has-error label.main-label,
+.ccf-form-wrapper .field.field-error label.main-label {
+  color: #d63638;
+}
+
+/* ========================================
+   Submit Button
+   ======================================== */
+
+.ccf-form-wrapper .form-submit {
+  margin-top: 1.75em;
+  padding-top: 0.5em;
+  clear: both;
+}
+
+.ccf-form-wrapper .form-submit .ccf-submit-button,
+.ccf-form-wrapper .ccf-form .form-submit input[type="submit"],
+.ccf-form-wrapper input.ccf-submit-button,
+.ccf-form-wrapper input.btn.ccf-submit-button {
+  display: inline-block;
+  padding: 0.65em 2em;
+  background: #2271b1 !important;
+  background-image: none !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 4px;
+  font-size: 0.95em;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  -webkit-appearance: none;
+  appearance: none;
+  filter: none !important;
+  text-shadow: none;
+}
+
+.ccf-form-wrapper .form-submit .ccf-submit-button:hover,
+.ccf-form-wrapper input.ccf-submit-button:hover,
+.ccf-form-wrapper input.btn.ccf-submit-button:hover {
+  background: #135e96 !important;
+}
+
+.ccf-form-wrapper .form-submit .ccf-submit-button:active,
+.ccf-form-wrapper input.ccf-submit-button:active {
+  background: #0a4b78 !important;
+  transform: translateY(1px);
+}
+
+.ccf-form-wrapper .form-submit .ccf-submit-button:focus-visible,
+.ccf-form-wrapper input.ccf-submit-button:focus-visible {
+  outline: 2px solid #2271b1;
+  outline-offset: 2px;
+}
+
+.ccf-form-wrapper .form-submit img.loading-img,
+.ccf-form-wrapper .form-submit img {
+  vertical-align: middle;
+  margin-left: 0.5em;
+  opacity: 0;
+  border: 0;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  float: none;
+}
+
+/* ========================================
+   Completion, Pause, Login Messages
+   ======================================== */
+
+.ccf-form-complete,
+.ccf-form-pause,
+.ccf-form-require-logged-in {
+  padding: 1.25em 1.5em;
+  border-radius: 6px;
+  font-size: 0.95em;
+  line-height: 1.6;
+  max-width: 640px;
+}
+
+.ccf-form-complete {
+  background: #edfaef;
+  border: 1px solid #68de7c;
+  color: #1e4620;
+}
+
+.ccf-form-pause {
+  background: #fcf9e8;
+  border: 1px solid #dba617;
+  color: #50400e;
+}
+
+.ccf-form-require-logged-in {
+  background: #f0f6fc;
+  border: 1px solid #72aee6;
+  color: #0a4b78;
+}
+
+/* ========================================
+   Dark Theme
+   ======================================== */
+
+.ccf-form-wrapper .ccf-theme-dark {
+  font-size: 15px;
+}
+
+.ccf-form-wrapper .ccf-theme-dark .form-title {
+  color: #f0f0f1;
+}
+
+.ccf-form-wrapper .ccf-theme-dark .form-description {
+  color: #a7aaad;
+}
+
+.ccf-form-wrapper .ccf-theme-dark label.main-label {
+  color: #f0f0f1;
+}
+
+.ccf-form-wrapper .ccf-theme-dark .sub-label,
+.ccf-form-wrapper .ccf-theme-dark .field-description,
+.ccf-form-wrapper .ccf-theme-dark .help-block {
+  color: #a7aaad;
+}
+
+.ccf-form-wrapper .ccf-theme-dark input[type="text"],
+.ccf-form-wrapper .ccf-theme-dark input[type="email"],
+.ccf-form-wrapper .ccf-theme-dark input.field-input,
+.ccf-form-wrapper .ccf-theme-dark textarea,
+.ccf-form-wrapper .ccf-theme-dark select {
+  background: #2c3338 !important;
+  color: #f0f0f1 !important;
+  border-color: #50575e !important;
+}
+
+.ccf-form-wrapper .ccf-theme-dark input::placeholder,
+.ccf-form-wrapper .ccf-theme-dark textarea::placeholder {
+  color: #8c8f94;
+}
+
+.ccf-form-wrapper .ccf-theme-dark input:focus,
+.ccf-form-wrapper .ccf-theme-dark textarea:focus,
+.ccf-form-wrapper .ccf-theme-dark select:focus {
+  border-color: #72aee6 !important;
+  box-shadow: 0 0 0 1px #72aee6 !important;
+}
+
+.ccf-form-wrapper .ccf-theme-dark select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a7aaad' d='M6 8.825L1.175 4 2.238 2.938 6 6.7 9.763 2.937 10.825 4z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75em center !important;
+  background-size: 12px !important;
+}
+
+.ccf-form-wrapper .ccf-theme-dark input[type="file"] {
+  border-color: #50575e;
+  background: #2c3338 !important;
+  color: #a7aaad;
+}
+
+.ccf-form-wrapper .ccf-theme-dark .ccf-submit-button,
+.ccf-form-wrapper .ccf-theme-dark input.ccf-submit-button {
+  background: #72aee6 !important;
+  color: #1e1e1e !important;
+}
+
+.ccf-form-wrapper .ccf-theme-dark .ccf-submit-button:hover,
+.ccf-form-wrapper .ccf-theme-dark input.ccf-submit-button:hover {
+  background: #9ec2e6 !important;
+}
+
+/* ========================================
+   Light Theme
+   ======================================== */
+
+.ccf-form-wrapper .ccf-theme-light {
+  font-size: 15px;
+}
+
+.ccf-form-wrapper .ccf-theme-light input[type="text"],
+.ccf-form-wrapper .ccf-theme-light input[type="email"],
+.ccf-form-wrapper .ccf-theme-light input.field-input,
+.ccf-form-wrapper .ccf-theme-light textarea,
+.ccf-form-wrapper .ccf-theme-light select {
+  background: #fff !important;
+  border-color: #dcdcde !important;
+}
+
+/* ========================================
+   jQuery UI Datepicker Override
+   ======================================== */
+
+.ui-datepicker {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 0.5em;
+  z-index: 99999 !important;
+}
+
+.ui-datepicker-header {
+  background: #f0f0f1;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em;
+  font-weight: 600;
+  color: #1e1e1e;
+}
+
+.ui-datepicker-header .ui-datepicker-prev,
+.ui-datepicker-header .ui-datepicker-next {
+  cursor: pointer;
+  top: 0.6em;
+  border: none;
+  background: transparent;
+  border-radius: 3px;
+}
+
+.ui-datepicker-header .ui-datepicker-prev:hover,
+.ui-datepicker-header .ui-datepicker-next:hover {
+  background: #dcdcde;
+}
+
+.ui-datepicker th {
+  font-weight: 600;
+  color: #50575e;
+  font-size: 0.85em;
+  padding: 0.5em 0.3em;
+}
+
+.ui-datepicker td {
+  padding: 1px;
+}
+
+.ui-datepicker td a,
+.ui-datepicker td span {
+  display: block;
+  padding: 0.4em;
+  text-align: center;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #1e1e1e;
+  background: transparent;
+  border: none;
+  transition: background-color 0.1s ease;
+}
+
+.ui-datepicker td a:hover {
+  background: #f0f6fc;
+  color: #2271b1;
+}
+
+.ui-datepicker td a.ui-state-active {
+  background: #2271b1;
+  color: #fff;
+  font-weight: 600;
+}
+
+.ui-datepicker td .ui-state-highlight {
+  background: #dcdcde;
+  font-weight: 600;
+}
+
+/* ========================================
+   Gutenberg Editor Preview
+   ======================================== */
+
+.ccf-gutenberg-block-preview {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 0.5em;
+  background: #fafafa;
+}
+
+.ccf-gutenberg-block-preview .ccf-form-wrapper {
+  pointer-events: none;
+  margin: 0;
+}
+
+.ccf-gutenberg-block-preview .ccf-form-wrapper .form-submit .ccf-submit-button {
+  pointer-events: none;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 480px) {
+  .ccf-form-wrapper .field .left,
+  .ccf-form-wrapper .field .right {
+    width: 100%;
+    float: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .ccf-form-wrapper .field .left {
+    margin-bottom: 0.75em;
+  }
+
+  .ccf-form-wrapper .form-submit .ccf-submit-button,
+  .ccf-form-wrapper input.ccf-submit-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .ccf-form-wrapper .field.field-type-date .hour,
+  .ccf-form-wrapper .field.field-type-date .minute {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+
+  .ccf-form-wrapper .field.field-type-date .hour input,
+  .ccf-form-wrapper .field.field-type-date .minute input {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   Print
+   ======================================== */
+
+@media print {
+  .ccf-form-wrapper .form-submit {
+    display: none;
+  }
+
+  .ccf-form-wrapper .field input,
+  .ccf-form-wrapper .field textarea,
+  .ccf-form-wrapper .field select {
+    border: 1px solid #999 !important;
+    box-shadow: none !important;
+  }
+}

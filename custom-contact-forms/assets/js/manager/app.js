@@ -171,22 +171,7 @@
 						if ( metabox ) {
 							var container = metabox.querySelectorAll( '.inside' )[0];
 
-							var settings = document.createElement( 'div' );
-							settings.className = 'ccf-submission-icon';
-							settings.setAttribute( 'data-icon', '' );
-
-							var download = document.createElement( 'a' );
-							download.href = '?action=edit&post=' + parseInt( ccfSettings.postId ) + '&download_submissions=1&download_submissions_nonce=' + ccfSettings.downloadSubmissionsNonce;
-							download.className = 'ccf-submission-icon';
-							download.setAttribute( 'data-icon', '' );
-
-							var screenOptionsLink = document.getElementById( 'show-settings-link' );
-							settings.onclick = function() {
-								screenOptionsLink.click();
-							};
-
-							metabox.insertBefore( settings, metabox.firstChild.nextSibling.nextSibling );
-							metabox.insertBefore( download, metabox.firstChild.nextSibling.nextSibling );
+							// Icons are now rendered server-side in meta_box_submissions()
 
 							wp.ccf.createSubmissionsTable( container );
 

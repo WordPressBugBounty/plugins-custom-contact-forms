@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CCF_API_Form_Controller extends WP_REST_Controller {
 
 	/**
@@ -70,10 +74,6 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 				'escape' => 'esc_attr',
 			),
 			'defaultState' => array(
-				'sanitize' => 'esc_attr',
-				'escape' => 'esc_attr',
-			),
-			'defaultCountry' => array(
 				'sanitize' => 'esc_attr',
 				'escape' => 'esc_attr',
 			),
@@ -259,18 +259,18 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$new_choices = array();
 
 		foreach ( $choices as $choice ) {
-			if ( ! empty( $choice['label'] ) || $choice['label'] === '0' ) {
+			if ( ! empty( $choice['label'] ) || ( isset( $choice['label'] ) && $choice['label'] === '0' ) ) {
 				if ( empty( $choice['ID'] ) ) {
 					$args = array(
-						'post_title' => $choice['label'] . '-' . (int) $field_id,
+						'post_title' => sanitize_text_field( $choice['label'] ) . '-' . (int) $field_id,
 						'post_status' => 'publish',
-						'post_parent' => $field_id,
+						'post_parent' => (int) $field_id,
 						'post_type' => 'ccf_choice',
 					);
 
 					$choice_id = wp_insert_post( $args );
 				} else {
-					$choice_id = $choice['ID'];
+					$choice_id = (int) $choice['ID'];
 				}
 
 				if ( ! is_wp_error( $choice_id ) ) {
@@ -284,7 +284,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 				}
 			} else {
 				if ( ! empty( $choice['ID'] ) ) {
-					wp_delete_post( $choice['ID'], true );
+					wp_delete_post( (int) $choice['ID'], true );
 				}
 			}
 		}
@@ -292,10 +292,10 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$current_choices = get_post_meta( $field_id, 'ccf_attached_choices', true );
 		$new_choices = array_map( 'absint', $new_choices );
 
-		if ( ! empty( $current_choices ) ) {
+		if ( ! empty( $current_choices ) && is_array( $current_choices ) ) {
 			$deleted_choices = array_diff( $current_choices, $new_choices );
 			foreach ( $deleted_choices as $choice_id ) {
-				wp_delete_post( $choice_id, true );
+				wp_delete_post( (int) $choice_id, true );
 			}
 		}
 
@@ -315,15 +315,15 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		foreach ( $fields as $field ) {
 			if ( empty( $field['ID'] ) ) {
 				$args = array(
-					'post_title' => $field['slug'] . '-' . (int) $form_id,
+					'post_title' => sanitize_text_field( isset( $field['slug'] ) ? $field['slug'] : '' ) . '-' . (int) $form_id,
 					'post_status' => 'publish',
-					'post_parent' => $form_id,
+					'post_parent' => (int) $form_id,
 					'post_type' => 'ccf_field',
 				);
 
 				$field_id = wp_insert_post( $args );
 			} else {
-				$field_id = $field['ID'];
+				$field_id = (int) $field['ID'];
 			}
 
 			if ( ! is_wp_error( $field_id ) ) {
@@ -350,10 +350,10 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$current_fields = get_post_meta( $form_id, 'ccf_attached_fields', true );
 		$new_fields = array_map( 'absint', $new_fields );
 
-		if ( ! empty( $current_fields ) ) {
+		if ( ! empty( $current_fields ) && is_array( $current_fields ) ) {
 			$deleted_fields = array_diff( $current_fields, $new_fields );
 			foreach ( $deleted_fields as $field_id ) {
-				wp_delete_post( $field_id, true );
+				wp_delete_post( (int) $field_id, true );
 			}
 		}
 
@@ -368,13 +368,24 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 * @since 7.2
 	 */
 	public function _create_and_map_notifications( $notifications, $form_id ) {
-		// @Todo: better sanitization
+		if ( ! is_array( $notifications ) ) {
+			$notifications = array();
+		}
+
 		$clean_notifications = array();
-		for ( $index = 0; $index < count( $notifications ); $index++ ) {
+		$count = count( $notifications );
+		for ( $index = 0; $index < $count; $index++ ) {
+			if ( ! is_array( $notifications[ $index ] ) ) {
+				continue;
+			}
 			foreach ( $notifications[ $index ] as $notification_key => $notification_value ) {
-				if ( 'addresses' === $notification_key ) {
+				if ( 'addresses' === $notification_key && is_array( $notification_value ) ) {
 					foreach ( $notification_value as $address_key => $address_value ) {
-						if ( ( 'field' === $address_value['type'] && ! empty( $address_value['field'] ) ) || ( 'custom' === $address_value['type'] && ! empty( $address_value['email'] ) ) ) {
+						if ( ! is_array( $address_value ) ) {
+							continue;
+						}
+						$addr_type = isset( $address_value['type'] ) ? $address_value['type'] : '';
+						if ( ( 'field' === $addr_type && ! empty( $address_value['field'] ) ) || ( 'custom' === $addr_type && ! empty( $address_value['email'] ) ) ) {
 							$clean_notifications[ $index ][ $notification_key ][ $address_key ] = array_map( 'sanitize_text_field', $address_value );
 						}
 					}
@@ -397,10 +408,17 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 * @since 7.5
 	 */
 	public function _create_and_map_conditionals( $conditionals, $field_id ) {
-		// @Todo: better sanitization
-		$clean_conditionals = array();
+		if ( ! is_array( $conditionals ) ) {
+			$conditionals = array();
+		}
 
-		for ( $index = 0; $index < count( $conditionals ); $index++ ) {
+		$clean_conditionals = array();
+		$count = count( $conditionals );
+
+		for ( $index = 0; $index < $count; $index++ ) {
+			if ( ! is_array( $conditionals[ $index ] ) ) {
+				continue;
+			}
 			if ( ! empty( $conditionals[ $index ]['field'] ) && ! empty( $conditionals[ $index ]['compare'] ) ) {
 				foreach ( $conditionals[ $index ] as $conditional_key => $conditional_value ) {
 					$clean_conditionals[ $index ][ $conditional_key ] = sanitize_text_field( $conditional_value );
@@ -419,10 +437,14 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 * @since 7.3
 	 */
 	public function _create_and_map_post_field_mappings( $post_field_mappings, $form_id ) {
+		if ( ! is_array( $post_field_mappings ) ) {
+			$post_field_mappings = array();
+		}
+
 		$clean_post_field_mappings = array();
 
 		foreach ( $post_field_mappings as $mapping ) {
-			if ( ! empty( $mapping['formField'] ) && ! empty( $mapping['postField'] ) ) {
+			if ( is_array( $mapping ) && ! empty( $mapping['formField'] ) && ! empty( $mapping['postField'] ) ) {
 				$clean_post_field_mappings[] = array_map( 'sanitize_text_field', $mapping );
 			}
 		}
@@ -435,12 +457,12 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param array $data
 	 * @since 7.0
-	 * @return array
+	 * @return int|WP_Error
 	 */
 	public function _create_item( $data ) {
 
 		$args = array(
-			'post_title' => $data['title'],
+			'post_title' => sanitize_text_field( isset( $data['title'] ) ? $data['title'] : '' ),
 			'post_type' => 'ccf_form',
 			'post_status' => 'publish',
 		);
@@ -452,15 +474,18 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$result = wp_insert_post( $args );
 
 		if ( ! is_wp_error( $result ) ) {
-			if ( empty( $data['fields'] ) ) {
-				$data['fields'] = array();
+			$fields = isset( $data['fields'] ) ? $data['fields'] : array();
+			if ( ! is_array( $fields ) ) {
+				$fields = array();
 			}
 
-			$this->_create_and_map_fields( $data['fields'], $result );
+			$this->_create_and_map_fields( $fields, $result );
 
-			$this->_create_and_map_notifications( $data['notifications'], $result );
+			$notifications = isset( $data['notifications'] ) ? $data['notifications'] : array();
+			$this->_create_and_map_notifications( $notifications, $result );
 
-			$this->_create_and_map_post_field_mappings( $data['postFieldMappings'], $result );
+			$post_field_mappings = isset( $data['postFieldMappings'] ) ? $data['postFieldMappings'] : array();
+			$this->_create_and_map_post_field_mappings( $post_field_mappings, $result );
 
 			if ( isset( $data['buttonText'] ) ) {
 				update_post_meta( $result, 'ccf_form_buttonText', sanitize_text_field( $data['buttonText'] ) );
@@ -550,20 +575,17 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$params = $request->get_params();
 
 		$args                   = array( 'post_type' => 'ccf_submission' );
-		$args['post_parent']    = $params['id'];
-		$args['paged']          = $request['page'];
-		$args['posts_per_page'] = ( ! empty( $request['per_page'] ) ) ? $request['per_page'] : get_option( 'posts_per_page' );
+		$args['post_parent']    = (int) $params['id'];
+		$args['paged']          = isset( $request['page'] ) ? absint( $request['page'] ) : 1;
+		$args['posts_per_page'] = ( ! empty( $request['per_page'] ) ) ? absint( $request['per_page'] ) : get_option( 'posts_per_page' );
 
-		if ( is_array( $request['filter'] ) ) {
-			$args = array_merge( $args, $request['filter'] );
-			unset( $args['filter'] );
-		}
+		// SECURITY FIX: removed unsafe $request['filter'] merge
 
 		$query = new WP_Query( $args );
 
 		$posts = array();
 		foreach ( $query->posts as $item ) {
-			$posts[] = $this->prepare_submission_for_response( $item, $request );
+			$posts[] = $this->prepare_submission_for_response( $item );
 		}
 
 		$response = rest_ensure_response( $posts );
@@ -588,7 +610,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$fields = array();
 
 		if ( ! empty( $params['id'] ) ) {
-			$fields = $this->_get_fields( $params['id'] );
+			$fields = $this->_get_fields( (int) $params['id'] );
 		}
 
 		return new WP_REST_Response( $fields, 200 );
@@ -597,8 +619,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	/**
 	 * Prepare submission for the REST response
 	 *
-	 * @param  int $item
-	 * @param  int $item_id
+	 * @param  WP_Post $item
 	 * @since  7.0
 	 * @return array
 	 */
@@ -625,7 +646,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$data['data'] = get_post_meta( $item->ID, 'ccf_submission_data', true );
 		$data['fields'] = get_post_meta( $item->ID, 'ccf_submission_form_fields', true );
 		$data['ip_address'] = esc_html( get_post_meta( $item->ID, 'ccf_submission_ip', true ) );
-		$data['form_page_url'] = esc_url_raw( get_post_meta( $item->ID, 'ccf_submission_form_page', true ) );
+		$data['form_page_url'] = esc_url( get_post_meta( $item->ID, 'ccf_submission_form_page', true ) );
 
 		return $data;
 	}
@@ -639,12 +660,18 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 */
 	public function get_items( $request ) {
 		$args                   = array( 'post_type' => 'ccf_form' );
-		$args['paged']          = $request['page'];
-		$args['posts_per_page'] = ( ! empty( $request['per_page'] ) ) ? $request['per_page'] : get_option( 'posts_per_page' );
+		$args['paged']          = isset( $request['page'] ) ? absint( $request['page'] ) : 1;
+		$args['posts_per_page'] = ( ! empty( $request['per_page'] ) ) ? absint( $request['per_page'] ) : get_option( 'posts_per_page' );
 
-		if ( is_array( $request['filter'] ) ) {
-			$args = array_merge( $args, $request['filter'] );
-			unset( $args['filter'] );
+		// SECURITY FIX: removed unsafe $request['filter'] merge that allowed arbitrary WP_Query injection
+		// Only allow safe, whitelisted filter params
+		if ( isset( $request['filter'] ) && is_array( $request['filter'] ) ) {
+			$allowed_filter_keys = array( 'orderby', 'order' );
+			foreach ( $request['filter'] as $key => $value ) {
+				if ( in_array( $key, $allowed_filter_keys, true ) ) {
+					$args[ $key ] = sanitize_text_field( $value );
+				}
+			}
 		}
 
 		$query = new WP_Query( $args );
@@ -673,15 +700,18 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	public function get_item( $request ) {
 		$params = $request->get_params();
 
-		$item = get_post( $params['id'] );
-		$item->ID = (int) $params['id'];
+		$item = get_post( (int) $params['id'] );
+
+		if ( empty( $item ) || 'ccf_form' !== $item->post_type ) {
+			return new WP_Error( 'cant-find', __( 'Form not found', 'custom-contact-forms' ), array( 'status' => 404 ) );
+		}
 
 		$data = $this->prepare_item_for_response( $item, $request );
 
 		if ( is_array( $data ) ) {
 			return new WP_REST_Response( $data, 200 );
 		} else {
-			return new WP_Error( 'cant-find', __( 'Form not found', 'custom-contact-forms' ) );
+			return new WP_Error( 'cant-find', __( 'Form not found', 'custom-contact-forms' ), array( 'status' => 404 ) );
 		}
 	}
 
@@ -690,16 +720,27 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
-	 * @return WP_Error|WP_REST_Request
+	 * @return WP_Error|WP_REST_Response
 	 */
 	public function create_item( $request ) {
 
 		$item = $this->prepare_item_for_database( $request );
 
+		if ( false === $item ) {
+			return new WP_Error( 'cant-create', __( 'Could not create form', 'custom-contact-forms' ), array( 'status' => 400 ) );
+		}
+
 		$item_id = $this->_create_item( $item );
 
+		if ( is_wp_error( $item_id ) ) {
+			return $item_id;
+		}
+
 		$item = get_post( $item_id );
-		$item->ID = (int) $item_id;
+
+		if ( empty( $item ) ) {
+			return new WP_Error( 'cant-create', __( 'Could not create form', 'custom-contact-forms' ), array( 'status' => 500 ) );
+		}
 
 		$data = $this->prepare_item_for_response( $item, $request );
 
@@ -715,20 +756,37 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
-	 * @return WP_Error|WP_REST_Request
+	 * @return WP_Error|WP_REST_Response
 	 */
 	public function update_item( $request ) {
 		$params = $request->get_params();
 
 		if ( ! empty( $params['id'] ) ) {
+			// Verify the post exists and is a ccf_form
+			$existing = get_post( (int) $params['id'] );
+			if ( empty( $existing ) || 'ccf_form' !== $existing->post_type ) {
+				return new WP_Error( 'cant-update', __( 'Form not found', 'custom-contact-forms' ), array( 'status' => 404 ) );
+			}
+
 			$item = $this->prepare_item_for_database( $request );
 
-			$item['id'] = $params['id'];
+			if ( false === $item ) {
+				return new WP_Error( 'cant-update', __( 'Could not update form', 'custom-contact-forms' ), array( 'status' => 400 ) );
+			}
+
+			$item['id'] = (int) $params['id'];
 
 			$item_id = $this->_create_item( $item );
 
+			if ( is_wp_error( $item_id ) ) {
+				return $item_id;
+			}
+
 			$item = get_post( $item_id );
-			$item->ID = (int) $item_id;
+
+			if ( empty( $item ) ) {
+				return new WP_Error( 'cant-update', __( 'Could not update form', 'custom-contact-forms' ), array( 'status' => 500 ) );
+			}
 
 			$data = $this->prepare_item_for_response( $item, $request );
 
@@ -745,10 +803,16 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
-	 * @return WP_Error|WP_REST_Request
+	 * @return WP_Error|WP_REST_Response
 	 */
 	public function delete_item( $request ) {
 		$params = $request->get_params();
+		$post_id = (int) $params['id'];
+
+		// SECURITY FIX: verify this is actually a ccf_form
+		if ( 'ccf_form' !== get_post_type( $post_id ) ) {
+			return new WP_Error( 'cant-delete', __( 'Form not found', 'custom-contact-forms' ), array( 'status' => 404 ) );
+		}
 
 		$force = false;
 		if ( ! empty( $params['force'] ) ) {
@@ -756,9 +820,9 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		}
 
 		if ( $force ) {
-			$deleted = wp_delete_post( $params['id'], true );
+			$deleted = wp_delete_post( $post_id, true );
 		} else {
-			$deleted = wp_trash_post( $params['id'] );
+			$deleted = wp_trash_post( $post_id );
 		}
 
 		if ( $deleted ) {
@@ -774,10 +838,16 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
-	 * @return WP_Error|WP_REST_Request
+	 * @return WP_Error|WP_REST_Response
 	 */
 	public function delete_submission( $request ) {
 		$params = $request->get_params();
+		$post_id = (int) $params['id'];
+
+		// SECURITY FIX: verify this is actually a ccf_submission
+		if ( 'ccf_submission' !== get_post_type( $post_id ) ) {
+			return new WP_Error( 'cant-delete', __( 'Submission not found', 'custom-contact-forms' ), array( 'status' => 404 ) );
+		}
 
 		$force = false;
 		if ( ! empty( $params['force'] ) ) {
@@ -785,9 +855,9 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		}
 
 		if ( $force ) {
-			$deleted = wp_delete_post( $params['id'], true );
+			$deleted = wp_delete_post( $post_id, true );
 		} else {
-			$deleted = wp_trash_post( $params['id'] );
+			$deleted = wp_trash_post( $post_id );
 		}
 
 		if ( $deleted ) {
@@ -805,21 +875,22 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 */
 	public function delete_fields( $form_id ) {
 		$attached_fields = get_post_meta( $form_id, 'ccf_attached_fields', true );
-		if ( ! empty( $attached_fields ) ) {
+		if ( ! empty( $attached_fields ) && is_array( $attached_fields ) ) {
 			foreach ( $attached_fields as $field_id ) {
-				$this->delete_choices( $field_id );
-				wp_delete_post( $field_id, true );
+				$this->delete_choices( (int) $field_id );
+				wp_delete_post( (int) $field_id, true );
 			}
 		}
 	}
+
 	/**
-	 * Delete all submissionws associated with a post.
+	 * Delete all submissions associated with a post.
 	 *
 	 * @param int $form_id
 	 * @since 7.0
 	 */
 	public function delete_submissions( $form_id ) {
-		$submissions = get_children( array( 'post_parent' => $form_id, 'post_type' => 'ccf_submission', 'numberposts' => apply_filters( 'ccf_max_submissions', 5000, get_post( $form_id ) ) ) );
+		$submissions = get_children( array( 'post_parent' => (int) $form_id, 'post_type' => 'ccf_submission', 'numberposts' => apply_filters( 'ccf_max_submissions', 5000, get_post( $form_id ) ) ) );
 		if ( ! empty( $submissions ) ) {
 			foreach ( $submissions as $submission ) {
 				wp_delete_post( $submission->ID, true );
@@ -835,9 +906,9 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 */
 	public function delete_choices( $field_id ) {
 		$attached_choices = get_post_meta( $field_id, 'ccf_attached_choices', true );
-		if ( ! empty( $attached_choices ) ) {
+		if ( ! empty( $attached_choices ) && is_array( $attached_choices ) ) {
 			foreach ( $attached_choices as $choice_id ) {
-				wp_delete_post( $choice_id, true );
+				wp_delete_post( (int) $choice_id, true );
 			}
 		}
 	}
@@ -850,13 +921,11 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 */
 	public function get_items_permissions_check( $request ) {
 		if ( ! is_user_logged_in() ) {
-			return false;
+			return new WP_Error( 'rest_forbidden', __( 'You must be logged in.', 'custom-contact-forms' ), array( 'status' => 401 ) );
 		}
 
-		$submission_cpt = get_post_type_object( 'ccf_submission' );
-
-		if ( ! current_user_can( $submission_cpt->cap->edit_posts ) ) {
-			return false;
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'You do not have permission.', 'custom-contact-forms' ), array( 'status' => 403 ) );
 		}
 
 		return true;
@@ -867,10 +936,20 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
+	 * @since  7.9.0 — Per-post capability check.
 	 * @return WP_Error|bool
 	 */
 	public function get_item_permissions_check( $request ) {
-		return $this->get_items_permissions_check( $request );
+		if ( ! is_user_logged_in() ) {
+			return new WP_Error( 'rest_forbidden', __( 'You must be logged in.', 'custom-contact-forms' ), array( 'status' => 401 ) );
+		}
+
+		$post_id = (int) $request['id'];
+		if ( $post_id && ! current_user_can( 'edit_post', $post_id ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'You do not have permission.', 'custom-contact-forms' ), array( 'status' => 403 ) );
+		}
+
+		return true;
 	}
 
 	/**
@@ -878,10 +957,14 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
+	 * @since  7.9.0 — Uses publish_posts capability.
 	 * @return WP_Error|bool
 	 */
 	public function create_item_permissions_check( $request ) {
-		return current_user_can( 'edit_posts' );
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'You do not have permission.', 'custom-contact-forms' ), array( 'status' => 403 ) );
+		}
+		return true;
 	}
 
 	/**
@@ -889,10 +972,15 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
+	 * @since  7.9.0 — Per-post capability check.
 	 * @return WP_Error|bool
 	 */
 	public function update_item_permissions_check( $request ) {
-		return $this->create_item_permissions_check( $request );
+		$post_id = (int) $request['id'];
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'You do not have permission.', 'custom-contact-forms' ), array( 'status' => 403 ) );
+		}
+		return true;
 	}
 
 	/**
@@ -900,10 +988,15 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
+	 * @since  7.9.0 — Per-post capability check.
 	 * @return WP_Error|bool
 	 */
 	public function delete_item_permissions_check( $request ) {
-		return $this->create_item_permissions_check( $request );
+		$post_id = (int) $request['id'];
+		if ( ! current_user_can( 'delete_post', $post_id ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'You do not have permission.', 'custom-contact-forms' ), array( 'status' => 403 ) );
+		}
+		return true;
 	}
 
 	/**
@@ -911,7 +1004,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Request object
 	 * @since  7.0
-	 * @return WP_Error|object $prepared_item
+	 * @return array|false $prepared_item
 	 */
 	protected function prepare_item_for_database( $request ) {
 		$body = $request->get_body();
@@ -919,8 +1012,12 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		if ( ! empty( $body ) ) {
 			$body = json_decode( $body, true );
 
+			if ( ! is_array( $body ) ) {
+				return false;
+			}
+
 			$raw_title = ( ! empty( $body['title'] ) && ! empty( $body['title']['raw'] ) ) ? $body['title']['raw'] : '';
-			$body['title'] = $raw_title;
+			$body['title'] = sanitize_text_field( $raw_title );
 
 			return $body;
 		}
@@ -940,8 +1037,9 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 
 		$attached_fields = get_post_meta( $form_id, 'ccf_attached_fields', true );
 
-		if ( ! empty( $attached_fields ) ) {
+		if ( ! empty( $attached_fields ) && is_array( $attached_fields ) ) {
 			foreach ( $attached_fields as $field_id ) {
+				$field_id = (int) $field_id;
 				$field = array( 'id' => $field_id );
 
 				foreach ( $this->field_attribute_keys as $key => $functions ) {
@@ -957,8 +1055,9 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 				if ( ! empty( $choices ) ) {
 					$field['choices'] = array();
 
-					if ( ! empty( $choices[0] ) ) {
+					if ( ! empty( $choices[0] ) && is_array( $choices[0] ) ) {
 						foreach ( $choices[0] as $choice_id ) {
+							$choice_id = (int) $choice_id;
 							$choice = array( 'id' => $choice_id );
 
 							foreach ( $this->choice_attribute_keys as $key => $functions ) {
@@ -979,13 +1078,15 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 				if ( ! empty( $conditionals ) ) {
 					$field['conditionals'] = array();
 
-					if ( ! empty( $conditionals[0] ) ) {
+					if ( ! empty( $conditionals[0] ) && is_array( $conditionals[0] ) ) {
 						foreach ( $conditionals[0] as $conditional ) {
-							$field['conditionals'][] = array(
-								'field' => esc_attr( $conditional['field'] ),
-								'compare' => esc_attr( $conditional['compare'] ),
-								'value' => esc_html( $conditional['value'] ),
-							);
+							if ( is_array( $conditional ) ) {
+								$field['conditionals'][] = array(
+									'field' => esc_attr( isset( $conditional['field'] ) ? $conditional['field'] : '' ),
+									'compare' => esc_attr( isset( $conditional['compare'] ) ? $conditional['compare'] : '' ),
+									'value' => esc_html( isset( $conditional['value'] ) ? $conditional['value'] : '' ),
+								);
+							}
 						}
 					}
 				}
@@ -1000,8 +1101,8 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	/**
 	 * Prepare the item for the REST response
 	 *
-	 * @param  int|object      $item
-	 * @param  WP_REST_Request
+	 * @param  WP_Post         $item
+	 * @param  WP_REST_Request $request
 	 * @since  7.0
 	 * @return array
 	 */
@@ -1043,7 +1144,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$data['buttonClass'] = esc_attr( get_post_meta( $data['id'], 'ccf_form_buttonClass', true ) );
 		$data['description'] = esc_html( get_post_meta( $data['id'], 'ccf_form_description', true ) );
 		$data['completionActionType'] = esc_attr( get_post_meta( $data['id'], 'ccf_form_completion_action_type', true ) );
-		$data['completionRedirectUrl'] = esc_url_raw( get_post_meta( $data['id'], 'ccf_form_completion_redirect_url', true ) );
+		$data['completionRedirectUrl'] = esc_url( get_post_meta( $data['id'], 'ccf_form_completion_redirect_url', true ) );
 		$data['completionMessage'] = esc_html( get_post_meta( $data['id'], 'ccf_form_completion_message', true ) );
 		$data['pause'] = (bool) get_post_meta( $data['id'], 'ccf_form_pause', true );
 		$data['hideTitle'] = (bool) get_post_meta( $data['id'], 'ccf_form_hide_title', true );
@@ -1054,17 +1155,15 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$data['pauseMessage'] = esc_html( get_post_meta( $data['id'], 'ccf_form_pause_message', true ) );
 		$data['theme'] = esc_html( get_post_meta( $data['id'], 'ccf_form_theme', true ) );
 
-		// @Todo: escaping
 		$notifications = get_post_meta( $data['id'], 'ccf_form_notifications', true );
-		if ( empty( $notifications ) ) {
+		if ( empty( $notifications ) || ! is_array( $notifications ) ) {
 			$notifications = array();
 		}
 
 		$data['notifications'] = $notifications;
 
-		// @Todo: escaping
 		$post_field_mappings = get_post_meta( $data['id'], 'ccf_form_post_field_mappings', true );
-		if ( empty( $post_field_mappings ) ) {
+		if ( empty( $post_field_mappings ) || ! is_array( $post_field_mappings ) ) {
 			$post_field_mappings = array();
 		}
 
@@ -1083,7 +1182,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 * @param  string $date_gmt
 	 * @param  string $date
 	 * @since  7.0
-	 * @return string
+	 * @return string|null
 	 */
 	protected function prepare_date_response( $date_gmt, $date = null ) {
 		if ( '0000-00-00 00:00:00' === $date_gmt ) {

@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CCF_Form_CPT {
 
 	/**
@@ -53,15 +57,15 @@ class CCF_Form_CPT {
 			return;
 		}
 
-		if ( empty( $_GET['post'] ) || 'ccf_form' !== get_post_type( $_GET['post'] ) ) {
+		if ( empty( $_GET['post'] ) || 'ccf_form' !== get_post_type( absint( $_GET['post'] ) ) ) {
 			return;
 		}
 
-		if ( empty( $_GET['download_submissions_nonce'] ) || ! wp_verify_nonce( $_GET['download_submissions_nonce'], 'ccf_download_submissions_nonce' ) ) {
+		if ( empty( $_GET['download_submissions_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['download_submissions_nonce'] ) ), 'ccf_download_submissions_nonce' ) ) {
 			return;
 		}
 
-		$post_id = (int) $_GET['post'];
+		$post_id = absint( $_GET['post'] );
 
 		$submissions = new WP_Query( array(
 			'post_type' => 'ccf_submission',
@@ -76,7 +80,7 @@ class CCF_Form_CPT {
 
 		// Todo: Unit tests
 		header( 'Content-Type: text/csv' );
-		header( 'Content-Disposition: attachment; filename=form-' . $post_id . '-submission-' . date( 'Y-m-d' ) . '.csv' );
+		header( 'Content-Disposition: attachment; filename=form-' . $post_id . '-submission-' . gmdate( 'Y-m-d' ) . '.csv' );
 		header( 'Cache-Control: no-cache, no-store, must-revalidate' );
 		header( 'Pragma: no-cache' );
 		header( 'Expires: 0' );
@@ -267,7 +271,7 @@ class CCF_Form_CPT {
 	 */
 	public function filter_screen_options( $options, $screen ) {
 		global $pagenow;
-		if ( 'post.php' !== $pagenow || empty( $_GET['post'] ) || 'ccf_form' !== get_post_type( $_GET['post'] ) ) {
+		if ( 'post.php' !== $pagenow || empty( $_GET['post'] ) || 'ccf_form' !== get_post_type( absint( $_GET['post'] ) ) ) {
 			return $options;
 		}
 
@@ -323,6 +327,7 @@ class CCF_Form_CPT {
 		unset( $actions['trash'] );
 
 		$actions['submissions'] = '<a href="' . esc_url( get_edit_post_link( $post->ID ) ) . '#ccf-submissions">' . esc_html__( 'Submissions', 'custom-contact-forms' ) . '</a>';
+		$actions['copy_shortcode'] = '<a href="#" class="ccf-copy-shortcode" data-shortcode="[ccf_form id=&quot;' . (int) $post->ID . '&quot;]" title="' . esc_attr__( 'Copy shortcode to clipboard', 'custom-contact-forms' ) . '">' . esc_html__( 'Copy Shortcode', 'custom-contact-forms' ) . '</a>';
 		$actions['trash'] = $trash;
 		return $actions;
 	}
@@ -357,7 +362,7 @@ class CCF_Form_CPT {
 
 		if ( 'post-new.php' === $pagenow ) {
 			?>
-			<p><?php esc_html_e( 'Save your new form to see a preview.' ); ?></p>
+			<p><?php esc_html_e( 'Save your new form to see a preview.', 'custom-contact-forms' ); ?></p>
 			<?php
 		} else {
 			?>
@@ -374,7 +379,10 @@ class CCF_Form_CPT {
 	 * @param object $post
 	 * @since 6.0
 	 */
-	public function meta_box_submissions( $post ) { }
+	public function meta_box_submissions( $post ) {
+		// Toolbar CSS is enqueued via ccf-admin-toolbar.css
+		// Toolbar JS is added via wp_add_inline_script on ccf-form-cpt-preview
+	}
 
 	/**
 	 * Output at a glance meta box. This contains stats about the form.
@@ -404,6 +412,14 @@ class CCF_Form_CPT {
 			</div>
 			<div class="misc-pub-section">
 				<span id="ccf-submission-num" class="has-icon"><?php esc_html_e( 'Number of submissions:', 'custom-contact-forms' ); ?> <strong><?php echo count( $submissions ); ?></strong></span>
+			</div>
+			<div class="misc-pub-section" style="border-top:1px solid #f0f0f1;padding-top:8px;">
+				<label style="font-weight:600;display:block;margin-bottom:4px;"><?php esc_html_e( 'Shortcode:', 'custom-contact-forms' ); ?></label>
+				<code class="ccf-copy-target" style="display:block;padding:5px 8px;background:#f6f7f7;border:1px solid #dcdcde;border-radius:3px;font-size:12px;cursor:pointer;user-select:all;" data-copy="[ccf_form id=&quot;<?php echo (int) $post->ID; ?>&quot;]" title="<?php esc_attr_e( 'Click to copy', 'custom-contact-forms' ); ?>">[ccf_form id="<?php echo (int) $post->ID; ?>"]</code>
+			</div>
+			<div class="misc-pub-section">
+				<label style="font-weight:600;display:block;margin-bottom:4px;"><?php esc_html_e( 'PHP:', 'custom-contact-forms' ); ?></label>
+				<code class="ccf-copy-target" style="display:block;padding:5px 8px;background:#f6f7f7;border:1px solid #dcdcde;border-radius:3px;font-size:11px;cursor:pointer;user-select:all;" data-copy="&lt;?php ccf_output_form( <?php echo (int) $post->ID; ?> ); ?&gt;" title="<?php esc_attr_e( 'Click to copy', 'custom-contact-forms' ); ?>">&lt;?php ccf_output_form( <?php echo (int) $post->ID; ?> ); ?&gt;</code>
 			</div>
 		</div>
 
@@ -492,10 +508,21 @@ class CCF_Form_CPT {
 
 			wp_enqueue_style( 'ccf-form-mce', plugins_url( $mce_css_path, dirname( __FILE__ ) ), array(), CCF_VERSION );
 			wp_enqueue_style( 'ccf-form-cpt', plugins_url( $form_cpt_css_path, dirname( __FILE__ ) ), array(), CCF_VERSION );
+			wp_enqueue_style( 'ccf-admin-toolbar', plugins_url( '/build/css/ccf-admin-toolbar.css', dirname( __FILE__ ) ), array(), CCF_VERSION );
 
 			wp_enqueue_script( 'ccf-form-cpt-preview', plugins_url( $form_cpt_preview_js_path, dirname( __FILE__ ) ), array( 'jquery', 'backbone', 'ccf-form-manager' ), CCF_VERSION, true );
+
+			// Toolbar injection script — runs after Backbone creates the submissions table
+			$toolbar_js = '(function(){var ci=setInterval(function(){var m=document.getElementById("ccf-submissions");if(!m)return;var ins=m.querySelector(".inside");if(!ins)return;var t=ins.querySelector("table");if(!t)return;clearInterval(ci);var old=m.querySelectorAll(".ccf-submission-icon,.ccf-submission-icon-btn");for(var i=0;i<old.length;i++)old[i].parentNode.removeChild(old[i]);if(m.querySelector(".ccf-toolbar"))return;var s=window.ccfSettings||{};var url=s.adminUrl+"post.php?action=edit&post="+parseInt(s.postId)+"&download_submissions=1&download_submissions_nonce="+s.downloadSubmissionsNonce;var tb=document.createElement("div");tb.className="ccf-toolbar";tb.innerHTML=\'<a href="\'+url+\'" class="button button-small" title="Download CSV"><span class="dashicons dashicons-download"></span> Export CSV</a><button type="button" class="button button-small" title="Column Settings" onclick="var b=document.getElementById(\\\'show-settings-link\\\');if(b){b.click();}else{var w=document.getElementById(\\\'screen-options-wrap\\\');if(w){w.style.display=w.style.display===\\\'none\\\'?\\\'block\\\':\\\'none\\\';}}"><span class="dashicons dashicons-admin-generic"></span> Columns</button>\';ins.insertBefore(tb,ins.firstChild);},200);setTimeout(function(){clearInterval(ci);},10000);})();';
+			wp_add_inline_script( 'ccf-form-cpt-preview', $toolbar_js );
+
+			// Clipboard copy script for shortcodes
+			add_action( 'admin_footer', array( $this, 'clipboard_script' ) );
 		} elseif ( 'edit.php' === $pagenow && 'ccf_form' === get_post_type() ) {
 			wp_enqueue_style( 'ccf-form-table', plugins_url( $form_table_css_path, dirname( __FILE__ ) ), array(), CCF_VERSION );
+
+			// Clipboard copy script for shortcodes
+			add_action( 'admin_footer', array( $this, 'clipboard_script' ) );
 		}
 	}
 
@@ -547,25 +574,29 @@ class CCF_Form_CPT {
 
 				break;
 			case 'ccf_form_id':
-				echo (int) $post->ID;
+				$shortcode = '[ccf_form id="' . (int) $post->ID . '"]';
+				$php_code = '<?php ccf_output_form( ' . (int) $post->ID . ' ); ?>';
+				echo '<code class="ccf-shortcode-display" style="display:block;padding:3px 6px;background:#f0f0f1;border-radius:3px;font-size:12px;cursor:pointer;user-select:all;" title="' . esc_attr__( 'Click to copy', 'custom-contact-forms' ) . '">' . esc_html( $shortcode ) . '</code>';
+				echo '<small style="color:#757575;display:block;margin-top:2px;">ID: ' . (int) $post->ID . '</small>';
 
 				break;
 			case 'ccf_date':
 				if ( '0000-00-00 00:00:00' == $post->post_date ) {
-					$t_time = $h_time = __( 'Unpublished' );
+					$t_time = $h_time = __( 'Unpublished', 'custom-contact-forms' );
 				} else {
-					$t_time = get_the_time( __( 'Y/m/d g:i:s A' ) );
+					$t_time = get_the_time( __( 'Y/m/d g:i:s A', 'custom-contact-forms' ) );
 					$m_time = $post->post_date;
 					$time = get_post_time( 'G', true, $post );
 
 					$time_diff = time() - $time;
 
 					if ( $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
-						$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
-					} else { 						$h_time = mysql2date( __( 'Y/m/d' ), $m_time ); }
+						/* translators: %s: human-readable time difference */
+						$h_time = sprintf( __( '%s ago', 'custom-contact-forms' ), human_time_diff( $time ) );
+					} else { 						$h_time = mysql2date( __( 'Y/m/d', 'custom-contact-forms' ), $m_time ); }
 				}
 
-				echo '<abbr title="' . $t_time . '">' . $h_time . '</abbr>';
+				echo '<abbr title="' . esc_attr( $t_time ) . '">' . esc_html( $h_time ) . '</abbr>';
 				break;
 		}
 	}
@@ -610,6 +641,18 @@ class CCF_Form_CPT {
 		);
 
 		register_post_type( 'ccf_form', $args );
+	}
+
+	/**
+	 * Output clipboard copy JS for shortcode buttons
+	 *
+	 * @since 7.9.0
+	 */
+	public function clipboard_script() {
+		wp_enqueue_script( 'ccf-clipboard', plugins_url( '/assets/js/ccf-clipboard.js', dirname( __FILE__ ) ), array(), CCF_VERSION, true );
+		wp_localize_script( 'ccf-clipboard', 'ccfClipboardL10n', array(
+			'copied' => esc_html__( 'Copied!', 'custom-contact-forms' ),
+		) );
 	}
 
 	/**

@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 /**
  * Class CCF_Widget
  *
@@ -29,15 +33,15 @@ class CCF_Widget extends WP_Widget {
 			return;
 		}
 
-		echo $args['before_widget'];
+		echo wp_kses_post( $args['before_widget'] );
 
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
+			echo wp_kses_post( $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'] );
 		}
 
 		ccf_output_form( $instance['form_id'] );
 
-		echo $args['after_widget'];
+		echo wp_kses_post( $args['after_widget'] );
 	}
 
 	/**
@@ -59,17 +63,17 @@ class CCF_Widget extends WP_Widget {
 		) );
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
 				<?php esc_html_e( 'Title:', 'custom-contact-forms' ); ?>
 			</label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'form_id' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'form_id' ) ); ?>">
 				<?php esc_html_e( 'Choose a form:', 'custom-contact-forms' ); ?>
 			</label><br>
-			<select id="<?php echo $this->get_field_id( 'form_id' ); ?>" name="<?php echo $this->get_field_name( 'form_id' ); ?>">
+			<select id="<?php echo esc_attr( $this->get_field_id( 'form_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'form_id' ) ); ?>">
 				<?php if ( $forms_query->have_posts() ) : ?>
 					<?php foreach ( $forms_query->posts as $form_id ) : ?>
 						<option <?php selected( $current_form_id, $form_id ); ?> value="<?php echo (int) $form_id; ?>">

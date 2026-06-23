@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CCF_Submission_CPT {
 	public function __construct() {}
 
@@ -58,23 +62,32 @@ class CCF_Submission_CPT {
 	/**
 	 * Get prettified field date
 	 *
-	 * @param array $value
+	 * @param array|mixed $value
 	 * @since 6.0
-	 * @return bool|string
+	 * @return string
 	 */
 	public function get_pretty_field_date( $value ) {
-		$dateString = '';
-
-		if ( ! empty( $value['hour'] ) && ! empty( $value['minute'] ) && ! empty( $value['am-pm'] ) ) {
-			$dateString .= ' ' . $value['hour'] . ':' . $value['minute'] . ' ' . $value['am-pm'];
+		if ( ! is_array( $value ) ) {
+			return '-';
 		}
 
-		if ( ! empty( $value['date'] ) ) {
+		$dateString = '';
+
+		$hour = isset( $value['hour'] ) ? $value['hour'] : '';
+		$minute = isset( $value['minute'] ) ? $value['minute'] : '';
+		$ampm = isset( $value['am-pm'] ) ? $value['am-pm'] : '';
+		$date = isset( $value['date'] ) ? $value['date'] : '';
+
+		if ( ! empty( $hour ) && ! empty( $minute ) && ! empty( $ampm ) ) {
+			$dateString .= ' ' . $hour . ':' . $minute . ' ' . $ampm;
+		}
+
+		if ( ! empty( $date ) ) {
 			if ( ! empty( $dateString ) ) {
 				$dateString .= ' ';
 			}
 
-			$dateString .= $value['date'];
+			$dateString .= $date;
 		}
 
 		if ( empty( $dateString ) ) {
@@ -87,22 +100,29 @@ class CCF_Submission_CPT {
 	/**
 	 * Get a prettified name
 	 *
-	 * @param array $value
+	 * @param array|mixed $value
 	 * @since 6.0
 	 * @return string
 	 */
 	public function get_pretty_field_name( $value ) {
-		$nameString = $value['first'];
+		if ( ! is_array( $value ) ) {
+			return is_string( $value ) ? $value : '-';
+		}
+
+		$first = isset( $value['first'] ) ? $value['first'] : '';
+		$last = isset( $value['last'] ) ? $value['last'] : '';
+
+		$nameString = $first;
 
 		if ( ! empty( $nameString ) ) {
 			$nameString .= ' ';
 		}
 
-		if ( ! empty( $value['last'] ) ) {
-			$nameString .= $value['last'];
+		if ( ! empty( $last ) ) {
+			$nameString .= $last;
 		}
 
-		if ( empty( $nameString ) ) {
+		if ( empty( trim( $nameString ) ) ) {
 			$nameString = '-';
 		}
 
@@ -112,22 +132,29 @@ class CCF_Submission_CPT {
 	/**
 	 * Get a prettified address
 	 *
-	 * @param array $value
+	 * @param array|mixed $value
 	 * @since 6.0
 	 * @return string
 	 */
 	public function get_pretty_field_address( $value ) {
-		if ( empty( $value['street'] ) || empty( $value['city'] ) ) {
+		if ( ! is_array( $value ) ) {
 			return '-';
 		}
 
-		$addressString = $value['street'];
+		$street = isset( $value['street'] ) ? $value['street'] : '';
+		$city = isset( $value['city'] ) ? $value['city'] : '';
+
+		if ( empty( $street ) || empty( $city ) ) {
+			return '-';
+		}
+
+		$addressString = $street;
 
 		if ( ! empty( $value['line_two'] ) ) {
 			$addressString .= ' ' . $value['line_two'];
 		}
 
-		$addressString .= ', ' . $value['city'];
+		$addressString .= ', ' . $city;
 
 		if ( ! empty( $value['state'] ) ) {
 			$addressString .= ', ' . $value['state'];
@@ -148,7 +175,7 @@ class CCF_Submission_CPT {
 	 * Return singleton instance of class
 	 *
 	 * @since 6.0
-	 * @return object
+	 * @return CCF_Submission_CPT
 	 */
 	public static function factory() {
 		static $instance;

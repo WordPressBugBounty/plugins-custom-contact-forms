@@ -3366,7 +3366,7 @@
 
 			events: {
 				'click .save-button': 'sync',
-				'click .signup-button': 'signup',
+				
 				'click .accordion-heading': 'accordionClick',
 				'click .form-settings-heading': 'accordionClick',
 				'click .insert-form-button': 'insertForm'
@@ -3382,26 +3382,7 @@
 				wp.ccf.toggle();
 			},
 
-			signup: function( event ) {
-				var email = this.el.querySelectorAll( '.email-signup-field' )[0].value;
-				var signupContainer = this.el.querySelectorAll( '.bottom .left.signup' )[0];
-				signupContainer.className = 'left signup';
-
-				if (email) {
-					$.ajax( {
-						url: '//taylorlovett.us8.list-manage.com/subscribe/post-json?u=66118f9a5b0ab0414e83f043a&amp;id=b4ed816a24&c=?',
-						method: 'post',
-						dataType: 'jsonp',
-						data: {
-							EMAIL: email
-						}
-					}).done(function() {
-						signupContainer.className = 'left signup signup-success';
-					});
-				} else {
-					signupContainer.className = 'left signup signup-error';
-				}
-			},
+			signup: function( event ) { return; },
 
 			accordionClick: function( event ) {
 				var parentContainer = $( event.currentTarget ).parents( '.accordion-container' )[0];
@@ -4394,22 +4375,7 @@
 						if ( metabox ) {
 							var container = metabox.querySelectorAll( '.inside' )[0];
 
-							var settings = document.createElement( 'div' );
-							settings.className = 'ccf-submission-icon';
-							settings.setAttribute( 'data-icon', '' );
-
-							var download = document.createElement( 'a' );
-							download.href = '?action=edit&post=' + parseInt( ccfSettings.postId ) + '&download_submissions=1&download_submissions_nonce=' + ccfSettings.downloadSubmissionsNonce;
-							download.className = 'ccf-submission-icon';
-							download.setAttribute( 'data-icon', '' );
-
-							var screenOptionsLink = document.getElementById( 'show-settings-link' );
-							settings.onclick = function() {
-								screenOptionsLink.click();
-							};
-
-							metabox.insertBefore( settings, metabox.firstChild.nextSibling.nextSibling );
-							metabox.insertBefore( download, metabox.firstChild.nextSibling.nextSibling );
+														// Icons are now rendered server-side in meta_box_submissions()
 
 							wp.ccf.createSubmissionsTable( container );
 

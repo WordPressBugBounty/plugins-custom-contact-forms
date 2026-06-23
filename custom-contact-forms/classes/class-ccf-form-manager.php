@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CCF_Form_Manager {
 	/**
 	 * Placeholder method
@@ -79,11 +83,13 @@ class CCF_Form_Manager {
 							<p><?php esc_html_e( 'There is an issue with synchronizing data. Please try the following:', 'custom-contact-forms' ); ?></p>
 
 							<ul>
-								<li><?php printf( __( 'Go to Settings &gt; <a href="%s">Permalinks</a> and click "Save Changes". This flushes your permalinks. If this fixes your problem, you are good to go!', 'custom-contact-forms' ), esc_url( admin_url( 'options-permalink.php' ) ) ); ?></li>
-								<li><?php _e( 'Deactivate all other plugins and activate the TwentySixteen theme. If this fixes the problem, there is a plugin or theme conflict. Please report on <a href="http://github.com/tlovett1/custom-contact-form">Github</a> or the <a href="https://wordpress.org/support/plugin/custom-contact-forms">support forums</a>.', 'custom-contact-forms' ); ?></li>
+								<li><?php
+								/* translators: %s: URL to permalinks settings page */
+								echo wp_kses_post( sprintf( __( 'Go to Settings &gt; <a href="%s">Permalinks</a> and click "Save Changes". This flushes your permalinks. If this fixes your problem, you are good to go!', 'custom-contact-forms' ), esc_url( admin_url( 'options-permalink.php' ) ) ) ); ?></li>
+								<li><?php echo wp_kses_post( __( 'Deactivate all other plugins and activate a default theme. If this fixes the problem, there is a plugin or theme conflict. Please report on the <a href="https://wordpress.org/support/plugin/custom-contact-forms">support forums</a>.', 'custom-contact-forms' ) ); ?></li>
 							</ul>
 
-							<p><?php _e( 'If neither of these things fix your problem, please report on <a href="http://github.com/tlovett1/custom-contact-form">Github</a> or the <a href="https://wordpress.org/support/plugin/custom-contact-forms">support forums</a>.', 'custom-contact-forms' ); ?></p>
+							<p><?php echo wp_kses_post( __( 'If neither of these things fix your problem, please report on the <a href="https://wordpress.org/support/plugin/custom-contact-forms">support forums</a>.', 'custom-contact-forms' ) ); ?></p>
 						<# } #>
 					</p>
 				</div>
@@ -152,15 +158,6 @@ class CCF_Form_Manager {
 			<div class="right-sidebar ccf-field-sidebar accordion-container"></div>
 
 			<div class="bottom">
-				<?php if ( ! apply_filters( 'ccf_hide_ads', false ) ) : ?>
-					<div class="left signup">
-						<strong>Want free WP blogging tips, tutorials, and marketing tricks? </strong>
-						<input type="email" class="email-signup-field" placeholder="Email">
-						<button type="button" class="button signup-button">Sign me up!</button>
-						<span class="signup-check">✓</span>
-						<span class="signup-x">&times;</span>
-					</div>
-				<?php endif; ?>
 				<input type="button" class="button insert-form-button" value="<?php esc_html_e( 'Insert into post', 'custom-contact-forms' ); ?>">
 				<input type="button" class="button button-primary save-button" value="<?php esc_html_e( 'Save Form', 'custom-contact-forms' ); ?>">
 				<div class="spinner" style="background: url( '<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>' ) no-repeat;"></div>
@@ -188,7 +185,7 @@ class CCF_Form_Manager {
 				<td>
 					<# if ( 'default' === notification.subjectType ) { #>
 
-						<?php echo wp_specialchars_decode( get_bloginfo( 'name' ) ); ?>: <?php esc_html_e( 'Form Submission', 'custom-contact-forms' ); ?> 
+						<?php echo esc_html( wp_specialchars_decode( get_bloginfo( 'name' ) ) ); ?>: <?php esc_html_e( 'Form Submission', 'custom-contact-forms' ); ?> 
 						<# if ( form.title.raw ) { #>
 							<?php esc_html_e( 'to', 'custom-contact-forms' ); ?> {{ form.title.raw }}
 						<# } #>
@@ -246,7 +243,7 @@ class CCF_Form_Manager {
 							</div>
 						</p>
 
-						<p><em><?php _e( 'If you are not receiving email notifications, we highly recommend installing the <a href="https://wordpress.org/plugins/easy-wp-smtp/">WP Easy SMTP</a> plugin as there is probably an issue with emailing on your host.', 'custom-contact-forms' ); ?></em></p>
+						<p><em><?php echo wp_kses_post( __( 'If you are not receiving email notifications, we highly recommend installing the <a href="https://wordpress.org/plugins/easy-wp-smtp/">WP Easy SMTP</a> plugin as there is probably an issue with emailing on your host.', 'custom-contact-forms' ) ); ?></em></p>
 					</div>
 					<div class="right">
 						<p class="email-notification-active">
@@ -626,7 +623,7 @@ class CCF_Form_Manager {
 
 		<script type="text/html" id="ccf-empty-field-template">
 			<div class="no-field">
-				<?php _e( '<span>&larr;</span> Click on a field to edit it.', 'custom-contact-forms' ); ?>
+				<?php echo wp_kses_post( __( '<span>&larr;</span> Click on a field to edit it.', 'custom-contact-forms' ) ); ?>
 			</div>
 		</script>
 
@@ -717,12 +714,16 @@ class CCF_Form_Manager {
 					<div>
 						<label for="ccf-field-file-extensions"><?php esc_html_e( 'Allowed File Extensions (comma separate):', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-file-extensions" class="field-file-extensions" type="text" value="{{ field.fileExtensions }}" placeholder="jpg,gif,png">
-						<span class="explain"><?php _e( 'If left blank, will default to all extensions registered by WordPress. If you use a file extension or mime type not <a href="http://codex.wordpress.org/Function_Reference/get_allowed_mime_types">whitelisted by WordPress</a>, you will need to filter and manually whitelist the new extension.', 'custom-contact-forms' ); ?></span>
+						<span class="explain"><?php echo wp_kses_post( __( 'If left blank, will default to all extensions registered by WordPress. If you use a file extension or mime type not <a href="http://codex.wordpress.org/Function_Reference/get_allowed_mime_types">whitelisted by WordPress</a>, you will need to filter and manually whitelist the new extension.', 'custom-contact-forms' ) ); ?></span>
 					</div>
 					<div>
 						<label for="ccf-field-max-file-size"><?php esc_html_e( 'Max File Size (in MB):', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-max-file-size" class="field-max-file-size" type="text" value="{{ field.maxFileSize }}">
-						<span class="explain"><?php printf( esc_html__( 'If left blank, will default to %d MB. Maximum allowed by server is %d MB.', 'custom-contact-forms' ), (double) size_format( $max_upload_size ), (double) size_format( $max_upload_size ) ); ?></span>
+						<span class="explain"><?php
+							$max_upload_mb = (int) ( $max_upload_size / ( 1024 * 1024 ) );
+							/* translators: %1$d: default file size in MB, %2$d: maximum server file size in MB */
+							printf( esc_html__( 'If left blank, will default to %1$d MB. Maximum allowed by server is %2$d MB.', 'custom-contact-forms' ), (int) $max_upload_mb, (int) $max_upload_mb );
+						?></span>
 					</div>
 					<div>
 						<label for="ccf-field-required"><?php esc_html_e( 'Required:', 'custom-contact-forms' ); ?></label>
@@ -772,7 +773,7 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'basic' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading">Basic</a>
 				<div class="section-content">
-					<p><?php _e( 'reCAPTCHA is a simple captcha service provided by Google. <a target="_blank" href="https://www.google.com/recaptcha/intro/index.html">Learn more</a>', 'custom-contact-forms' ); ?></p>
+					<p><?php echo wp_kses_post( __( 'reCAPTCHA is a simple captcha service provided by Google. <a target="_blank" href="https://www.google.com/recaptcha/intro/index.html">Learn more</a>', 'custom-contact-forms' ) ); ?></p>
 					<div>
 						<label for="ccf-field-label"><?php esc_html_e( 'Label:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-label" class="field-label" type="text" value="{{ field.label }}">
@@ -784,12 +785,12 @@ class CCF_Form_Manager {
 					<div>
 						<label for="ccf-field-site-key"><span class="required">*</span> <?php esc_html_e( 'Site Key:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-site-key" class="field-site-key" type="text" value="{{ field.siteKey }}">
-						<a href="http://google.com/recaptcha/" target="_blank"><?php _e( "Don't have one?", 'custom-contact-forms' ); ?></a>
+						<a href="http://google.com/recaptcha/" target="_blank"><?php esc_html_e( "Don't have one?", 'custom-contact-forms' ); ?></a>
 					</div>
 					<div>
 						<label for="ccf-field-secret-key"><span class="required">*</span> <?php esc_html_e( 'Secret Key:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-secret-key" class="field-secret-key" type="text" value="{{ field.secretKey }}">
-						<a href="http://google.com/recaptcha/" target="_blank"><?php _e( "Don't have one?", 'custom-contact-forms' ); ?></a>
+						<a href="http://google.com/recaptcha/" target="_blank"><?php esc_html_e( "Don't have one?", 'custom-contact-forms' ); ?></a>
 					</div>
 				</div>
 			</div>
@@ -1364,7 +1365,7 @@ class CCF_Form_Manager {
 							<label for="ccf-field-default-country"><?php esc_html_e( 'Default Country:', 'custom-contact-forms' ); ?></label>
 							<select id="ccf-field-default-country" class="field-default-country">
 								<?php foreach ( CCF_Constants::factory()->get_countries() as $country ) : ?>
-									<option <# if ( "<?php echo $country; ?>" === field.defaultCountry ) { #>selected<# } #>><?php echo $country; ?></option>
+									<option <# if ( "<?php echo esc_html( $country ); ?>" === field.defaultCountry ) { #>selected<# } #>><?php echo esc_html( $country ); ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
@@ -1764,7 +1765,7 @@ class CCF_Form_Manager {
 			<div class="field-description">
 				<# if ( field.fileExtensions ) {
 					var extensions = field.fileExtensions.toLowerCase().replace( /\s/g, '' ).split( ',' ).join( ', ' );
-					var file_size = <?php echo floor( $max_upload_size / 1000 / 1000 ); ?>;
+					var file_size = <?php echo (int) floor( $max_upload_size / 1000 / 1000 ); ?>;
 					if ( field.maxFileSize ) {
 						file_size = field.maxFileSize;
 					}
@@ -1778,7 +1779,7 @@ class CCF_Form_Manager {
 
 		<script type="text/html" id="ccf-recaptcha-preview-template">
 			<label>{{ field.label }} <# if ( field.required ) { #><span class="required">*</span><# } #> <# if ( field.conditionalsEnabled ) { #><span class="conditionals-enabled">if</span><# } #></label>
-			<img class="recaptcha-preview-img" src="<?php echo plugins_url( 'assets/img/recaptcha.png', dirname( __FILE__ ) ); ?>">
+			<img class="recaptcha-preview-img" src="<?php echo esc_url( plugins_url( 'assets/img/recaptcha.png', dirname( __FILE__ ) ) ); ?>">
 			<# if ( field.description ) { #>
 				<div class="field-description">{{ field.description }}</div>
 			<# } #>
@@ -1786,7 +1787,7 @@ class CCF_Form_Manager {
 
 		<script type="text/html" id="ccf-simple-captcha-preview-template">
 			<label>{{ field.label }} <# if ( field.required ) { #><span class="required">*</span><# } #></label>
-			<img class="simple-captcha-preview-img" src="<?php echo plugins_url( 'assets/img/simple-captcha.png', dirname( __FILE__ ) ); ?>">
+			<img class="simple-captcha-preview-img" src="<?php echo esc_url( plugins_url( 'assets/img/simple-captcha.png', dirname( __FILE__ ) ) ); ?>">
 			
 			<input disabled type="text" placeholder="{{ field.placeholder }}" value="{{ field.value }}">
 			<# if ( field.description ) { #>
@@ -1952,7 +1953,7 @@ class CCF_Form_Manager {
 				<div class="right">
 					<select>
 						<?php foreach ( CCF_Constants::factory()->get_us_states() as $state ) : ?>
-							<option><?php echo $state; ?></option>
+							<option><?php echo esc_html( $state ); ?></option>
 						<?php endforeach; ?>
 					</select>
 					<label class="sub-label"><?php esc_html_e( 'State', 'custom-contact-forms' ); ?></label>
@@ -1985,7 +1986,7 @@ class CCF_Form_Manager {
 				<div class="right">
 					<select>
 						<?php foreach ( CCF_Constants::factory()->get_countries() as $country ) : ?>
-							<option <# if ( "<?php echo $country; ?>" === field.defaultCountry ) { #>selected<# } #>><?php echo $country; ?></option>
+							<option <# if ( "<?php echo esc_html( $country ); ?>" === field.defaultCountry ) { #>selected<# } #>><?php echo esc_html( $country ); ?></option>
 						<?php endforeach; ?>
 					</select>
 					<label class="sub-label"><?php esc_html_e( 'Country', 'custom-contact-forms' ); ?></label>
@@ -2327,22 +2328,14 @@ class CCF_Form_Manager {
 				'simple-captcha' => __( 'Simple CAPTCHA', 'custom-contact-forms' ),
 			));
 
-			wp_register_script( 'moment', plugins_url( '/bower_components/moment/moment.js', dirname( __FILE__ ) ), array(), CCF_VERSION );
+			// moment.js is bundled with WordPress core since WP 4.7
+			// No need to register — WP will use its own copy when listed as a dependency
 
-			if ( ! wp_script_is( 'wp-api-ccf', 'registered' ) ) {
-				wp_register_script( 'wp-api-ccf', plugins_url( '/wp-api/wp-api.js', dirname( __FILE__ ) ), array(), CCF_VERSION );
-			}
+			// ccf-rest-api is registered in class-ccf-custom-contact-forms.php
 
-			$site_url_parsed = parse_url( site_url() );
-			$home_url_parsed = parse_url( home_url() );
+			$api_root = esc_url_raw( rest_url() );
 
-			if ( $site_url_parsed['host'] === $home_url_parsed['host'] && strtolower( $site_url_parsed['scheme'] ) === strtolower( $home_url_parsed['scheme'] ) ) {
-				$api_root = home_url( 'wp-json' );
-			} else {
-				$api_root = site_url( 'wp-json' );
-			}
-
-			wp_enqueue_script( 'ccf-form-manager', plugins_url( $js_manager_path, dirname( __FILE__ ) ), array( 'json2', 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'underscore', 'backbone', 'jquery-ui-core', 'jquery-ui-draggable', 'jquery-ui-sortable', 'jquery-ui-droppable', 'wp-api-ccf', 'moment' ), CCF_VERSION, true );
+			wp_enqueue_script( 'ccf-form-manager', plugins_url( $js_manager_path, dirname( __FILE__ ) ), array( 'json2', 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'underscore', 'backbone', 'jquery-ui-core', 'jquery-ui-draggable', 'jquery-ui-sortable', 'jquery-ui-droppable', 'ccf-rest-api', 'moment' ), CCF_VERSION, true );
 			wp_localize_script( 'ccf-form-manager', 'ccfSettings', array(
 				'apiRoot' => $api_root,
 				'nonce' => wp_create_nonce( 'ccf_nonce' ),
@@ -2352,7 +2345,7 @@ class CCF_Form_Manager {
 				'gmtOffset' => get_option( 'gmt_offset' ),
 				'adminEmail' => sanitize_email( get_option( 'admin_email' ) ),
 				'single' => ( 'ccf_form' === get_post_type() ) ? true : false,
-				'postId' => ( ! empty( $_GET['post'] ) ) ? (int) $_GET['post'] : null,
+				'postId' => ( ! empty( $_GET['post'] ) ) ? absint( $_GET['post'] ) : null,
 				'postsPerPage' => (int) get_option( 'posts_per_page' ),
 				'structureFieldLabels' => $structure_field_labels,
 				'specialFieldLabels' => $special_field_labels,

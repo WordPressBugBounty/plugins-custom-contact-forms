@@ -1,102 +1,54 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Class CCF_Ads
+ *
+ * Legacy promotional class. External Mailchimp subscription has been removed
+ * as the original list is no longer maintained. Structure preserved for
+ * backward compatibility with hooks and filters.
+ *
+ * @since 6.9.4
+ * @since 7.9.0 — Neutralized dead Mailchimp integration, added nonce checks
+ */
 class CCF_Ads {
 
-	/**
-	 * Placeholder method
-	 *
-	 * @since 6.9.4
-	 */
 	public function __construct() {}
 
 	/**
-	 * Setup hooks
-	 *
 	 * @since 6.9.4
 	 */
 	public function setup() {
-		add_action( 'admin_notices', array( $this, 'show_ad' ) );
+		// Disabled: original developer's subscribe banner is dead code
+		// add_action( 'admin_notices', array( $this, 'show_ad' ) );
 		add_action( 'init', array( $this, 'process_submission' ) );
 		add_action( 'in_admin_footer', array( $this, 'please_rate' ) );
 	}
 
+	/**
+	 * Process dismiss — no longer sends to external Mailchimp
+	 *
+	 * @since 7.9.0
+	 */
 	public function process_submission() {
 		if ( apply_filters( 'ccf_hide_ads', false ) ) {
 			return;
 		}
 
-		if ( ! empty( $_POST['ccf_subscribe'] ) && ! empty( $_POST['email'] ) ) {
-			$request = wp_remote_request( 'http://taylorlovett.us8.list-manage.com/subscribe/post?u=66118f9a5b0ab0414e83f043a&amp;id=b4ed816a24', array(
-				'method' => 'post',
-				'body' => array(
-					'EMAIL' => $_POST['email'],
-				),
-			));
-
-			update_option( 'ccf_subscribed', 1 );
-		} elseif ( ! empty( $_POST['ccf_unsubscribe'] ) ) {
+		// Only process dismissal, not external subscription
+		if ( ! empty( $_POST['ccf_unsubscribe'] ) ) {
+			if ( ! isset( $_POST['ccf_ads_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['ccf_ads_nonce'] ) ), 'ccf_ads_action' ) ) {
+				return;
+			}
 			update_option( 'ccf_subscribed', 1 );
 		}
 	}
 
 	/**
-	 * Output ad
-	 *
-	 * @since 6.9.4
-	 */
-	public function show_ad() {
-		global $pagenow;
-
-		if ( apply_filters( 'ccf_hide_ads', false ) ) {
-			return;
-		}
-
-		if ( 'edit.php' === $pagenow || 'post-new.php' === $pagenow ) {
-			if ( empty( $_GET['post_type'] ) || 'ccf_form' !== $_GET['post_type'] ) {
-				return;
-			}
-		}
-
-		if ( 'post.php' === $pagenow ) {
-			if ( 'ccf_form' !== get_post_type() ) {
-				return;
-			}
-		}
-
-		if ( 'post.php' !== $pagenow && 'edit.php' !== $pagenow && 'post-new.php' !== $pagenow ) {
-			return;
-		}
-
-		$subscribed = get_option( 'ccf_subscribed' );
-
-		if ( ! empty( $subscribed ) ) {
-			return;
-		}
-
-		?>
-		<div class="updated update-nag ccf-subscribe">
-			<div class="ad-wrap">
-				<?php if ( empty( $_POST['ccf_subscribe'] ) || empty( $_POST['ccf_unsubscribe'] ) ) : ?>
-					WordPress exclusive tutorials, blogging tips, themes, plugins, and more.
-					<form method="post">
-						<input type="email" name="email">
-						<input type="hidden" name="ccf_subscribe" value="1">
-						<input type="submit" class="button button-primary" value="Sign Me Up">
-					</form>
-					<form method="post">
-						<input type="hidden" name="ccf_unsubscribe" value="1">
-						<input type="submit" class="button" value="Not Interested">
-					</form>
-				<?php else : ?>
-					Check your email to confirm your subscription!
-				<?php endif; ?>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Output please rate
+	 * Output rate request
 	 *
 	 * @since 6.9.4
 	 */
@@ -126,18 +78,21 @@ class CCF_Ads {
 		?>
 		<p class="ccf-please-rate">
 			<a href="https://wordpress.org/support/view/plugin-reviews/custom-contact-forms#postform">
-
-				<?php _e( "We need your support. Please rate Custom Contact Forms five <span alt=\"f155\" class=\"dashicons dashicons-star-filled\"></span>'s", 'custom-contact-forms' ); ?>
+				<?php
+				printf(
+					/* translators: %s: star dashicon */
+					esc_html__( 'We need your support. Please rate Custom Contact Forms five %s\'s', 'custom-contact-forms' ),
+					'<span class="dashicons dashicons-star-filled"></span>'
+				);
+				?>
 			</a>
 		</p>
 		<?php
 	}
 
 	/**
-	 * Return singleton instance of class
-	 *
 	 * @since 6.9.4
-	 * @return object
+	 * @return CCF_Ads
 	 */
 	public static function factory() {
 		static $instance;

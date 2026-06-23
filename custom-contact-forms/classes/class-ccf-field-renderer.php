@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CCF_Field_Renderer {
 
 	/**
@@ -38,7 +42,7 @@ class CCF_Field_Renderer {
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ] ) ) {
-					$post_value = $_POST[ 'ccf_field_' . $slug ];
+					$post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}
@@ -94,7 +98,7 @@ class CCF_Field_Renderer {
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ] ) ) {
-					$post_value = $_POST[ 'ccf_field_' . $slug ];
+					$post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}
@@ -124,9 +128,13 @@ class CCF_Field_Renderer {
 
 			<div class="field-description help-block text-muted">
 				<?php if ( ! empty( $file_extensions ) ) : ?>
-					<?php echo sprintf( esc_html__( 'Allowed file extensions are %s. ', 'custom-contact-forms' ), implode( ', ', explode( ',', str_replace( ' ', '', $file_extensions ) ) ) ); ?>
+					<?php
+					/* translators: %s: comma-separated list of file extensions */
+					echo sprintf( esc_html__( 'Allowed file extensions are %s. ', 'custom-contact-forms' ), esc_html( implode( ', ', explode( ',', str_replace( ' ', '', $file_extensions ) ) ) ) ); ?>
 				<?php endif; ?>
-				<?php echo sprintf( esc_html__( 'Max file size is %d MB. ', 'custom-contact-forms' ), (int) $formatted_file_size ); ?>
+				<?php
+				/* translators: %d: maximum file size in MB */
+				echo sprintf( esc_html__( 'Max file size is %d MB. ', 'custom-contact-forms' ), (int) $formatted_file_size ); ?>
 				<?php echo esc_html( $description ); ?>
 			</div>
 
@@ -150,6 +158,11 @@ class CCF_Field_Renderer {
 	 * @return string
 	 */
 	public function recaptcha( $field_id, $form_id ) {
+		// Only load Google's reCAPTCHA API when a reCAPTCHA field is actually
+		// rendered on the page. The script is registered in
+		// CCF_Form_Renderer::action_wp_enqueue_scripts() but not enqueued by default.
+		wp_enqueue_script( 'ccf-google-recaptcha' );
+
 		$slug = get_post_meta( $field_id, 'ccf_field_slug', true );
 		$label = get_post_meta( $field_id, 'ccf_field_label', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
@@ -202,7 +215,9 @@ class CCF_Field_Renderer {
 
 		require_once( dirname( __FILE__ ) . '/../vendor/abeautifulsite/simple-php-captcha/simple-php-captcha.php' );
 
+		CCF_Form_Handler::maybe_start_session();
 		$_SESSION['ccf_simple_captcha_' . $slug] = simple_php_captcha();
+		$captcha_image_src = isset( $_SESSION['ccf_simple_captcha_' . $slug]['image_src'] ) ? sanitize_text_field( $_SESSION['ccf_simple_captcha_' . $slug]['image_src'] ) : '';
 
 		ob_start();
 		?>
@@ -213,7 +228,7 @@ class CCF_Field_Renderer {
 				<?php echo esc_html( $label ); ?>
 			</label>
 			<div class="ccf-simple-captcha-wrapper">
-				<img src="<?php echo esc_url( $_SESSION['ccf_simple_captcha_' . $slug]['image_src'] ); ?>">
+				<img src="<?php echo esc_url( $captcha_image_src ); ?>">
 			</div>
 
 			<input class="form-control <?php if ( ! empty( $errors ) ) : ?>field-error-input<?php endif; ?> field-input" required aria-required="true" type="text" name="ccf_field_<?php echo esc_attr( $slug ); ?>" id="ccf_field_<?php echo esc_attr( $slug ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>">
@@ -353,7 +368,7 @@ class CCF_Field_Renderer {
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ] ) ) {
-					$post_value = $_POST[ 'ccf_field_' . $slug ];
+					$post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}
@@ -386,7 +401,7 @@ class CCF_Field_Renderer {
 					}
 
 					?>
-					<option <?php echo $selected; ?> value="<?php echo esc_attr( $value ); ?>"><?php echo esc_html( $choice['label'] ); ?></option>
+					<option <?php echo esc_attr( $selected ); ?> value="<?php echo esc_attr( $value ); ?>"><?php echo esc_html( $choice['label'] ); ?></option>
 				<?php endforeach; ?>
 			</select>
 
@@ -442,7 +457,7 @@ class CCF_Field_Renderer {
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ] ) ) {
-					$post_value = $_POST[ 'ccf_field_' . $slug ];
+					$post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}
@@ -468,7 +483,7 @@ class CCF_Field_Renderer {
 				}
 				?>
 				<div class="choice checkbox">
-					<label><input class="field-input" name="ccf_field_<?php echo esc_attr( $slug ); ?>[]" type="checkbox" <?php echo $checked; ?> value="<?php echo esc_attr( $choice['value'] ); ?>"> <span><?php echo esc_html( $choice['label'] ); ?></span></label>
+					<label><input class="field-input" name="ccf_field_<?php echo esc_attr( $slug ); ?>[]" type="checkbox" <?php echo esc_attr( $checked ); ?> value="<?php echo esc_attr( $choice['value'] ); ?>"> <span><?php echo esc_html( $choice['label'] ); ?></span></label>
 				</div>
 			<?php endforeach; ?>
 
@@ -524,7 +539,7 @@ class CCF_Field_Renderer {
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ] ) ) {
-					$post_value = $_POST[ 'ccf_field_' . $slug ];
+					$post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}
@@ -550,7 +565,7 @@ class CCF_Field_Renderer {
 				}
 				?>
 				<div class="choice radio">
-					<label><input class="field-input" name="ccf_field_<?php echo esc_attr( $slug ); ?>" type="radio" <?php echo $checked; ?> value="<?php echo esc_attr( $choice['value'] ); ?>"> <span><?php echo esc_html( $choice['label'] ); ?></span></label>
+					<label><input class="field-input" name="ccf_field_<?php echo esc_attr( $slug ); ?>" type="radio" <?php echo esc_attr( $checked ); ?> value="<?php echo esc_attr( $choice['value'] ); ?>"> <span><?php echo esc_html( $choice['label'] ); ?></span></label>
 				</div>
 			<?php endforeach; ?>
 
@@ -593,27 +608,27 @@ class CCF_Field_Renderer {
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['street'] ) ) {
-					$street_post_value = $_POST[ 'ccf_field_' . $slug ]['street'];
+					$street_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['street'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['line_two'] ) ) {
-					$line_two_post_value = $_POST[ 'ccf_field_' . $slug ]['line_two'];
+					$line_two_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['line_two'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['city'] ) ) {
-					$city_post_value = $_POST[ 'ccf_field_' . $slug ]['city'];
+					$city_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['city'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['state'] ) ) {
-					$state_post_value = $_POST[ 'ccf_field_' . $slug ]['state'];
+					$state_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['state'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['country'] ) ) {
-					$country_post_value = $_POST[ 'ccf_field_' . $slug ]['country'];
+					$country_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['country'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['zipcode'] ) ) {
-					$zipcode_post_value = $_POST[ 'ccf_field_' . $slug ]['zipcode'];
+					$zipcode_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['zipcode'] ) );
 				}
 			}
 		}
@@ -649,7 +664,7 @@ class CCF_Field_Renderer {
 				<div class="right">
 					<select class="<?php if ( ! empty( $errors['state_required'] ) ) : ?>field-error-input<?php endif; ?> field-input" <?php if ( ! empty( $required ) ) : ?>required aria-required="true"<?php endif; ?> name="ccf_field_<?php echo esc_attr( $slug ); ?>[state]" id="ccf_field_<?php echo esc_attr( $slug ); ?>-state">
 						<?php foreach ( CCF_Constants::factory()->get_us_states() as $state ) : ?>
-							<option <?php if ( ! empty( $street_post_value ) ) { selected( $street_post_value, $state ); } ?>><?php echo $state; ?></option>
+							<option <?php if ( ! empty( $street_post_value ) ) { selected( $street_post_value, $state ); } ?>><?php echo esc_html( $state ); ?></option>
 						<?php endforeach; ?>
 					</select>
 					<?php if ( ! empty( $errors['state_required'] ) ) : ?>
@@ -687,7 +702,7 @@ class CCF_Field_Renderer {
 				<div class="right">
 					<select class="<?php if ( ! empty( $errors['country_required'] ) ) : ?>field-error-input<?php endif; ?> field-input" <?php if ( ! empty( $required ) ) : ?>required aria-required="true"<?php endif; ?> name="ccf_field_<?php echo esc_attr( $slug ); ?>[country]" id="ccf_field_<?php echo esc_attr( $slug ); ?>-country">
 						<?php foreach ( CCF_Constants::factory()->get_countries() as $country ) : ?>
-							<option <?php if ( $country === $default_country ) : ?>selected<?php endif; ?> <?php if ( ! empty( $country_post_value ) ) { selected( $country_post_value, $country ); } ?>><?php echo $country; ?></option>
+							<option <?php if ( $country === $default_country ) : ?>selected<?php endif; ?> <?php if ( ! empty( $country_post_value ) ) { selected( $country_post_value, $country ); } ?>><?php echo esc_html( $country ); ?></option>
 						<?php endforeach; ?>
 					</select>
 					<?php if ( ! empty( $errors['country_required'] ) ) : ?>
@@ -735,7 +750,7 @@ class CCF_Field_Renderer {
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ] ) ) {
-					$post_value = $_POST[ 'ccf_field_' . $slug ];
+					$post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}
@@ -792,7 +807,7 @@ class CCF_Field_Renderer {
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ] ) ) {
-					$post_value = $_POST[ 'ccf_field_' . $slug ];
+					$post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}
@@ -850,14 +865,14 @@ endif; ?>
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $email_confirmation ) ) {
 					if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['email'] ) ) {
-						$email_post_value = $_POST[ 'ccf_field_' . $slug ]['email'];
+						$email_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['email'] ) );
 					}
 
 					if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['confirm'] ) ) {
-						$confirm_post_value = $_POST[ 'ccf_field_' . $slug ]['confirm'];
+						$confirm_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['confirm'] ) );
 					}
 				} else {
-					$email_post_value = $_POST[ 'ccf_field_' . $slug ];
+					$email_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}
@@ -934,11 +949,11 @@ endif; ?>
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['first'] ) ) {
-					$first_post_value = $_POST[ 'ccf_field_' . $slug ]['first'];
+					$first_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['first'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['last'] ) ) {
-					$last_post_value = $_POST[ 'ccf_field_' . $slug ]['last'];
+					$last_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['last'] ) );
 				}
 			}
 		}
@@ -1006,19 +1021,19 @@ endif; ?>
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['date'] ) ) {
-					$date_post_value = $_POST[ 'ccf_field_' . $slug ]['date'];
+					$date_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['date'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['hour'] ) ) {
-					$hour_post_value = $_POST[ 'ccf_field_' . $slug ]['hour'];
+					$hour_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['hour'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['minute'] ) ) {
-					$minute_post_value = $_POST[ 'ccf_field_' . $slug ]['minute'];
+					$minute_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['minute'] ) );
 				}
 
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ]['am-pm'] ) ) {
-					$am_pm_post_value = $_POST[ 'ccf_field_' . $slug ]['am-pm'];
+					$am_pm_post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ]['am-pm'] ) );
 				}
 			}
 		}
@@ -1114,7 +1129,7 @@ endif; ?>
 		if ( ! empty( $all_errors ) ) {
 			if ( apply_filters( 'ccf_show_last_field_value', true, $field_id ) ) {
 				if ( ! empty( $_POST[ 'ccf_field_' . $slug ] ) ) {
-					$post_value = $_POST[ 'ccf_field_' . $slug ];
+					$post_value = sanitize_text_field( wp_unslash( $_POST[ 'ccf_field_' . $slug ] ) );
 				}
 			}
 		}

@@ -1,25 +1,20 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class CCF_Export {
 
-	/**
-	 * Placeholder method
-	 *
-	 * @since 6.5
-	 */
 	public function __construct() {}
 
 	/**
-	 * Keep track of post types when we change them
-	 *
-	 * @var $old_post_types
+	 * @var array|false
 	 * @since 6.5
 	 */
 	public $old_post_types = false;
 
 	/**
-	 * Setup form screen with actions and filters
-	 *
 	 * @since 6.5
 	 */
 	public function setup() {
@@ -34,42 +29,38 @@ class CCF_Export {
 	}
 
 	/**
-	 * Hackishly hide some CCF post types on the export screen
-	 *
 	 * @since 6.5
 	 */
 	public function action_all_admin_notices() {
 		global $pagenow;
 
-		if ( 'export.php' === $pagenow && empty( $_GET['download'] ) ) {
+		if ( 'export.php' === $pagenow && ! isset( $_GET['download'] ) ) {
 			global $wp_post_types;
 			$this->old_post_types = $wp_post_types;
 
 			$ccf_post_types = array( 'ccf_field', 'ccf_choice', 'ccf_submission' );
 
 			foreach ( $wp_post_types as $slug => $post_type ) {
-				if ( in_array( $slug, $ccf_post_types ) ) {
+				if ( in_array( $slug, $ccf_post_types, true ) ) {
 					$this->old_post_types[ $slug ] = clone $post_type;
 					$post_type->can_export = false;
 				}
 
 				if ( 'ccf_form' === $slug ) {
 					$this->old_post_types[ $slug ] = clone $post_type;
-					$post_type->label = esc_html__( 'Forms and Submissions', 'cutom-contact-forms' );
+					$post_type->label = esc_html__( 'Forms and Submissions', 'custom-contact-forms' );
 				}
 			}
 		}
 	}
 
 	/**
-	 * Restore global post types on export page
-	 *
 	 * @since 6.5
 	 */
 	public function action_export_filters() {
 		global $pagenow;
 
-		if ( 'export.php' === $pagenow && empty( $_GET['download'] ) ) {
+		if ( 'export.php' === $pagenow && ! isset( $_GET['download'] ) ) {
 			global $wp_post_types;
 
 			if ( false !== $this->old_post_types ) {
@@ -79,36 +70,26 @@ class CCF_Export {
 	}
 
 	/**
-	 * Hackishly add import link to forms menu
-	 *
 	 * @since 6.5
 	 */
 	public function action_admin_menu() {
-		if ( current_user_can( 'edit_posts' ) ) {
-			global $submenu;
-
-			$submenu['edit.php?post_type=ccf_form'][] = array( esc_html__( 'Import', 'custom-contact-forms' ), 'manage_options', esc_url( admin_url( 'import.php' ) ) );
-		}
+		// Removed: old "Import" link that pointed to WordPress core import.php
+		// CSV import is now handled by CCF_CSV_Importer under Forms → Import CSV
 	}
 
 	/**
-	 * Add import cleanup meta value
-	 *
 	 * @param int $post_id
 	 * @since 6.5
 	 */
 	public function action_wp_import_insert_post( $post_id ) {
 		$types = array( 'ccf_form', 'ccf_field' );
 
-		if ( in_array( get_post_type( $post_id ), $types ) ) {
-			// Mark post for cleanup later
+		if ( in_array( get_post_type( $post_id ), $types, true ) ) {
 			update_post_meta( $post_id, 'ccf_import_cleanup', true );
 		}
 	}
 
 	/**
-	 * We need to reattach form fields and field choices
-	 *
 	 * @since 6.5
 	 */
 	public function action_import_end() {
@@ -126,10 +107,11 @@ class CCF_Export {
 					$fields = wp_list_pluck( get_children( array( 'post_type' => 'ccf_field', 'post_parent' => $form->ID, 'numberposts' => 500 ) ), 'ID' );
 					if ( ! empty( $fields ) ) {
 						$fields = array_values( $fields );
+					} else {
+						$fields = array();
 					}
 
 					update_post_meta( $form->ID, 'ccf_attached_fields', $fields );
-
 					delete_post_meta( $form->ID, 'ccf_import_cleanup' );
 				}
 			}
@@ -149,10 +131,12 @@ class CCF_Export {
 					$choices = wp_list_pluck( get_children( array( 'post_type' => 'ccf_choice', 'post_parent' => $field->ID, 'numberposts' => 500 ) ), 'ID' );
 					if ( ! empty( $choices ) ) {
 						$choices = array_values( $choices );
+					} else {
+						$choices = array();
 					}
 
-					update_post_meta( $field->ID, 'ccf_attached_fields', $choices );
-
+					// FIX: was saving to wrong meta key (ccf_attached_fields instead of ccf_attached_choices)
+					update_post_meta( $field->ID, 'ccf_attached_choices', $choices );
 					delete_post_meta( $field->ID, 'ccf_import_cleanup' );
 				}
 			}
@@ -160,7 +144,7 @@ class CCF_Export {
 	}
 
 	/**
-	 * Filter query for exporting a single form
+	 * Filter query for exporting a single form — SECURITY FIX: proper integer cast
 	 *
 	 * @param string $query
 	 * @since 6.5
@@ -169,22 +153,27 @@ class CCF_Export {
 	public function filter_query( $query ) {
 		global $wpdb;
 
-		if ( isset( $_GET['post'] ) && stripos( $query, 'ccf_form' ) ) {
+		if ( isset( $_GET['post'] ) && stripos( $query, 'ccf_form' ) !== false ) {
 			remove_filter( 'query', array( $this, 'filter_query' ) );
 
-			$form_id = (int) $_GET['post'];
+			$form_id = absint( $_GET['post'] );
+
+			if ( $form_id <= 0 || 'ccf_form' !== get_post_type( $form_id ) ) {
+				return $query;
+			}
 
 			$post_ids = array( $form_id );
 
-			// First get submissions
-			$submissions = wp_list_pluck( get_children( array( 'post_parent' => $_GET['post'], 'post_type' => 'ccf_submission' ) ), 'ID' );
+			// Get submissions
+			$submissions = wp_list_pluck( get_children( array( 'post_parent' => $form_id, 'post_type' => 'ccf_submission', 'numberposts' => apply_filters( 'ccf_max_submissions', 5000, get_post( $form_id ) ) ) ), 'ID' );
 			$post_ids = array_merge( $post_ids, $submissions );
 
-			// Now get fields
+			// Get fields
 			$fields = get_post_meta( $form_id, 'ccf_attached_fields', true );
 
-			if ( ! empty( $fields ) ) {
+			if ( ! empty( $fields ) && is_array( $fields ) ) {
 				foreach ( $fields as $field_id ) {
+					$field_id = (int) $field_id;
 					$post_ids[] = $field_id;
 
 					$type = get_post_meta( $field_id, 'ccf_field_type', true );
@@ -192,7 +181,7 @@ class CCF_Export {
 					if ( 'dropdown' === $type || 'radio' === $type || 'checkboxes' === $type ) {
 						$choices = get_post_meta( $field_id, 'ccf_attached_choices', true );
 
-						if ( ! empty( $choices ) ) {
+						if ( ! empty( $choices ) && is_array( $choices ) ) {
 							$post_ids = array_merge( $post_ids, $choices );
 						}
 					}
@@ -200,6 +189,7 @@ class CCF_Export {
 			}
 
 			if ( ! empty( $post_ids ) ) {
+				// SECURITY FIX: ensure all IDs are integers
 				$post_ids = implode( ',', array_map( 'intval', $post_ids ) );
 
 				$query = preg_replace( "#post_type.*=.*('|\").*?('|\")#i", "ID in ({$post_ids}) ", $query );
@@ -210,18 +200,16 @@ class CCF_Export {
 	}
 
 	/**
-	 * Output export file for single form
-	 *
 	 * @since 6.5
 	 */
 	public function action_handle_export() {
-		if ( ! empty( $_GET['post'] ) && ! empty( $_GET['export'] ) && wp_verify_nonce( $_GET['nonce'], 'ccf_form_export' ) ) {
+		if ( ! empty( $_GET['post'] ) && ! empty( $_GET['export'] ) && isset( $_GET['nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['nonce'] ) ), 'ccf_form_export' ) ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
 			require_once( ABSPATH . 'wp-admin/includes/export.php' );
 
-			/**
-			 * We use ccf_form so we can be sure we are referring to the
-			 * right query later.
-			 */
 			add_filter( 'query', array( $this, 'filter_query' ) );
 			export_wp( array( 'content' => 'ccf_form' ) );
 
@@ -230,8 +218,6 @@ class CCF_Export {
 	}
 
 	/**
-	 * Restore global post types variable if necessary
-	 *
 	 * @since 6.5
 	 */
 	public function action_rss2_head() {
@@ -245,9 +231,6 @@ class CCF_Export {
 	}
 
 	/**
-	 * Hack all non-ccf post types to be not exportable if someone tries to export the ccf_form
-	 * post type
-	 *
 	 * @param array $args
 	 * @since 6.5
 	 * @return array
@@ -262,7 +245,7 @@ class CCF_Export {
 			$ccf_post_types = array( 'ccf_form', 'ccf_field', 'ccf_choice', 'ccf_submission' );
 
 			foreach ( $wp_post_types as $slug => $post_type ) {
-				if ( ! in_array( $slug, $ccf_post_types ) ) {
+				if ( ! in_array( $slug, $ccf_post_types, true ) ) {
 					$this->old_post_types[ $slug ] = clone $post_type;
 					$post_type->can_export = false;
 				}
@@ -273,10 +256,8 @@ class CCF_Export {
 	}
 
 	/**
-	 * Return singleton instance of class
-	 *
 	 * @since 6.5
-	 * @return object
+	 * @return CCF_Export
 	 */
 	public static function factory() {
 		static $instance;

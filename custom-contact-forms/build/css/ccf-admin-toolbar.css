@@ -1,0 +1,31 @@
+/**
+ * Custom Contact Forms — Admin Submission Toolbar Styles
+ * @since 7.9.0
+ */
+
+/* Hide the old JS-created icon-font buttons */
+#ccf-submissions .ccf-submission-icon,
+#ccf-submissions .ccf-submission-icon-btn {
+	display: none !important;
+}
+
+#ccf-submissions .ccf-toolbar {
+	padding: 8px 12px;
+	border-bottom: 1px solid #f0f0f1;
+	background: #fafafa;
+	overflow: hidden;
+}
+
+#ccf-submissions .ccf-toolbar .button {
+	float: right;
+	margin-left: 6px;
+}
+
+#ccf-submissions .ccf-toolbar .dashicons {
+	vertical-align: middle;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	margin-top: 2px;
+	margin-right: 2px;
+}
