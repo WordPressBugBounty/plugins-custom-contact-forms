@@ -442,6 +442,7 @@ class CCF_Form_Manager {
 					<option value=""><?php esc_html_e( 'None', 'custom-contact-forms' ); ?></option>
 					<option value="light" <# if ( 'light' === form.theme ) { #>selected<# } #>><?php esc_html_e( 'Light', 'custom-contact-forms' ); ?></option>
 					<option value="dark" <# if ( 'dark' === form.theme ) { #>selected<# } #>><?php esc_html_e( 'Dark', 'custom-contact-forms' ); ?></option>
+				<option value="minimal" <# if ( 'minimal' === form.theme ) { #>selected<# } #>><?php esc_html_e( 'Minimal', 'custom-contact-forms' ); ?></option>
 				</select>
 
 				<span class="explain"><?php esc_html_e( '"None" will have your form inherit styles from your theme.', 'custom-contact-forms' ); ?></span>
@@ -660,6 +661,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -738,6 +750,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -798,6 +821,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -822,6 +856,17 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'advanced' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
+					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
 					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
@@ -866,6 +911,17 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'advanced' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
+					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
 					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
@@ -916,6 +972,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -964,6 +1031,17 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'advanced' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
+					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
 					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
@@ -1029,6 +1107,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -1081,6 +1170,17 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'advanced' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
+					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
 					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
@@ -1141,6 +1241,17 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'advanced' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
+					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
 					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
@@ -1225,6 +1336,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -1301,6 +1423,17 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'advanced' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
+					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
 					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
@@ -1383,6 +1516,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -1455,6 +1599,17 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'advanced' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
+					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
 					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
@@ -1566,6 +1721,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -1640,6 +1806,17 @@ class CCF_Form_Manager {
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
 					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
+					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
 					</div>
@@ -1713,6 +1890,17 @@ class CCF_Form_Manager {
 			<div class="accordion-section <# if ( 'advanced' === startPanel ) { #>expanded<# } #>">
 				<a class="accordion-heading"><?php esc_html_e( 'Advanced', 'custom-contact-forms' ); ?></a>
 				<div class="section-content">
+					<div>
+						<label for="ccf-field-width"><?php esc_html_e( 'Field Width:', 'custom-contact-forms' ); ?></label>
+						<select id="ccf-field-width" class="field-width">
+							<option value=""><?php esc_html_e( 'Full Width', 'custom-contact-forms' ); ?></option>
+							<option value="half" <# if ( 'half' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Half (1/2)', 'custom-contact-forms' ); ?></option>
+							<option value="third" <# if ( 'third' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Third (1/3)', 'custom-contact-forms' ); ?></option>
+							<option value="two-thirds" <# if ( 'two-thirds' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Two Thirds (2/3)', 'custom-contact-forms' ); ?></option>
+							<option value="quarter" <# if ( 'quarter' === field.fieldWidth ) { #>selected="selected"<# } #>><?php esc_html_e( 'Quarter (1/4)', 'custom-contact-forms' ); ?></option>
+						</select>
+						<span class="explain"><?php esc_html_e( 'Width is applied on the published form (block editor preview and front end), not in this builder.', 'custom-contact-forms' ); ?></span>
+					</div>
 					<div>
 						<label for="ccf-field-class-name"><?php esc_html_e( 'Class Name:', 'custom-contact-forms' ); ?></label>
 						<input id="ccf-field-class-name" class="field-class-name" type="text" value="{{ field.className }}">
@@ -2292,7 +2480,9 @@ class CCF_Form_Manager {
 		global $pagenow, $wp_customize;
 
 		if ( 'post.php' == $pagenow || 'post-new.php' == $pagenow || ( ! empty( $wp_customize ) && isset( $wp_customize->posts ) ) ) {
-			if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			// Always load the minified manager build for now; the unminified build
+			// is not yet synced with all field settings (e.g. field width).
+			if ( false ) {
 				$js_manager_path = '/assets/build/js/form-manager.js';
 				$js_mce_path = '/assets/js/form-mce.js';
 				$css_path = '/assets/build/css/form-manager.css';
@@ -2377,7 +2567,8 @@ class CCF_Form_Manager {
 				),
 			) );
 
-			wp_enqueue_style( 'ccf-form-manager', plugins_url( $css_path, dirname( __FILE__ ) ), array(), CCF_VERSION );
+			wp_enqueue_style( 'ccf-form-manager', plugins_url( $css_path, dirname( __FILE__ ) ), array( 'dashicons' ), CCF_VERSION );
+			wp_enqueue_style( 'ccf-builder-modern', plugins_url( '/build/css/ccf-builder-modern.css', dirname( __FILE__ ) ), array( 'ccf-form-manager' ), CCF_VERSION );
 
 			if ( apply_filters( 'ccf_enable_tinymce_previews', true ) && 'ccf_form' !== get_post_type() ) {
 				wp_enqueue_script( 'ccf-form-mce', plugins_url( $js_mce_path, dirname( __FILE__ ) ), array( 'mce-view', 'jquery', 'ccf-form-manager' ), CCF_VERSION, true );

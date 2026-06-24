@@ -34,6 +34,10 @@ class CCF_Field_Renderer {
 		$placeholder = get_post_meta( $field_id, 'ccf_field_placeholder', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
 		$errors = CCF_Form_Handler::factory()->get_errors( $form_id, $slug );
@@ -88,6 +92,10 @@ class CCF_Field_Renderer {
 		$placeholder = get_post_meta( $field_id, 'ccf_field_placeholder', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$max_file_size = get_post_meta( $field_id, 'ccf_field_maxFileSize', true );
 		$file_extensions = get_post_meta( $field_id, 'ccf_field_fileExtensions', true );
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
@@ -166,6 +174,10 @@ class CCF_Field_Renderer {
 		$slug = get_post_meta( $field_id, 'ccf_field_slug', true );
 		$label = get_post_meta( $field_id, 'ccf_field_label', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$site_key = get_post_meta( $field_id, 'ccf_field_siteKey', true );
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
@@ -208,6 +220,10 @@ class CCF_Field_Renderer {
 		$slug = get_post_meta( $field_id, 'ccf_field_slug', true );
 		$label = get_post_meta( $field_id, 'ccf_field_label', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$placeholder = get_post_meta( $field_id, 'ccf_field_placeholder', true );
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
@@ -261,6 +277,10 @@ class CCF_Field_Renderer {
 		$heading = get_post_meta( $field_id, 'ccf_field_heading', true );
 		$subheading = get_post_meta( $field_id, 'ccf_field_subheading', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 
 		ob_start();
 
@@ -301,6 +321,10 @@ class CCF_Field_Renderer {
 		$slug = get_post_meta( $field_id, 'ccf_field_slug', true );
 		$html = get_post_meta( $field_id, 'ccf_field_html', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 
 		ob_start();
 		?>
@@ -357,6 +381,10 @@ class CCF_Field_Renderer {
 		$slug = get_post_meta( $field_id, 'ccf_field_slug', true );
 		$label = get_post_meta( $field_id, 'ccf_field_label', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
@@ -449,6 +477,10 @@ class CCF_Field_Renderer {
 		;
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
 		$errors = CCF_Form_Handler::factory()->get_errors( $form_id, $slug );
@@ -531,6 +563,10 @@ class CCF_Field_Renderer {
 		;
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
 		$errors = CCF_Form_Handler::factory()->get_errors( $form_id, $slug );
@@ -599,6 +635,10 @@ class CCF_Field_Renderer {
 		$address_type = get_post_meta( $field_id, 'ccf_field_addressType', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 		$default_country = get_post_meta( $field_id, 'ccf_field_defaultCountry', true );
 
@@ -741,6 +781,10 @@ class CCF_Field_Renderer {
 		$placeholder = get_post_meta( $field_id, 'ccf_field_placeholder', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$phone_format = get_post_meta( $field_id, 'ccf_field_phoneFormat', true );
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
@@ -799,6 +843,10 @@ class CCF_Field_Renderer {
 		$placeholder = get_post_meta( $field_id, 'ccf_field_placeholder', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
 		$errors = CCF_Form_Handler::factory()->get_errors( $form_id, $slug );
@@ -856,6 +904,10 @@ endif; ?>
 		$email_confirmation = get_post_meta( $field_id, 'ccf_field_emailConfirmation', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
 		$errors = CCF_Form_Handler::factory()->get_errors( $form_id, $slug );
@@ -941,6 +993,10 @@ endif; ?>
 		$label = get_post_meta( $field_id, 'ccf_field_label', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
 		$errors = CCF_Form_Handler::factory()->get_errors( $form_id, $slug );
@@ -1008,6 +1064,10 @@ endif; ?>
 		$label = get_post_meta( $field_id, 'ccf_field_label', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$show_date = get_post_meta( $field_id, 'ccf_field_showDate', true );
 		$show_time = get_post_meta( $field_id, 'ccf_field_showTime', true );
 		$date_format = get_post_meta( $field_id, 'ccf_field_dateFormat', true );
@@ -1121,6 +1181,10 @@ endif; ?>
 		$placeholder = get_post_meta( $field_id, 'ccf_field_placeholder', true );
 		$required = get_post_meta( $field_id, 'ccf_field_required', true );
 		$class_name = get_post_meta( $field_id, 'ccf_field_className', true );
+		$field_width = get_post_meta( $field_id, 'ccf_field_fieldWidth', true );
+		if ( ! empty( $field_width ) ) {
+			$class_name .= ' ccf-width-' . $field_width;
+		}
 		$description = get_post_meta( $field_id, 'ccf_field_description', true );
 
 		$errors = CCF_Form_Handler::factory()->get_errors( $form_id, $slug );

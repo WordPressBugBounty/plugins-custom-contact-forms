@@ -15,6 +15,7 @@ class CCF_Settings {
 		add_action( 'admin_menu', array( $this, 'register_menu_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
+		add_action( 'wp_head', array( $this, 'output_custom_css' ), 999 );
 	}
 
 	/**
@@ -47,6 +48,11 @@ class CCF_Settings {
 		}
 
 		$clean_option['asset_loading_restriction_enabled'] = ( isset( $option['asset_loading_restriction_enabled'] ) && '1' === $option['asset_loading_restriction_enabled'] ) ? true : false;
+
+		// Custom CSS: strip tags to prevent </style> breakout or script injection,
+		// then run through wp_strip_all_tags. CSS itself contains no HTML, so this
+		// is safe and removes any attempt to close the style tag or inject markup.
+		$clean_option['custom_css'] = isset( $option['custom_css'] ) ? wp_strip_all_tags( $option['custom_css'] ) : '';
 
 		$clean_option['asset_loading_restrictions'] = array();
 		if ( ! empty( $option['asset_loading_restrictions'] ) && is_array( $option['asset_loading_restrictions'] ) ) {
@@ -89,6 +95,50 @@ class CCF_Settings {
 		add_settings_section( 'asset-loading-restriction', esc_html__( 'Asset Loading Restriction', 'custom-contact-forms' ), array( $this, 'asset_loading_restriction_summary' ), 'custom-contact-forms' );
 		add_settings_field( 'asset-loading-restriction-enable', esc_html__( 'Enable Asset Loading Restrictions', 'custom-contact-forms' ), array( $this, 'asset_loading_restriction_enable' ), 'custom-contact-forms', 'asset-loading-restriction' );
 		add_settings_field( 'asset-loading-restriction-choose', esc_html__( 'Restrict Asset Loading To', 'custom-contact-forms' ), array( $this, 'asset_loading_restriction_choose' ), 'custom-contact-forms', 'asset-loading-restriction', array( 'class' => $restriction_classes ) );
+
+		add_settings_section( 'ccf-custom-css', esc_html__( 'Custom CSS', 'custom-contact-forms' ), array( $this, 'custom_css_summary' ), 'custom-contact-forms' );
+		add_settings_field( 'ccf-custom-css-field', esc_html__( 'Custom CSS', 'custom-contact-forms' ), array( $this, 'custom_css_field' ), 'custom-contact-forms', 'ccf-custom-css' );
+	}
+
+	/**
+	 * Custom CSS section summary.
+	 *
+	 * @since 7.10
+	 */
+	public function custom_css_summary() {
+		?>
+		<p><?php esc_html_e( 'Add your own CSS to style your forms. This CSS is output on any page that displays a form.', 'custom-contact-forms' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Custom CSS textarea field.
+	 *
+	 * @since 7.10
+	 */
+	public function custom_css_field() {
+		$option = get_option( 'ccf_settings' );
+		$css    = ( is_array( $option ) && isset( $option['custom_css'] ) ) ? $option['custom_css'] : '';
+		?>
+		<textarea name="ccf_settings[custom_css]" id="ccf-custom-css" class="large-text code" rows="12" spellcheck="false" placeholder="<?php esc_attr_e( '.ccf-form { /* your styles */ }', 'custom-contact-forms' ); ?>"><?php echo esc_textarea( $css ); ?></textarea>
+		<p class="description"><?php esc_html_e( 'Target form elements with the .ccf-form class. Example: .ccf-form input { border-radius: 6px; } — if your theme overrides a style, add !important (e.g. border-radius: 6px !important;).', 'custom-contact-forms' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Output custom CSS on the frontend.
+	 *
+	 * @since 7.10
+	 */
+	public function output_custom_css() {
+		$option     = get_option( 'ccf_settings' );
+		$custom_css = ( is_array( $option ) && isset( $option['custom_css'] ) ) ? $option['custom_css'] : '';
+
+		if ( empty( trim( $custom_css ) ) ) {
+			return;
+		}
+
+		echo "\n<style id=\"ccf-custom-css\">\n" . wp_strip_all_tags( $custom_css ) . "\n</style>\n";
 	}
 
 	public function asset_loading_restriction_summary() {

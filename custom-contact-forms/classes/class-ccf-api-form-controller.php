@@ -45,6 +45,10 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 				'sanitize' => 'esc_attr',
 				'escape' => 'esc_attr',
 			),
+			'fieldWidth' => array(
+				'sanitize' => 'esc_attr',
+				'escape' => 'esc_attr',
+			),
 			'label' => array(
 				'sanitize' => 'sanitize_text_field',
 				'escape' => 'esc_html',

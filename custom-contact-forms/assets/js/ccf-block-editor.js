@@ -28,7 +28,8 @@
 	var themeOptions = [
 		{ value: "", label: "Default" },
 		{ value: "light", label: "Light" },
-		{ value: "dark", label: "Dark" }
+		{ value: "dark", label: "Dark" },
+		{ value: "minimal", label: "Minimal" }
 	];
 
 	wp.blocks.registerBlockType("ccf/form-block", {

@@ -4,18 +4,20 @@ Donate link: https://oiopublisher.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 6.9
-Stable tag: 7.9.1
+Stable tag: 7.10.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Build custom forms and manage submissions the WordPress way. Gutenberg block, Cloudflare Turnstile, and anti-spam protection.
+Build custom forms and manage submissions the WordPress way. Drag-and-drop builder, prebuilt templates, Gutenberg block, and modern spam protection.
 
 == Description ==
 
-Custom Contact Forms lets you build forms and manage submissions entirely within WordPress. The drag-and-drop builder lives inside the media manager — no separate admin pages, no learning a new interface. Live previews update as you build, and forms can be inserted via shortcode, Gutenberg block, widget, or PHP function.
+Custom Contact Forms lets you build forms and manage submissions entirely within WordPress. The drag-and-drop builder lives inside the media manager — no separate admin pages, no learning a new interface. Live previews update as you build, and forms can be inserted via Gutenberg block, shortcode, widget, or PHP function.
 
-**This plugin is actively maintained.** Originally created by Taylor Lovett, it is now maintained by [Dmitry Alexander](https://oiopublisher.com/) as of 2026. Version 7.9.0 is a comprehensive modernization: security hardened, PHP 8+ compatible, with new features and a modern UI.
+Start from a prebuilt template — contact, quote request, newsletter, event registration, or feedback — and have a working form in seconds. Or build your own from scratch with text, email, phone, address, dropdowns, checkboxes, file uploads, and more. Style it with included form themes and per-field width controls, or add your own custom CSS.
+
+**Powering thousands of active websites, with over 1.3 million all-time downloads.** Originally created by Taylor Lovett, Custom Contact Forms is now actively maintained by [Dmitry Alexander](https://oiopublisher.com/) — rebuilt for modern WordPress with a hardened, PHP 8+ codebase, a refreshed builder, and new features added regularly.
 
 = What You Can Build =
 
@@ -25,48 +27,44 @@ Custom Contact Forms lets you build forms and manage submissions entirely within
 * Multiple email notifications per form — customize recipients, subject, from name, reply-to, and body with field mapping
 * Post creation on submission — map form fields to post fields, meta, and taxonomies
 
-= What's New in 7.9.0 =
+= What's New in 7.10 =
 
-* **Gutenberg block** — Insert forms directly from the block editor with a live server-side preview
-* **Cloudflare Turnstile** — Modern, invisible, privacy-friendly spam protection (free from Cloudflare)
-* **Anti-spam controls** — Enhanced honeypot, time-based trap, IP rate limiting, disposable email blocking, keyword blacklist
-* **Email diagnostics** — Send test emails, view wp_mail failure log, debug delivery issues
-* **Copy shortcode** — One-click copy from form list, edit screen, and At a Glance panel
-* **Modern CSS** — Clean, responsive form styles with proper focus states, dark/light theme support
-* **Security hardened** — Full code audit, XSS fixes, SQL injection prevention, input sanitization, capability checks
-* **PHP 8+ compatible** — All deprecation warnings and type errors resolved
+* **Form templates** — Start from a prebuilt form (Contact, Quote Request, Newsletter, Event Registration, Feedback) and customize from there. Find them under Forms → Templates.
+* **Field width controls** — Set any field to full, half, third, two-thirds, or quarter width to build clean multi-column layouts
+* **Minimal theme** — A sleek, modern form style with underlined inputs and uppercase labels, selectable per form or per block
+* **Custom CSS** — Add your own styles to all forms from one place in Forms → Settings
+* **Refreshed builder** — Cleaner field palette with field-type icons and a more modern editing experience
 
-= Features =
+= Powerful Features, Included Free =
 
 * Drag-and-drop form builder with live preview in the media manager
+* Prebuilt form templates for the most common form types
 * Gutenberg block, shortcode, widget, and PHP template support
+* Multiple form themes plus per-field width controls and custom CSS
 * AJAX form submission — no page reloads
-* Export submissions to CSV
-* Import submissions from CSV with automatic column mapping
+* Export submissions to CSV, and import submissions from CSV with automatic column mapping
 * Import and export forms via WordPress XML
-* Multiple form themes (light and dark)
 * Cloudflare Turnstile, reCAPTCHA, and simple captcha options
-* Restrict forms to logged-in users
-* Pause forms with a custom message
+* Built-in spam protection — honeypot, time-based trap, IP rate limiting, disposable email blocking, keyword blacklist
+* Email diagnostics — send test emails and view delivery failure logs
+* Restrict forms to logged-in users, or pause forms with a custom message
 * Customizable completion text or redirect URL
 * Conditional asset loading — only load scripts where forms appear
 * Extensible with hooks, filters, and custom field types
-* Translations: French, Chinese, German, Danish
 
 = Quick Start =
 
-1. Go to Forms → Forms and Submissions
-2. Click "Manage Form" on any post or page
-3. Drag fields from the sidebar into the form area
-4. Save and insert into your content
-5. Or use the Gutenberg block: search "CCF" in the block inserter
+1. Go to Forms → Templates and pick a starting template — or go to Forms → Forms and Submissions to start from scratch
+2. Drag fields from the sidebar into the form area, and click a field to edit its label, width, and options
+3. Save the form
+4. Insert it with the Gutenberg block (search "CCF" in the block inserter) or the `[ccf_form id="X"]` shortcode
 
 == Installation ==
 
 1. Upload the `custom-contact-forms` folder to `/wp-content/plugins/`
 2. Activate the plugin through the Plugins menu
-3. Go to Forms → Forms and Submissions to create your first form
-4. Insert forms using the `[ccf_form id="X"]` shortcode or the Gutenberg block
+3. Go to Forms → Templates to start from a prebuilt form, or Forms → Forms and Submissions to build your own
+4. Insert forms using the Gutenberg block or the `[ccf_form id="X"]` shortcode
 
 = Shortcode =
 
@@ -78,21 +76,29 @@ Custom Contact Forms lets you build forms and manage submissions entirely within
 
 == Frequently Asked Questions ==
 
+= How do I use a form template? =
+
+Go to Forms → Templates and choose one of the prebuilt forms (Contact, Quote Request, Newsletter, Event Registration, or Feedback). A new form is created with the right fields already in place, ready for you to customize and insert.
+
+= How do I make fields sit side by side? =
+
+Click a field in the builder, open the Advanced panel, and set its Field Width (half, third, two-thirds, or quarter). Place two or more partial-width fields together and they line up in columns. Widths apply on the published form — in the block editor preview and on the front end — not inside the builder.
+
+= How do I add custom styling? =
+
+For per-form looks, choose a Form Theme (including the new Minimal theme) on the form or in the block settings. For site-wide custom styles, go to Forms → Settings and add your CSS in the Custom CSS box.
+
 = How do I add Cloudflare Turnstile? =
 
 Go to Forms → Settings and scroll to "Cloudflare Turnstile." Enter your site key and secret key (free from [Cloudflare Dashboard](https://dash.cloudflare.com/?to=/:account/turnstile)), enable it, and save. All forms will automatically show the Turnstile challenge.
 
 = How do I insert a form? =
 
-Use the shortcode `[ccf_form id="X"]`, the Gutenberg block (search "CCF" or "Contact Form"), the CCF widget, or the PHP template tag `ccf_output_form( X )`.
+Use the Gutenberg block (search "CCF" or "Contact Form"), the shortcode `[ccf_form id="X"]`, the CCF widget, or the PHP template tag `ccf_output_form( X )`.
 
-= Can I export form submissions? =
+= Can I export and import form submissions? =
 
-Yes. Edit any form and click the download icon to export submissions as a CSV file.
-
-= Can I import submissions from a CSV? =
-
-Yes. Go to Forms → Import CSV. Select a form, upload your CSV file, and map the CSV columns to form fields. The importer auto-detects matching columns by name. You can import submissions exported from other form plugins or any CSV source.
+Yes. Edit any form and click the download icon to export submissions as a CSV file. To import, go to Forms → Import CSV, select a form, upload your CSV, and map the columns to form fields — the importer auto-detects matching columns by name.
 
 = Does this plugin create custom database tables? =
 
@@ -100,14 +106,14 @@ No. All data is stored using WordPress custom post types and post meta. Nothing 
 
 = Is this plugin compatible with PHP 8? =
 
-Yes. Version 7.9.0 resolves all PHP 8.0, 8.1, 8.2, 8.3, and 8.4 compatibility issues.
+Yes. The plugin is fully compatible with PHP 8.0, 8.1, 8.2, 8.3, and 8.4.
 
 == Screenshots ==
 
-1. Drag-and-drop form builder with live preview
-2. Form submissions management
-3. Gutenberg block with server-side preview
-4. Settings page with Turnstile and spam protection options
+1. Drag-and-drop form builder with live preview and field settings
+2. Form submissions management with CSV export
+3. Gutenberg block with live preview and selectable form themes
+4. Settings page with Cloudflare Turnstile and spam protection options
 
 == External Services ==
 
@@ -130,6 +136,13 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [Privacy Policy](https://www.cloudflare.com/privacypolicy/)
 
 == Changelog ==
+
+= 7.10.0 =
+* New: Form templates — prebuilt Contact, Quote Request, Newsletter, Event Registration, and Feedback forms under Forms → Templates
+* New: Field width controls — set fields to full, half, third, two-thirds, or quarter width for multi-column layouts
+* New: Minimal form theme — modern underlined-input style, selectable per form and per block
+* New: Custom CSS setting — add site-wide form styles from Forms → Settings
+* Tweak: Refreshed form builder with field-type icons and a cleaner, more modern interface
 
 = 7.9.1 =
 * Privacy: Google reCAPTCHA API is no longer loaded by default — it now loads only on pages that actually render a reCAPTCHA field, preventing unsolicited third-party requests
@@ -208,6 +221,9 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [current_date_time] notification variable
 
 == Upgrade Notice ==
+
+= 7.10.0 =
+Adds form templates, per-field width controls, a Minimal theme, custom CSS, and a refreshed builder. All existing forms and submissions are preserved — no data migration needed.
 
 = 7.9.0 =
 Major security and compatibility update. Fixes PHP 8+ errors, adds Gutenberg block, Cloudflare Turnstile spam protection, and modern form styling. All existing forms and submissions are preserved — no data migration needed. Recommended for all users.

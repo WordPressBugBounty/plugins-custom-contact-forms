@@ -853,3 +853,143 @@
     box-shadow: none !important;
   }
 }
+
+
+   Minimal Theme (Material Design)
+   ============================================ */
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field input.field-input,
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field textarea.field-input,
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field select {
+	border: none !important;
+	border-bottom: 2px solid #ccc !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	padding: 10px 2px;
+	font-size: 15px;
+	transition: border-color 0.2s ease;
+	box-shadow: none !important;
+	outline: none;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field input.field-input:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field textarea.field-input:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field select:focus {
+	border-bottom-color: #2271b1;
+	box-shadow: none;
+	outline: none;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field label {
+	font-weight: 500;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	color: #555;
+	margin-bottom: 4px;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field .sub-label {
+	font-size: 11px;
+	color: #999;
+	text-transform: uppercase;
+	letter-spacing: 0.3px;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .ccf-submit-button {
+	background: #1d2327;
+	color: #fff;
+	border: none;
+	border-radius: 0;
+	padding: 12px 32px;
+	font-size: 14px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .ccf-submit-button:hover {
+	background: #2271b1;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .form-title {
+	font-weight: 700;
+	font-size: 1.4em;
+	border: none;
+	padding: 0;
+	margin-bottom: 4px;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .form-description {
+	color: #666;
+	font-size: 0.95em;
+	margin-bottom: 24px;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field {
+	margin-bottom: 20px;
+}
+.ccf-form-wrapper .ccf-form.ccf-theme-minimal .field-error-input {
+	border-bottom-color: #d63638 !important;
+}
+
+/* ============================================
+   Minimal Theme — high-specificity overrides
+   Matches the base input selector pattern exactly
+   so it reliably wins against the default boxed style.
+   ============================================ */
+.ccf-form-wrapper .ccf-theme-minimal .field input[type="text"],
+.ccf-form-wrapper .ccf-theme-minimal .field input[type="email"],
+.ccf-form-wrapper .ccf-theme-minimal .field input[type="url"],
+.ccf-form-wrapper .ccf-theme-minimal .field input[type="tel"],
+.ccf-form-wrapper .ccf-theme-minimal .field input[type="number"],
+.ccf-form-wrapper .ccf-theme-minimal .field input[type="password"],
+.ccf-form-wrapper .ccf-theme-minimal .field input.field-input,
+.ccf-form-wrapper .ccf-theme-minimal .field input.form-control,
+.ccf-form-wrapper .ccf-theme-minimal .field textarea.field-input,
+.ccf-form-wrapper .ccf-theme-minimal .field select {
+	border: none !important;
+	border-bottom: 2px solid #ccc !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+.ccf-form-wrapper .ccf-theme-minimal .field input[type="text"]:focus,
+.ccf-form-wrapper .ccf-theme-minimal .field input[type="email"]:focus,
+.ccf-form-wrapper .ccf-theme-minimal .field input.field-input:focus,
+.ccf-form-wrapper .ccf-theme-minimal .field textarea.field-input:focus,
+.ccf-form-wrapper .ccf-theme-minimal .field select:focus {
+	border-bottom-color: #2271b1 !important;
+}
+
+/* ============================================
+   Field Width Controls (half / third / two-thirds / quarter)
+   Fields with a width class sit side-by-side; full-width by default.
+   Stacks to full width on mobile.
+   ============================================ */
+.ccf-form-wrapper .field.ccf-width-half,
+.ccf-form-wrapper .field.ccf-width-third,
+.ccf-form-wrapper .field.ccf-width-two-thirds,
+.ccf-form-wrapper .field.ccf-width-quarter {
+	display: inline-block !important;
+	vertical-align: top;
+	box-sizing: border-box;
+	margin-right: 1.5%;
+	clear: none !important;
+	float: none !important;
+}
+.ccf-form-wrapper .field.ccf-width-half {
+	width: 49% !important;
+}
+.ccf-form-wrapper .field.ccf-width-third {
+	width: 32% !important;
+}
+.ccf-form-wrapper .field.ccf-width-two-thirds {
+	width: 65.5% !important;
+}
+.ccf-form-wrapper .field.ccf-width-quarter {
+	width: 23.5% !important;
+}
+@media (max-width: 600px) {
+	.ccf-form-wrapper .field.ccf-width-half,
+	.ccf-form-wrapper .field.ccf-width-third,
+	.ccf-form-wrapper .field.ccf-width-two-thirds,
+	.ccf-form-wrapper .field.ccf-width-quarter {
+		display: block !important;
+		width: 100% !important;
+		margin-right: 0 !important;
+	}
+}

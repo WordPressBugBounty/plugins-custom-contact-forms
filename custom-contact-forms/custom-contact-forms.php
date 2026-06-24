@@ -4,7 +4,7 @@
  * Plugin URI: https://oiopublisher.com/
  * Description: Build beautiful custom forms and manage submissions the WordPress way. Gutenberg block, Cloudflare Turnstile, anti-spam protection, and email diagnostics.
  * Author: Dmitry Alexander
- * Version: 7.9.1
+ * Version: 7.10.0
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.9.1' );
+define( 'CCF_VERSION', '7.10.0' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -48,6 +48,7 @@ require_once CCF_PLUGIN_DIR . 'classes/class-ccf-turnstile.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-anti-spam.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-logger.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-csv-importer.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-templates.php';
 
 CCF_Custom_Contact_Forms::factory();
 CCF_Constants::factory();
@@ -68,6 +69,7 @@ CCF_Turnstile::factory();
 CCF_Anti_Spam::factory();
 CCF_Email_Logger::factory();
 CCF_CSV_Importer::factory();
+CCF_Form_Templates::factory();
 
 /**
  * Setup the widget

@@ -689,3 +689,22 @@
         list-style-type: disc; }
 
 /*# sourceMappingURL=form-manager.css.map */
+/* Field-type icons in the builder palette (dashicons, ships with WP) */
+.ccf-main-modal .left-sidebar .field h4:before{font-family:dashicons;font-size:17px;vertical-align:middle;margin-right:8px;opacity:.55;width:18px;display:inline-block;-webkit-font-smoothing:antialiased}
+.ccf-main-modal .left-sidebar .field[data-field-type="single-line-text"] h4:before{content:"\f215"}
+.ccf-main-modal .left-sidebar .field[data-field-type="paragraph-text"] h4:before{content:"\f478"}
+.ccf-main-modal .left-sidebar .field[data-field-type="dropdown"] h4:before{content:"\f140"}
+.ccf-main-modal .left-sidebar .field[data-field-type="checkboxes"] h4:before{content:"\f147"}
+.ccf-main-modal .left-sidebar .field[data-field-type="radio"] h4:before{content:"\f522"}
+.ccf-main-modal .left-sidebar .field[data-field-type="hidden"] h4:before{content:"\f530"}
+.ccf-main-modal .left-sidebar .field[data-field-type="file"] h4:before{content:"\f498"}
+.ccf-main-modal .left-sidebar .field[data-field-type="email"] h4:before{content:"\f465"}
+.ccf-main-modal .left-sidebar .field[data-field-type="name"] h4:before{content:"\f338"}
+.ccf-main-modal .left-sidebar .field[data-field-type="website"] h4:before{content:"\f103"}
+.ccf-main-modal .left-sidebar .field[data-field-type="phone"] h4:before{content:"\f525"}
+.ccf-main-modal .left-sidebar .field[data-field-type="address"] h4:before{content:"\f230"}
+.ccf-main-modal .left-sidebar .field[data-field-type="date"] h4:before{content:"\f508"}
+.ccf-main-modal .left-sidebar .field[data-field-type="recaptcha"] h4:before{content:"\f332"}
+.ccf-main-modal .left-sidebar .field[data-field-type="simple-captcha"] h4:before{content:"\f332"}
+.ccf-main-modal .left-sidebar .field[data-field-type="html"] h4:before{content:"\f491"}
+.ccf-main-modal .left-sidebar .field[data-field-type="section-header"] h4:before{content:"\f331"}
