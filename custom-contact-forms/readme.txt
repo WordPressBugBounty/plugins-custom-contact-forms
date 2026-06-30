@@ -3,8 +3,8 @@ Contributors: outlawgt, tlovett1
 Donate link: https://oiopublisher.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
-Tested up to: 6.9
-Stable tag: 7.10.0
+Tested up to: 7.0
+Stable tag: 7.11.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,13 +27,13 @@ Start from a prebuilt template — contact, quote request, newsletter, event reg
 * Multiple email notifications per form — customize recipients, subject, from name, reply-to, and body with field mapping
 * Post creation on submission — map form fields to post fields, meta, and taxonomies
 
-= What's New in 7.10 =
+= What's New in 7.11 =
 
-* **Form templates** — Start from a prebuilt form (Contact, Quote Request, Newsletter, Event Registration, Feedback) and customize from there. Find them under Forms → Templates.
-* **Field width controls** — Set any field to full, half, third, two-thirds, or quarter width to build clean multi-column layouts
-* **Minimal theme** — A sleek, modern form style with underlined inputs and uppercase labels, selectable per form or per block
-* **Custom CSS** — Add your own styles to all forms from one place in Forms → Settings
-* **Refreshed builder** — Cleaner field palette with field-type icons and a more modern editing experience
+* **Modernized builder** — Yes/No options are now clean toggle switches, and fields display as cards in the builder canvas
+* **Friendly submission columns** — The submissions table now shows real field labels instead of internal slugs
+* **Redesigned submissions table** — A cleaner, more modern look for managing entries
+* **Redesigned templates screen** — Each form template now has its own custom icon, under Forms → Templates
+* **WordPress 7.0 ready** — Tested up to the latest WordPress
 
 = Powerful Features, Included Free =
 
@@ -114,6 +114,7 @@ Yes. The plugin is fully compatible with PHP 8.0, 8.1, 8.2, 8.3, and 8.4.
 2. Form submissions management with CSV export
 3. Gutenberg block with live preview and selectable form themes
 4. Settings page with Cloudflare Turnstile and spam protection options
+5. Prebuilt form templates to start a new form in one click
 
 == External Services ==
 
@@ -136,6 +137,14 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [Privacy Policy](https://www.cloudflare.com/privacypolicy/)
 
 == Changelog ==
+
+= 7.11.0 =
+* Tweak: Modernized form builder — Yes/No options now display as toggle switches and fields appear as cards in the canvas
+* Tweak: Friendly submission columns — the entry table now shows real field labels instead of internal slugs
+* Tweak: Redesigned submissions table with a cleaner, more modern style
+* Tweak: Redesigned Form Templates screen with custom template icons
+* Dev: New ccf_pre_submission_errors filter so add-ons can run final pre-save validation
+* Compatibility: Tested up to WordPress 7.0
 
 = 7.10.0 =
 * New: Form templates — prebuilt Contact, Quote Request, Newsletter, Event Registration, and Feedback forms under Forms → Templates
@@ -221,6 +230,9 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [current_date_time] notification variable
 
 == Upgrade Notice ==
+
+= 7.11.0 =
+A visual refresh of the form builder (toggle switches and card-style fields), a modernized submissions table with friendly column labels, and a redesigned templates screen. Tested up to WordPress 7.0. All existing forms and submissions are preserved — no data migration needed.
 
 = 7.10.0 =
 Adds form templates, per-field width controls, a Minimal theme, custom CSS, and a refreshed builder. All existing forms and submissions are preserved — no data migration needed.

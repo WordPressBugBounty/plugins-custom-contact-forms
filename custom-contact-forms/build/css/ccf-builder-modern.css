@@ -1,0 +1,285 @@
+/**
+ * CCF Builder Modern
+ *
+ * A light visual refresh for the form builder modal: cleaner field-type
+ * palette, crisper field-type icons, softer panels and buttons. Layered on
+ * top of form-manager.css without changing any builder behavior.
+ *
+ * @since 7.10.0
+ */
+
+/* ------------------------------------------------------------------
+   Field-type palette buttons
+   ------------------------------------------------------------------ */
+.ccf-main-modal .left-sidebar .field h4 {
+	border: 1px solid #e2e4e7;
+	border-radius: 6px;
+	background: #fff;
+	color: #1e1e1e;
+	font-weight: 500;
+	padding: 12px 14px;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.ccf-main-modal .left-sidebar .field h4:hover {
+	border-color: #2271b1;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	background: #f6fafe;
+}
+
+/* Crisper field-type icons (dashicons) */
+.ccf-main-modal .left-sidebar .field h4:before {
+	color: #50575e;
+	opacity: 0.7;
+	font-size: 18px;
+}
+
+.ccf-main-modal .left-sidebar .field h4:hover:before {
+	color: #1e1e1e;
+	opacity: 1;
+}
+
+/* ------------------------------------------------------------------
+   Field rows in the form canvas — card style (7.11.0)
+
+   The canvas is an accordion: each .field is a collapsed <h4> bar that
+   expands its .preview inline when edited. We style each row as a card.
+   Layout-safe: only shadows / insets / radius / colour — no added borders
+   or width/margin changes that would break the half/third width math.
+   ------------------------------------------------------------------ */
+.ccf-main-modal .form-content .field {
+	margin-bottom: 10px;
+	border-radius: 8px;
+	transition: box-shadow .15s ease;
+}
+
+/* Collapsed header = the card face */
+.ccf-main-modal .form-content .field h4 {
+	border: 1px solid #e2e4e7;
+	border-radius: 8px;
+	background: #fff;
+	color: #1d2327;
+	font-weight: 500;
+	box-shadow: 0 1px 2px rgba( 0, 0, 0, .04 );
+	transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.ccf-main-modal .form-content .field h4:hover {
+	border-color: #2271b1;
+	box-shadow: 0 2px 8px rgba( 0, 0, 0, .08 );
+}
+
+/* Expanded / editing card: blue ring (box-shadow = no layout shift) */
+.ccf-main-modal .form-content .field.ccf-editing {
+	border: 0;
+	box-shadow: 0 0 0 2px #2271b1, 0 6px 18px rgba( 0, 0, 0, .10 );
+}
+
+.ccf-main-modal .form-content .field.ccf-editing h4 {
+	border-color: #2271b1;
+	border-radius: 8px 8px 0 0;
+	background: #f6fafe;
+	box-shadow: none;
+}
+
+.ccf-main-modal .form-content .field.ccf-editing h4:hover {
+	border-color: #2271b1;
+}
+
+.ccf-main-modal .form-content .field .preview {
+	border-color: #e2e4e7;
+	border-top: 0;
+	border-radius: 0 0 8px 8px;
+	background: #fff;
+}
+
+/* Validation accents — inset bar, no size change */
+.ccf-main-modal .form-content .field.field-incomplete h4 {
+	box-shadow: inset 3px 0 0 #dba617, 0 1px 2px rgba( 0, 0, 0, .04 );
+}
+
+.ccf-main-modal .form-content .field.field-duplicate-slug h4 {
+	box-shadow: inset 3px 0 0 #d63638, 0 1px 2px rgba( 0, 0, 0, .04 );
+}
+
+/* Drop zone */
+.ccf-main-modal .ccf-form-pane .form-content:after {
+	border-radius: 8px;
+	border-color: #c3c4c7;
+	color: #757575;
+}
+
+.ccf-main-modal .ccf-form-pane .form-content .field-placeholder {
+	border-radius: 6px;
+	border-color: #2271b1;
+	background: #f6fafe;
+}
+
+/* ------------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------------ */
+.ccf-main-modal .ccf-form-pane .bottom input[type="button"],
+.ccf-main-modal .insert-form-button {
+	border-radius: 4px;
+}
+
+/* ------------------------------------------------------------------
+   Accordion / section headings
+   ------------------------------------------------------------------ */
+.ccf-main-modal .ccf-form-pane .accordion-section .accordion-heading,
+.ccf-main-modal .ccf-form-pane .accordion-section .form-settings-heading {
+	font-size: 130%;
+	font-weight: 600;
+	color: #1e1e1e;
+}
+
+/* ------------------------------------------------------------------
+   Right sidebar (field settings) inputs
+   ------------------------------------------------------------------ */
+.ccf-main-modal .ccf-form-pane .right-sidebar input[type="text"],
+.ccf-main-modal .ccf-form-pane .right-sidebar select,
+.ccf-main-modal .ccf-form-pane .right-sidebar textarea {
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 6px 8px;
+	box-sizing: border-box;
+}
+
+.ccf-main-modal .ccf-form-pane .right-sidebar input[type="text"]:focus,
+.ccf-main-modal .ccf-form-pane .right-sidebar select:focus,
+.ccf-main-modal .ccf-form-pane .right-sidebar textarea:focus {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+	outline: none;
+}
+
+/* Helper / explain text */
+.ccf-main-modal .ccf-form-pane .explain,
+.ccf-main-modal .ccf-form-pane .right-sidebar .explain {
+	color: #757575;
+	font-size: 12px;
+}
+
+/* ------------------------------------------------------------------
+   Submissions table — modern restyle (presentation only)
+   The submissions table renders as table.widefat.fixed with a
+   tbody.submission-rows, inside the #ccf-submissions metabox.
+   ------------------------------------------------------------------ */
+#ccf-submissions table.widefat,
+.ccf-submission-table-container table.widefat {
+	border: 1px solid #e2e4e7;
+	border-radius: 8px;
+	border-collapse: separate;
+	border-spacing: 0;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Header */
+#ccf-submissions table.widefat thead,
+#ccf-submissions table.widefat tfoot {
+	background: #f6f7f7;
+}
+
+#ccf-submissions table.widefat thead th,
+#ccf-submissions table.widefat tfoot th {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #50575e;
+	padding: 14px 18px;
+	border-bottom: 1px solid #e2e4e7;
+}
+
+/* Body rows */
+#ccf-submissions table.widefat tbody td {
+	padding: 14px 18px;
+	border-bottom: 1px solid #f0f0f1;
+	color: #1e1e1e;
+	font-size: 13px;
+	vertical-align: middle;
+}
+
+#ccf-submissions table.widefat tbody tr {
+	background: #fff;
+	transition: background-color 0.12s ease;
+}
+
+#ccf-submissions table.widefat tbody tr:hover {
+	background: #f6fafe;
+}
+
+#ccf-submissions table.widefat tbody.submission-rows tr:last-child td {
+	border-bottom: 0;
+}
+
+/* Pagination — modern */
+.ccf-pagination {
+	font-size: 13px;
+	margin-top: 14px;
+}
+
+.ccf-pagination a {
+	color: #2271b1;
+	background: #fff;
+	border: 1px solid #e2e4e7;
+	border-radius: 4px;
+	transition: all 0.12s ease;
+}
+
+.ccf-pagination a.first,
+.ccf-pagination a.last,
+.ccf-pagination a.next,
+.ccf-pagination a.prev {
+	padding: 4px 10px;
+	line-height: 20px;
+}
+
+.ccf-pagination a.first:hover,
+.ccf-pagination a.last:hover,
+.ccf-pagination a.next:hover,
+.ccf-pagination a.prev:hover {
+	color: #fff;
+	background-color: #2271b1;
+	border-color: #2271b1;
+}
+
+.ccf-pagination a.disabled,
+.ccf-pagination a.disabled:hover {
+	color: #c3c4c7;
+	background: #f6f7f7;
+	border-color: #e2e4e7;
+}
+
+/* -------------------------------------------------------------------------
+ * Yes/No toggle switches (7.11.0)
+ *
+ * The make-or-break visual styles (size, track colour, knob position) are set
+ * inline by ccf-builder-modern.js so the high-specificity builder CSS can't
+ * override them. The rules below are belt-and-suspenders: they (a) guarantee
+ * the native <select> stays hidden, and (b) add polish (focus ring, hover)
+ * that doesn't fight the inline state.
+ * ---------------------------------------------------------------------- */
+select[data-ccf-toggle-enhanced="1"] {
+	display: none !important;
+}
+
+button.ccf-toggle {
+	-webkit-appearance: none !important;
+	appearance: none !important;
+	border: 0 !important;
+	box-shadow: none !important;
+	cursor: pointer !important;
+	vertical-align: middle !important;
+	line-height: 1 !important;
+}
+
+button.ccf-toggle:hover {
+	filter: brightness( 0.96 );
+}
+
+button.ccf-toggle:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}

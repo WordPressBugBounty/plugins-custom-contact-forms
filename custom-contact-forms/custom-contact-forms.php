@@ -4,7 +4,7 @@
  * Plugin URI: https://oiopublisher.com/
  * Description: Build beautiful custom forms and manage submissions the WordPress way. Gutenberg block, Cloudflare Turnstile, anti-spam protection, and email diagnostics.
  * Author: Dmitry Alexander
- * Version: 7.10.0
+ * Version: 7.11.0
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.10.0' );
+define( 'CCF_VERSION', '7.11.0' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 

@@ -521,6 +521,22 @@
 				return columns;
 			},
 
+			getFieldLabelMap: function() {
+				var fields = wp.ccf.currentForm.get( 'fields' ),
+					map = {};
+
+				fields.each( function( field ) {
+					var slug = field.get( 'slug' ),
+						label = field.get( 'label' );
+
+					if ( slug ) {
+						map[ slug ] = ( label && label.length ) ? label : slug;
+					}
+				});
+
+				return map;
+			},
+
 			parse: function( response ) {
 				var SELF = this,
 					i = 0,
@@ -4030,7 +4046,7 @@
 				if ( SELF.columns.length < 1 ) {
 					SELF.el.innerHTML = '';
 				} else {
-					SELF.el.innerHTML = SELF.template( { columns: SELF.columns } );
+					SELF.el.innerHTML = SELF.template( { columns: SELF.columns, labelMap: wp.ccf.currentForm.getFieldLabelMap() } );
 
 					var pagination = SELF.el.querySelectorAll( '.ccf-pagination' )[0];
 

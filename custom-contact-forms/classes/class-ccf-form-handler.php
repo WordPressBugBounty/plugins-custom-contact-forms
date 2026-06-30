@@ -789,6 +789,29 @@ class CCF_Form_Handler {
 			return $content_check;
 		}
 
+		/**
+		 * Final pre-save gate for extensions (e.g. payment add-ons).
+		 *
+		 * Fires after all field validation and spam checks have passed, but
+		 * before the submission is saved. Add-ons can use this to perform
+		 * authoritative server-side work that must gate the submission —
+		 * for example, recomputing an order total from the stored field
+		 * configuration and charging a payment — and halt the submission by
+		 * returning a non-empty array of errors. With no add-on attached the
+		 * array passes through unchanged, so core behavior is unaffected.
+		 *
+		 * @param array $errors            Field-keyed errors (empty at this point).
+		 * @param array $submission        Sanitized slug => value submission data.
+		 * @param array $field_slug_to_id  Map of field slug => field ID.
+		 * @param int   $form_id           The form ID being submitted.
+		 */
+		$errors = apply_filters( 'ccf_pre_submission_errors', $errors, $submission, $field_slug_to_id, $form_id );
+
+		if ( ! empty( $errors ) ) {
+			$this->errors_by_form[ $form_id ] = $errors;
+			return array( 'error' => 'invalid_fields', 'field_errors' => $errors, 'success' => false );
+		}
+
 		{
 			$submission_id = wp_insert_post( array(
 				'post_status' => 'publish',

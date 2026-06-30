@@ -2285,7 +2285,7 @@ class CCF_Form_Manager {
 								<# if ( 'date' === column ) { #>
 									<?php esc_html_e( 'Date', 'custom-contact-forms' ); ?>
 								<# } else { #>
-									{{ column }}
+									{{ ( typeof labelMap !== 'undefined' && labelMap[ column ] ) ? labelMap[ column ] : column }}
 								<# } #>
 							</th>
 						<# } ); #>
@@ -2299,7 +2299,7 @@ class CCF_Form_Manager {
 								<# if ( 'date' === column ) { #>
 									<?php esc_html_e( 'Date', 'custom-contact-forms' ); ?>
 								<# } else { #>
-									{{ column }}
+									{{ ( typeof labelMap !== 'undefined' && labelMap[ column ] ) ? labelMap[ column ] : column }}
 								<# } #>
 							</th>
 						<# } ); #>
@@ -2569,6 +2569,7 @@ class CCF_Form_Manager {
 
 			wp_enqueue_style( 'ccf-form-manager', plugins_url( $css_path, dirname( __FILE__ ) ), array( 'dashicons' ), CCF_VERSION );
 			wp_enqueue_style( 'ccf-builder-modern', plugins_url( '/build/css/ccf-builder-modern.css', dirname( __FILE__ ) ), array( 'ccf-form-manager' ), CCF_VERSION );
+			wp_enqueue_script( 'ccf-builder-modern', plugins_url( '/build/js/ccf-builder-modern.js', dirname( __FILE__ ) ), array( 'ccf-form-manager' ), CCF_VERSION, true );
 
 			if ( apply_filters( 'ccf_enable_tinymce_previews', true ) && 'ccf_form' !== get_post_type() ) {
 				wp_enqueue_script( 'ccf-form-mce', plugins_url( $js_mce_path, dirname( __FILE__ ) ), array( 'mce-view', 'jquery', 'ccf-form-manager' ), CCF_VERSION, true );
