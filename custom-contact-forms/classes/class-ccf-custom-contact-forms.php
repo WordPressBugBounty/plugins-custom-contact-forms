@@ -99,6 +99,14 @@ class CCF_Custom_Contact_Forms {
 				esc_url( admin_url( 'edit.php?post_type=ccf_form' ) ),
 				esc_html__( 'Forms and Submissions', 'custom-contact-forms' )
 			);
+
+			if ( ! defined( 'CCFP_VERSION' ) ) {
+				$new_actions['ccf_get_pro'] = sprintf(
+					'<a href="%s" target="_blank" rel="noopener" style="color:#8659d6;font-weight:600;">%s</a>',
+					esc_url( apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' ) ),
+					esc_html__( 'Get Pro', 'custom-contact-forms' )
+				);
+			}
 		}
 
 		return array_merge( $new_actions, $plugin_actions );

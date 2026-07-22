@@ -129,7 +129,42 @@ class CCF_Form_Templates {
 			update_post_meta( $field_id, 'ccf_field_required', ! empty( $field_def['required'] ) );
 			update_post_meta( $field_id, 'ccf_field_value', '' );
 			update_post_meta( $field_id, 'ccf_field_className', '' );
-			update_post_meta( $field_id, 'ccf_field_description', '' );
+			update_post_meta( $field_id, 'ccf_field_description', isset( $field_def['description'] ) ? sanitize_textarea_field( $field_def['description'] ) : '' );
+
+			// Arbitrary additional attributes (add-on field settings such as
+			// pricing modes, terms text or survey rows). Multiline strings are
+			// preserved; keys are restricted to safe meta-name characters.
+			if ( ! empty( $field_def['attributes'] ) && is_array( $field_def['attributes'] ) ) {
+				foreach ( $field_def['attributes'] as $attr_key => $attr_value ) {
+					$attr_key = preg_replace( '/[^a-zA-Z0-9_]/', '', (string) $attr_key );
+					if ( '' === $attr_key ) {
+						continue;
+					}
+					$attr_value = is_array( $attr_value ) ? map_deep( $attr_value, 'sanitize_text_field' ) : sanitize_textarea_field( (string) $attr_value );
+					update_post_meta( $field_id, 'ccf_field_' . $attr_key, $attr_value );
+				}
+			}
+
+			// Conditional logic rules.
+			if ( ! empty( $field_def['conditionals'] ) && is_array( $field_def['conditionals'] ) ) {
+				$clean_conditions = array();
+				foreach ( $field_def['conditionals'] as $condition ) {
+					if ( empty( $condition['field'] ) ) {
+						continue;
+					}
+					$clean_conditions[] = array(
+						'field'   => sanitize_text_field( $condition['field'] ),
+						'compare' => sanitize_text_field( $condition['compare'] ?? 'is' ),
+						'value'   => sanitize_text_field( $condition['value'] ?? '' ),
+					);
+				}
+				if ( $clean_conditions ) {
+					update_post_meta( $field_id, 'ccf_attached_conditionals', $clean_conditions );
+					update_post_meta( $field_id, 'ccf_field_conditionalsEnabled', true );
+					update_post_meta( $field_id, 'ccf_field_conditionalType', sanitize_text_field( $field_def['conditional_type'] ?? 'show' ) );
+					update_post_meta( $field_id, 'ccf_field_conditionalFieldsRequired', sanitize_text_field( $field_def['conditional_fields_required'] ?? 'all' ) );
+				}
+			}
 
 			if ( ! empty( $field_def['placeholder'] ) ) {
 				update_post_meta( $field_id, 'ccf_field_placeholder', sanitize_text_field( $field_def['placeholder'] ) );
@@ -190,7 +225,7 @@ class CCF_Form_Templates {
 	 * @return array
 	 */
 	public function get_templates() {
-		return array(
+		$templates = array(
 
 			'contact' => array(
 				'title'       => __( 'Contact Form', 'custom-contact-forms' ),
@@ -452,6 +487,21 @@ class CCF_Form_Templates {
 			),
 
 		);
+
+		/**
+		 * Filter the available form templates.
+		 *
+		 * Add-ons can register additional templates. Each template supports
+		 * 'title', 'description', 'button_text', 'badge' (small label shown
+		 * in the picker), 'icon'/'color', and 'fields' — where each field
+		 * supports 'type', 'slug', 'label', 'required', 'placeholder',
+		 * 'description', 'choices', 'attributes' (arbitrary ccf_field_ meta)
+		 * and 'conditionals'.
+		 *
+		 * @since 7.12.6
+		 * @param array $templates Registered templates.
+		 */
+		return apply_filters( 'ccf_form_templates', $templates );
 	}
 
 	/**
@@ -493,6 +543,16 @@ class CCF_Form_Templates {
 	}
 
 	public function render_page() {
+		if ( ! defined( 'CCFP_VERSION' ) ) {
+			wp_enqueue_script( 'ccf-pro-teaser', plugins_url( '/assets/js/pro-teaser.js', dirname( __FILE__ ) ), array(), CCF_VERSION, true );
+			wp_localize_script( 'ccf-pro-teaser', 'ccfProTeaser', array(
+				'url'     => apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' ),
+				'badge'   => esc_html__( 'Pro', 'custom-contact-forms' ),
+				'cta'     => esc_html__( 'Get Custom Contact Forms Pro', 'custom-contact-forms' ),
+				'dismiss' => esc_html__( 'Maybe later', 'custom-contact-forms' ),
+			) );
+		}
+
 		$templates = $this->get_templates();
 		?>
 		<div class="wrap ccf-templates-wrap">
@@ -500,6 +560,7 @@ class CCF_Form_Templates {
 			<p class="ccf-templates-intro"><?php esc_html_e( 'Select a template to create a new form with pre-configured fields. You can customize everything after creation.', 'custom-contact-forms' ); ?></p>
 
 			<style>
+				.ccf-tpl-badge { display:inline-block; margin-left:6px; padding:1px 7px; border-radius:10px; font-size:10px; font-weight:600; letter-spacing:.4px; vertical-align:middle; background:#8659d6; color:#fff; }
 				.ccf-templates-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:20px;max-width:1200px;}
 				.ccf-tpl{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid #e2e4e7;border-radius:12px;padding:22px;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:box-shadow .18s ease,border-color .18s ease,transform .18s ease;}
 				.ccf-tpl:hover{border-color:#2271b1;box-shadow:0 6px 20px rgba(0,0,0,.08);transform:translateY(-1px);}
@@ -510,6 +571,16 @@ class CCF_Form_Templates {
 				.ccf-tpl-meta{color:#8c8f94;margin:0 0 16px;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.03em;}
 				.ccf-tpl-blank{align-items:center;text-align:center;border-style:dashed;border-color:#c3c4c7;background:#fbfbfc;box-shadow:none;}
 				.ccf-tpl-blank:hover{border-color:#2271b1;}
+				.ccf-tpl-locked{cursor:pointer;}
+				.ccf-tpl-locked .ccf-tpl-chip,.ccf-tpl-locked h3,.ccf-tpl-locked .ccf-tpl-desc{opacity:.72;}
+				.ccf-tpl-locked:hover .ccf-tpl-chip,.ccf-tpl-locked:hover h3,.ccf-tpl-locked:hover .ccf-tpl-desc{opacity:1;}
+				.ccf-pro-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1700000;display:flex;align-items:center;justify-content:center;}
+				.ccf-pro-modal{background:#fff;border-radius:8px;padding:26px 28px;max-width:380px;width:90%;position:relative;box-shadow:0 8px 30px rgba(0,0,0,.3);}
+				.ccf-pro-modal h2{margin:0 0 10px;font-size:18px;}
+				.ccf-pro-modal-badge{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#8659d6;color:#fff;vertical-align:middle;}
+				.ccf-pro-modal p{margin:0 0 18px;font-size:14px;color:#3c434a;}
+				.ccf-pro-modal-actions{display:flex;gap:10px;}
+				.ccf-pro-modal-close{position:absolute;top:8px;right:10px;background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:#787c82;}
 			</style>
 
 			<div class="ccf-templates-grid">
@@ -531,7 +602,7 @@ class CCF_Form_Templates {
 						}
 						?>
 					</span>
-					<h3><?php echo esc_html( $template['title'] ); ?></h3>
+					<h3><?php echo esc_html( $template['title'] ); ?><?php if ( ! empty( $template['badge'] ) ) : ?> <span class="ccf-tpl-badge"><?php echo esc_html( $template['badge'] ); ?></span><?php endif; ?></h3>
 					<p class="ccf-tpl-desc"><?php echo esc_html( $template['description'] ); ?></p>
 					<p class="ccf-tpl-meta">
 						<?php
@@ -542,6 +613,30 @@ class CCF_Form_Templates {
 					<a href="<?php echo esc_url( $url ); ?>" class="button button-primary"><?php esc_html_e( 'Use Template', 'custom-contact-forms' ); ?></a>
 				</div>
 				<?php endforeach; ?>
+
+				<?php if ( ! defined( 'CCFP_VERSION' ) ) :
+					$ccf_pro_url = apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' );
+					$ccf_pro_templates = array(
+						array( 'title' => __( 'Donation Form', 'custom-contact-forms' ), 'desc' => __( 'Giving tiers with an "Other" custom amount and enforced minimum.', 'custom-contact-forms' ), 'icon' => 'heart', 'color' => '#d63384' ),
+						array( 'title' => __( 'Product Order Form', 'custom-contact-forms' ), 'desc' => __( 'Sell products with quantities, coupons and card payment.', 'custom-contact-forms' ), 'icon' => 'cart', 'color' => '#2271b1' ),
+						array( 'title' => __( 'Paid Event Registration', 'custom-contact-forms' ), 'desc' => __( 'Multi-step registration with ticket tiers and payment.', 'custom-contact-forms' ), 'icon' => 'tickets-alt', 'color' => '#996800' ),
+						array( 'title' => __( 'Liability Waiver', 'custom-contact-forms' ), 'desc' => __( 'Scrollable waiver, versioned consent and ink signature.', 'custom-contact-forms' ), 'icon' => 'shield', 'color' => '#b32d2e' ),
+						array( 'title' => __( 'Service Agreement + Deposit', 'custom-contact-forms' ), 'desc' => __( 'Contract, signature and deposit payment in one flow.', 'custom-contact-forms' ), 'icon' => 'edit-page', 'color' => '#2271b1' ),
+						array( 'title' => __( 'Satisfaction Survey Pro', 'custom-contact-forms' ), 'desc' => __( 'Star rating, Likert survey grid and conditional follow-up.', 'custom-contact-forms' ), 'icon' => 'chart-bar', 'color' => '#3858e9' ),
+						array( 'title' => __( 'Invoice Payment', 'custom-contact-forms' ), 'desc' => __( 'Clients enter their invoice amount and pay online.', 'custom-contact-forms' ), 'icon' => 'media-spreadsheet', 'color' => '#50575e' ),
+						array( 'title' => __( 'Tip Jar', 'custom-contact-forms' ), 'desc' => __( 'Preset tips with Apple Pay and Google Pay support.', 'custom-contact-forms' ), 'icon' => 'coffee', 'color' => '#b45309' ),
+					);
+					foreach ( $ccf_pro_templates as $ccf_pro_tpl ) : ?>
+				<div class="ccf-tpl ccf-tpl-locked ccf-pro-teaser" data-pro-name="<?php echo esc_attr( $ccf_pro_tpl['title'] ); ?>" data-pro-desc="<?php echo esc_attr( $ccf_pro_tpl['desc'] ); ?>">
+					<span class="ccf-tpl-chip" style="background:<?php echo esc_attr( $ccf_pro_tpl['color'] ); ?>;">
+						<span class="dashicons dashicons-<?php echo esc_attr( $ccf_pro_tpl['icon'] ); ?>" style="color:#fff;font-size:27px;width:27px;height:27px;"></span>
+					</span>
+					<h3><?php echo esc_html( $ccf_pro_tpl['title'] ); ?> <span class="ccf-tpl-badge"><?php esc_html_e( 'Pro', 'custom-contact-forms' ); ?></span></h3>
+					<p class="ccf-tpl-desc"><?php echo esc_html( $ccf_pro_tpl['desc'] ); ?></p>
+					<p class="ccf-tpl-meta"><span class="dashicons dashicons-lock" style="font-size:12px;width:12px;height:12px;"></span> <?php esc_html_e( 'Pro template', 'custom-contact-forms' ); ?></p>
+					<span class="button"><?php esc_html_e( 'Unlock', 'custom-contact-forms' ); ?></span>
+				</div>
+				<?php endforeach; endif; ?>
 
 				<div class="ccf-tpl ccf-tpl-blank">
 					<span class="ccf-tpl-chip" style="background:#8c8f94;">

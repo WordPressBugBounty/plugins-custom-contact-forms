@@ -1,10 +1,10 @@
 === Custom Contact Forms ===
 Contributors: outlawgt, tlovett1
-Donate link: https://oiopublisher.com/
+Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 7.11.0
+Stable tag: 7.13.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,12 +27,12 @@ Start from a prebuilt template — contact, quote request, newsletter, event reg
 * Multiple email notifications per form — customize recipients, subject, from name, reply-to, and body with field mapping
 * Post creation on submission — map form fields to post fields, meta, and taxonomies
 
-= What's New in 7.11 =
+= Recent Updates =
 
 * **Modernized builder** — Yes/No options are now clean toggle switches, and fields display as cards in the builder canvas
 * **Friendly submission columns** — The submissions table now shows real field labels instead of internal slugs
-* **Redesigned submissions table** — A cleaner, more modern look for managing entries
 * **Redesigned templates screen** — Each form template now has its own custom icon, under Forms → Templates
+* **Developer hooks for add-ons** — Filter submission responses, field rendering, and notification timing
 * **WordPress 7.0 ready** — Tested up to the latest WordPress
 
 = Powerful Features, Included Free =
@@ -58,6 +58,24 @@ Start from a prebuilt template — contact, quote request, newsletter, event reg
 2. Drag fields from the sidebar into the form area, and click a field to edit its label, width, and options
 3. Save the form
 4. Insert it with the Gutenberg block (search "CCF" in the block inserter) or the `[ccf_form id="X"]` shortcode
+
+= Customize More with Pro =
+
+Custom Contact Forms Pro turns the builder you already know into forms that sell, book, and sign — no e-commerce stack required.
+
+* **Stripe payments on the form** — cards, Apple Pay, Google Pay, and Link, with a live "Pay $25.00" button and server-verified totals
+* **Product & pricing fields** — fixed price, multiple options, or customer-chooses-amount, with quantities, images, and enforced minimums
+* **Coupons & live totals** — percentage or fixed discounts, order total updates as visitors choose
+* **Digital signature field** — draw with mouse, finger, or stylus; saved as an image with every submission
+* **Consent / terms field** — scrollable terms with versioned agreement records, snapshotted permanently
+* **PDF receipts** — attached to notification emails for paid orders, plus one-click PDF download of any submission
+* **Multi-step forms** — page breaks, progress bar, per-step validation
+* **Conditional logic** — show or hide any field based on answers, priced fields included
+* **Survey & star rating fields** — Likert grids and quick ratings
+* **13 ready-made templates** — donations, orders, registrations, waivers, agreements, and more
+* **No added transaction fees** — you pay only Stripe's standard processing fees
+
+[Learn more about Custom Contact Forms Pro](https://customformspro.com/)
 
 == Installation ==
 
@@ -108,6 +126,10 @@ No. All data is stored using WordPress custom post types and post meta. Nothing 
 
 Yes. The plugin is fully compatible with PHP 8.0, 8.1, 8.2, 8.3, and 8.4.
 
+= What does the deactivation survey collect? =
+
+If you deactivate the plugin, an optional survey asks why. Nothing is sent unless you choose a reason or add a comment and click "Submit & Deactivate" — the "Skip & Deactivate" option sends nothing. When you do submit, the plugin uses your site's own email to send the maintainer the reason you selected, your optional comment, your site URL, the number of forms you have, and your plugin, WordPress, and PHP versions. No personal data and no visitor data is collected, and no external tracking service is used.
+
 == Screenshots ==
 
 1. Drag-and-drop form builder with live preview and field settings
@@ -137,6 +159,19 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [Privacy Policy](https://www.cloudflare.com/privacypolicy/)
 
 == Changelog ==
+
+= 7.13.0 =
+* Refreshed plugin listing and documentation
+* Introduced Custom Contact Forms Pro — payments, signatures, PDFs, and more at customformspro.com
+* Fix: The Pro field preview dialog in the form builder now displays correctly
+* New: Get Pro link on the Plugins screen (shown only when the Pro add-on is not active)
+
+= 7.12.0 =
+* New: Optional feedback prompt when deactivating the plugin
+* New: Developer hooks for add-ons (submission response, field rendering, submission preparation, and notification timing)
+* Fix: Prevent a fatal error when a field attribute lacked an escape callback
+* Fix: The form builder now handles unrecognized field types gracefully, so deactivating an add-on no longer breaks editing saved forms
+* Tweak: Tested up to the latest WordPress
 
 = 7.11.0 =
 * Tweak: Modernized form builder — Yes/No options now display as toggle switches and fields appear as cards in the canvas

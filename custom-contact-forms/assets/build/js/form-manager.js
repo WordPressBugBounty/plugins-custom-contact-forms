@@ -592,7 +592,8 @@
 						var newFields = [];
 
 						_.each( response.fields, function( field ) {
-							var fieldModel = new wp.ccf.models.Fields[field.type]( field );
+							var CCFFieldModel = wp.ccf.models.Fields[field.type] || wp.ccf.models.StandardField;
+							var fieldModel = new CCFFieldModel( field );
 							fieldModel.decode();
 
 							newFields.push( fieldModel );
@@ -2802,7 +2803,8 @@
 						}
 					}
 
-					this.currentFieldView = new wp.ccf.views.Fields[type]( { model: field, collection: this.form.get( 'fields' ) } );
+					var CCFFieldView = wp.ccf.views.Fields[type] || wp.ccf.views.Fields['single-line-text'];
+					this.currentFieldView = new CCFFieldView( { model: field, collection: this.form.get( 'fields' ) } );
 
 					this.currentFieldView.render();
 
@@ -3971,6 +3973,7 @@
 						getPrettyFieldEmailConfirm: wp.ccf.utils.getPrettyFieldEmailConfirm
 					}
 				} ) );
+
 
 				return this;
 			}

@@ -283,3 +283,9 @@ button.ccf-toggle:focus-visible {
 	outline: 2px solid #2271b1;
 	outline-offset: 2px;
 }
+
+/* Payment status badge (Pro) on submission rows */
+.ccfp-pay-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 7px;border-radius:10px;margin-right:8px;vertical-align:middle;color:#fff}
+.ccfp-pay-badge.ccfp-pay-paid{background:#1f8a4c}
+.ccfp-pay-badge.ccfp-pay-pending{background:#8a6d1f}
+.ccfp-pay-badge.ccfp-pay-error{background:#b32d2e}

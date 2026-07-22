@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: Custom Contact Forms
- * Plugin URI: https://oiopublisher.com/
+ * Plugin URI: https://customformspro.com/
  * Description: Build beautiful custom forms and manage submissions the WordPress way. Gutenberg block, Cloudflare Turnstile, anti-spam protection, and email diagnostics.
  * Author: Dmitry Alexander
- * Version: 7.11.0
+ * Version: 7.13.0
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.11.0' );
+define( 'CCF_VERSION', '7.13.0' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -49,6 +49,7 @@ require_once CCF_PLUGIN_DIR . 'classes/class-ccf-anti-spam.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-logger.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-csv-importer.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-templates.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-feedback.php';
 
 CCF_Custom_Contact_Forms::factory();
 CCF_Constants::factory();
@@ -70,6 +71,7 @@ CCF_Anti_Spam::factory();
 CCF_Email_Logger::factory();
 CCF_CSV_Importer::factory();
 CCF_Form_Templates::factory();
+CCF_Feedback::factory();
 
 /**
  * Setup the widget

@@ -18,3 +18,10 @@
 .ccf-main-modal .left-sidebar .field[data-field-type="simple-captcha"] h4:before{content:"\f332"}
 .ccf-main-modal .left-sidebar .field[data-field-type="html"] h4:before{content:"\f491"}
 .ccf-main-modal .left-sidebar .field[data-field-type="section-header"] h4:before{content:"\f331"}
+
+/* Field search */
+.ccf-field-search-wrap{padding:10px 10px 4px}.ccf-field-search{width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #c3c4c7;border-radius:4px;font-size:13px}
+
+
+
+/* Pro field teasers (injected into the Special Fields list) */ .ccf-main-modal .field.ccf-pro-teaser { cursor: pointer; opacity: .8} .ccf-main-modal .field.ccf-pro-teaser:hover { opacity: 1} .ccf-main-modal .field.ccf-pro-teaser h4 { display: flex; align-items: center} .ccf-pro-mini { margin-left: auto; padding: 0 7px; border-radius: 9px; font-size: 9px; font-weight: 600; letter-spacing: .4px; line-height: 16px; background: #8659d6; color: #fff} .ccf-pro-lock::after { content: "\f160"; font-family: dashicons; font-size: 13px; margin-left: 5px; vertical-align: middle; color: #8659d6}.ccf-pro-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1700000;display:flex;align-items:center;justify-content:center}.ccf-pro-modal{background:#fff;border-radius:8px;padding:26px 28px;max-width:380px;width:90%;position:relative;box-shadow:0 8px 30px rgba(0,0,0,.3)}.ccf-pro-modal h2{margin:0 0 10px;font-size:18px}.ccf-pro-modal-badge{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:10px;font-size:10px;font-weight:600;background:#8659d6;color:#fff;vertical-align:middle}.ccf-pro-modal p{margin:0 0 18px;font-size:14px;color:#3c434a}.ccf-pro-modal-actions{display:flex;gap:10px}.ccf-pro-modal-close{position:absolute;top:8px;right:10px;background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:#787c82}

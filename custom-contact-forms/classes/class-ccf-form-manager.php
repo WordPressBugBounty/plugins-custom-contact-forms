@@ -2526,6 +2526,37 @@ class CCF_Form_Manager {
 			$api_root = esc_url_raw( rest_url() );
 
 			wp_enqueue_script( 'ccf-form-manager', plugins_url( $js_manager_path, dirname( __FILE__ ) ), array( 'json2', 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'underscore', 'backbone', 'jquery-ui-core', 'jquery-ui-draggable', 'jquery-ui-sortable', 'jquery-ui-droppable', 'ccf-rest-api', 'moment' ), CCF_VERSION, true );
+
+			// Field search box in the builder palette.
+			wp_enqueue_script( 'ccf-field-search', plugins_url( '/assets/js/field-search.js', dirname( __FILE__ ) ), array( 'ccf-form-manager' ), CCF_VERSION, true );
+
+			// Pro field teasers (only when the Pro add-on is not active).
+			if ( ! defined( 'CCFP_VERSION' ) ) {
+				wp_enqueue_script( 'ccf-pro-teaser', plugins_url( '/assets/js/pro-teaser.js', dirname( __FILE__ ) ), array( 'ccf-form-manager' ), CCF_VERSION, true );
+				wp_localize_script( 'ccf-pro-teaser', 'ccfProTeaser', array(
+					'url'     => apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' ),
+					'badge'   => esc_html__( 'Pro', 'custom-contact-forms' ),
+					'cta'     => esc_html__( 'Get Custom Contact Forms Pro', 'custom-contact-forms' ),
+					'dismiss' => esc_html__( 'Maybe later', 'custom-contact-forms' ),
+					'fields'  => array(
+						array( 'name' => esc_html__( 'Product', 'custom-contact-forms' ), 'desc' => esc_html__( 'Sell items with fixed prices, dropdown options, or customer-chosen amounts.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Stripe Card', 'custom-contact-forms' ), 'desc' => esc_html__( 'Take card, Apple Pay and Google Pay payments right on the form.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Total', 'custom-contact-forms' ), 'desc' => esc_html__( 'Live order total that updates as visitors choose products.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Coupon', 'custom-contact-forms' ), 'desc' => esc_html__( 'Discount codes with percentage or fixed amounts.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Signature', 'custom-contact-forms' ), 'desc' => esc_html__( 'Ink signatures drawn with mouse, finger or stylus, saved as images.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Consent / Terms', 'custom-contact-forms' ), 'desc' => esc_html__( 'Scrollable terms with an agreement checkbox and versioned proof of consent.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Survey', 'custom-contact-forms' ), 'desc' => esc_html__( 'Likert-style survey grids with questions and answer scales.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Rating', 'custom-contact-forms' ), 'desc' => esc_html__( 'Star ratings for quick feedback.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Page Break', 'custom-contact-forms' ), 'desc' => esc_html__( 'Multi-step forms with progress bar and per-step validation.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Section Break', 'custom-contact-forms' ), 'desc' => esc_html__( 'Titled dividers to organize long forms.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'File Upload Pro', 'custom-contact-forms' ), 'desc' => esc_html__( 'Advanced uploads with type and size rules.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Email Opt-in', 'custom-contact-forms' ), 'desc' => esc_html__( 'Grow your list with Mailchimp and MailerLite sync.', 'custom-contact-forms' ) ),
+					),
+				) );
+			}
+			wp_localize_script( 'ccf-field-search', 'ccfFieldSearch', array(
+				'placeholder' => esc_html__( 'Search for a field…', 'custom-contact-forms' ),
+			) );
 			wp_localize_script( 'ccf-form-manager', 'ccfSettings', array(
 				'apiRoot' => $api_root,
 				'nonce' => wp_create_nonce( 'ccf_nonce' ),

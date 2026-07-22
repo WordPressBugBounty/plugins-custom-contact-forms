@@ -652,6 +652,15 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$data['ip_address'] = esc_html( get_post_meta( $item->ID, 'ccf_submission_ip', true ) );
 		$data['form_page_url'] = esc_url( get_post_meta( $item->ID, 'ccf_submission_form_page', true ) );
 
+		/**
+		 * Filter the prepared submission response. Lets add-ons attach extra
+		 * data (e.g. a payment status badge) to each submission row.
+		 *
+		 * @param array   $data The prepared submission data.
+		 * @param WP_Post $item The submission post.
+		 */
+		$data = apply_filters( 'ccf_prepare_submission_response', $data, $item );
+
 		return $data;
 	}
 
@@ -1050,7 +1059,12 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 					$value = get_post_meta( $field_id, 'ccf_field_' . $key );
 
 					if ( isset( $value[0] ) ) {
-						$field[ $key ] = call_user_func( $functions['escape'], $value[0] );
+						// Fall back gracefully if an add-on registered an attribute
+						// without an escape callback (prevents a fatal in PHP 8+).
+						$escape = isset( $functions['escape'] ) && is_callable( $functions['escape'] )
+							? $functions['escape']
+							: ( isset( $functions['sanitize'] ) && is_callable( $functions['sanitize'] ) ? $functions['sanitize'] : 'esc_attr' );
+						$field[ $key ] = call_user_func( $escape, $value[0] );
 					}
 				}
 
@@ -1068,7 +1082,10 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 								$value = get_post_meta( $choice_id, 'ccf_choice_' . $key );
 
 								if ( isset( $value[0] ) ) {
-									$choice[ $key ] = call_user_func( $functions['escape'], $value[0] );
+									$escape = isset( $functions['escape'] ) && is_callable( $functions['escape'] )
+										? $functions['escape']
+										: ( isset( $functions['sanitize'] ) && is_callable( $functions['sanitize'] ) ? $functions['sanitize'] : 'esc_attr' );
+									$choice[ $key ] = call_user_func( $escape, $value[0] );
 								}
 							}
 

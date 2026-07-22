@@ -632,6 +632,7 @@ class CCF_Form_Handler {
 	 */
 	public function setup() {
 		add_action( 'init', array( $this, 'submit_listen' ), 11 );
+		add_action( 'rest_api_init', array( $this, 'register_submit_route' ) );
 	}
 
 	/**
@@ -653,12 +654,67 @@ class CCF_Form_Handler {
 	 *
 	 * @since 6.0
 	 */
+	/**
+	 * REST submission endpoint for headless / custom-markup frontends.
+	 *
+	 * POST /wp-json/ccf/v1/submit with form_id, form_nonce (action
+	 * "ccf_form") and ccf_field_{slug} values. Runs the exact same
+	 * pipeline as the standard flow — sanitization, validation,
+	 * anti-spam, storage, notifications — and returns the same
+	 * response shape as JSON.
+	 *
+	 * @since 7.12.5
+	 */
+	public function register_submit_route() {
+		register_rest_route( 'ccf/v1', '/submit', array(
+			'methods'             => 'POST',
+			'callback'            => array( $this, 'rest_submit' ),
+			'permission_callback' => '__return_true', // Public forms; the form_nonce inside process_submission() gates the request.
+		) );
+	}
+
+	/**
+	 * Handle a REST submission by feeding the shared pipeline.
+	 *
+	 * @since 7.12.5
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function rest_submit( $request ) {
+		// process_submission() reads from $_POST. Form-encoded and multipart
+		// bodies populate it already; merge JSON/other params so all body
+		// styles behave identically.
+		foreach ( $request->get_params() as $key => $value ) {
+			if ( is_scalar( $value ) || is_array( $value ) ) {
+				$_POST[ $key ] = $value;
+			}
+		}
+
+		$response = $this->process_submission();
+		$response = apply_filters( 'ccf_submission_response', $response, isset( $_POST['form_id'] ) ? (int) $_POST['form_id'] : 0 );
+
+		$status = ( is_array( $response ) && ! empty( $response['success'] ) ) ? 200 : 400;
+		return new WP_REST_Response( $response, $status );
+	}
+
 	public function submit_listen() {
 		if ( empty( $_POST['ccf_form'] ) || empty( $_POST['form_id'] ) ) {
 			return;
 		}
 
 		$submission_response = $this->process_submission();
+
+		/**
+		 * Filter the submission response before it is returned to the browser.
+		 *
+		 * Lets add-ons (e.g. payment) alter the response — for example, turning
+		 * a successful submission into a redirect to a hosted checkout page.
+		 * With no add-on attached the response is returned unchanged.
+		 *
+		 * @param array $submission_response The response array.
+		 * @param int   $form_id             The submitted form ID.
+		 */
+		$submission_response = apply_filters( 'ccf_submission_response', $submission_response, isset( $_POST['form_id'] ) ? (int) $_POST['form_id'] : 0 );
 
 		// SECURITY FIX: Use wp_send_json() instead of echo + exit
 		wp_send_json( $submission_response );
@@ -942,7 +998,18 @@ class CCF_Form_Handler {
 
 			$notifications = get_post_meta( $form_id, 'ccf_form_notifications', true );
 
-			if ( ! empty( $notifications ) && is_array( $notifications ) ) {
+			/**
+			 * Allow add-ons to defer notifications (e.g. hold until a payment
+			 * is confirmed). Returning false skips notifications for now; the
+			 * add-on is then responsible for sending them later.
+			 *
+			 * @param bool $send          Whether to send now.
+			 * @param int  $form_id       The form ID.
+			 * @param int  $submission_id The submission ID.
+			 */
+			$ccf_send_notifications = apply_filters( 'ccf_send_submission_notifications', true, $form_id, $submission_id );
+
+			if ( ! empty( $notifications ) && is_array( $notifications ) && $ccf_send_notifications ) {
 				foreach ( $notifications as $notification ) {
 					if ( ! empty( $notification['active'] ) && ! empty( $notification['addresses'] ) ) {
 
