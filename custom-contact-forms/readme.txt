@@ -4,7 +4,7 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 7.13.0
+Stable tag: 7.14.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -159,6 +159,11 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [Privacy Policy](https://www.cloudflare.com/privacypolicy/)
 
 == Changelog ==
+
+= 7.14.0 =
+* New: Dashboard widget — see total submissions and a per-form breakdown for the last 7 days, 30 days, or all time, right on your WordPress dashboard
+* New: Click any form in the widget to jump straight to its submissions
+* New: One-time notice introducing Custom Contact Forms Pro (permanently dismissible, admin-only, hidden when Pro is active)
 
 = 7.13.0 =
 * Refreshed plugin listing and documentation
