@@ -59,6 +59,32 @@ class CCF_Feedback {
 	}
 
 	/**
+	 * Copy for the Pro feature match shown after the survey.
+	 *
+	 * Returns an empty set when the Pro add-on is active, which disables the
+	 * match path entirely rather than telling an existing customer about
+	 * features they already have.
+	 *
+	 * @since 7.15.0
+	 * @return array
+	 */
+	private function get_pro_copy() {
+		if ( defined( 'CCFP_VERSION' ) ) {
+			return array();
+		}
+
+		return array(
+			'url'        => apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' ),
+			'signature'  => __( 'Before you go — Custom Contact Forms Pro has a signature field. People sign with a finger, mouse or stylus, and it works on the same form as a payment.', 'custom-contact-forms' ),
+			'payments'   => __( 'Before you go — Custom Contact Forms Pro takes Stripe payments on the form itself. Cards, Apple Pay and Google Pay, with no cart or checkout page.', 'custom-contact-forms' ),
+			'pdf'        => __( 'Before you go — Custom Contact Forms Pro attaches a PDF receipt to notification emails, and any submission can be downloaded as a PDF.', 'custom-contact-forms' ),
+			'multistep'  => __( 'Before you go — Custom Contact Forms Pro splits long forms into steps, with a progress bar and validation on each step.', 'custom-contact-forms' ),
+			'survey'     => __( 'Before you go — Custom Contact Forms Pro adds survey grids and star rating fields.', 'custom-contact-forms' ),
+			'agreements' => __( 'Before you go — Custom Contact Forms Pro has a consent field that records the exact terms someone agreed to, alongside a signature field. Waiver and agreement templates are included.', 'custom-contact-forms' ),
+		);
+	}
+
+	/**
 	 * The survey reason options.
 	 *
 	 * @return array
@@ -101,6 +127,19 @@ class CCF_Feedback {
 
 				<textarea id="ccf-deactivate-comment" rows="3" placeholder="<?php esc_attr_e( 'Anything we could do better? (optional)', 'custom-contact-forms' ); ?>"></textarea>
 
+				<div id="ccf-deactivate-match" hidden>
+					<p class="ccf-deactivate-matchlead"></p>
+					<p class="ccf-deactivate-matchactions">
+						<a href="#" class="button button-primary" id="ccf-deactivate-matchlink" target="_blank" rel="noopener"><?php esc_html_e( 'Show me', 'custom-contact-forms' ); ?></a>
+						<button type="button" class="button" id="ccf-deactivate-matchskip"><?php esc_html_e( 'No thanks, deactivate', 'custom-contact-forms' ); ?></button>
+					</p>
+				</div>
+
+				<div id="ccf-deactivate-error-wrap" hidden>
+					<p class="ccf-deactivate-errorlead"><?php esc_html_e( 'Saw an error message? Paste it below and we will look into it. Error messages usually name the file and line, which is most of the fix.', 'custom-contact-forms' ); ?></p>
+					<textarea id="ccf-deactivate-error" rows="3" placeholder="<?php esc_attr_e( 'Paste the error message here (optional)', 'custom-contact-forms' ); ?>"></textarea>
+				</div>
+
 				<div class="ccf-deactivate-actions">
 					<button type="button" class="button button-primary" id="ccf-deactivate-submit"><?php esc_html_e( 'Submit &amp; Deactivate', 'custom-contact-forms' ); ?></button>
 					<a href="#" class="ccf-deactivate-skip" id="ccf-deactivate-skip"><?php esc_html_e( 'Skip &amp; Deactivate', 'custom-contact-forms' ); ?></a>
@@ -118,7 +157,12 @@ class CCF_Feedback {
 			.ccf-deactivate-reasons{margin:0 0 12px;}
 			.ccf-deactivate-reasons li{margin:0 0 8px;}
 			.ccf-deactivate-reasons label{display:flex;align-items:center;gap:8px;font-size:13px;color:#2c3338;cursor:pointer;}
-			#ccf-deactivate-comment{width:100%;box-sizing:border-box;border:1px solid #dcdcde;border-radius:6px;padding:8px 10px;font-size:13px;resize:vertical;}
+			#ccf-deactivate-comment,#ccf-deactivate-error{width:100%;box-sizing:border-box;border:1px solid #dcdcde;border-radius:6px;padding:8px 10px;font-size:13px;resize:vertical;}
+			#ccf-deactivate-error-wrap{margin-top:10px;}
+			.ccf-deactivate-errorlead{margin:0 0 6px;font-size:12px;color:#646970;}
+			#ccf-deactivate-match{margin-top:14px;padding:12px 14px;background:#f3faf7;border:1px solid #d1ede2;border-radius:6px;}
+			.ccf-deactivate-matchlead{margin:0 0 10px;font-size:13px;color:#1d2327;}
+			.ccf-deactivate-matchactions{margin:0;display:flex;gap:8px;flex-wrap:wrap;}
 			.ccf-deactivate-actions{display:flex;align-items:center;gap:14px;margin-top:16px;}
 			.ccf-deactivate-skip{color:#787c82;font-size:13px;text-decoration:none;}
 			.ccf-deactivate-skip:hover{color:#d63638;}
@@ -129,6 +173,7 @@ class CCF_Feedback {
 			var basename = <?php echo wp_json_encode( $this->plugin_basename ); ?>;
 			var nonce = <?php echo wp_json_encode( $nonce ); ?>;
 			var deactivateUrl = '';
+			var proCopy = <?php echo wp_json_encode( $this->get_pro_copy() ); ?>;
 
 			var overlay = document.getElementById( 'ccf-deactivate-overlay' );
 			if ( ! overlay ) { return; }
@@ -151,24 +196,82 @@ class CCF_Feedback {
 			overlay.querySelector( '.ccf-deactivate-close' ).addEventListener( 'click', close );
 			overlay.addEventListener( 'click', function ( e ) { if ( e.target === overlay ) { close(); } } );
 
+			// Someone reporting a fault has the error on screen in another tab.
+			// Ask for it then, rather than leaving "it didn't work" as the whole
+			// report — the text usually names the file and line.
+			var errorWrap = document.getElementById( 'ccf-deactivate-error-wrap' );
+			var commentBox = document.getElementById( 'ccf-deactivate-comment' );
+
+			function maybeRevealError() {
+				var picked = overlay.querySelector( 'input[name="ccf_deactivate_reason"]:checked' );
+				var reason = picked ? picked.value : '';
+				var typed = ( commentBox.value || '' ).toLowerCase();
+				var wants = ( 'not_working' === reason || 'other' === reason ) ||
+					typed.indexOf( 'error' ) !== -1 ||
+					typed.indexOf( 'broke' ) !== -1 ||
+					typed.indexOf( 'crash' ) !== -1 ||
+					typed.indexOf( 'white screen' ) !== -1 ||
+					typed.indexOf( 'fatal' ) !== -1;
+
+				errorWrap.hidden = ! wants;
+			}
+
+			overlay.querySelectorAll( 'input[name="ccf_deactivate_reason"]' ).forEach( function ( input ) {
+				input.addEventListener( 'change', maybeRevealError );
+			} );
+			commentBox.addEventListener( 'input', maybeRevealError );
+
 			document.getElementById( 'ccf-deactivate-skip' ).addEventListener( 'click', function ( e ) {
 				e.preventDefault();
 				go();
 			} );
 
-			document.getElementById( 'ccf-deactivate-submit' ).addEventListener( 'click', function () {
+			// People who leave because a feature seemed missing have just told
+			// us, in their own words, what they were looking for. Where that
+			// names something Pro does, say so once. It never blocks the
+			// deactivation — they have already decided.
+			var proMatches = [
+				{ re: /\bsign|signature|e-?sign|initial\b/i, msg: proCopy.signature },
+				{ re: /\bpay|payment|stripe|checkout|charge|deposit|invoice|credit card\b/i, msg: proCopy.payments },
+				{ re: /\bpdf|receipt\b/i, msg: proCopy.pdf },
+				{ re: /\bmulti[- ]?step|multi[- ]?page|wizard|page break\b/i, msg: proCopy.multistep },
+				{ re: /\bsurvey|likert|rating|star\b/i, msg: proCopy.survey },
+				{ re: /\bwaiver|agreement|terms|consent|contract\b/i, msg: proCopy.agreements }
+			];
+
+			function findProMatch( text ) {
+				if ( ! text || ! text.trim() ) { return ''; }
+				for ( var i = 0; i < proMatches.length; i++ ) {
+					if ( proMatches[ i ].re.test( text ) ) { return proMatches[ i ].msg; }
+				}
+				return '';
+			}
+
+			var matchWrap = document.getElementById( 'ccf-deactivate-match' );
+			var matchLead = matchWrap.querySelector( '.ccf-deactivate-matchlead' );
+			var matchLink = document.getElementById( 'ccf-deactivate-matchlink' );
+			var matchShown = false;
+
+			matchLink.href = proCopy.url;
+			document.getElementById( 'ccf-deactivate-matchskip' ).addEventListener( 'click', function () {
+				send();
+			} );
+
+			function send() {
 				var checked = overlay.querySelector( 'input[name="ccf_deactivate_reason"]:checked' );
 				var reason = checked ? checked.value : '';
 				var comment = document.getElementById( 'ccf-deactivate-comment' ).value || '';
+				var errorText = document.getElementById( 'ccf-deactivate-error' ).value || '';
 
-				// Nothing selected and no comment — just deactivate, send nothing.
-				if ( ! reason && ! comment.trim() ) { go(); return; }
+				// Nothing selected and nothing written — just deactivate, send nothing.
+				if ( ! reason && ! comment.trim() && ! errorText.trim() ) { go(); return; }
 
 				var body = new URLSearchParams();
 				body.append( 'action', 'ccf_deactivation_feedback' );
 				body.append( 'nonce', nonce );
 				body.append( 'reason', reason );
 				body.append( 'comment', comment );
+				body.append( 'error_text', errorText );
 
 				fetch( ajaxurl, {
 					method: 'POST',
@@ -176,6 +279,20 @@ class CCF_Feedback {
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 					body: body.toString()
 				} ).then( go ).catch( go );
+			}
+
+			document.getElementById( 'ccf-deactivate-submit' ).addEventListener( 'click', function () {
+				var comment = document.getElementById( 'ccf-deactivate-comment' ).value || '';
+				var msg = matchShown ? '' : findProMatch( comment );
+
+				if ( msg ) {
+					matchShown = true;
+					matchLead.textContent = msg;
+					matchWrap.hidden = false;
+					return;
+				}
+
+				send();
 			} );
 		} )();
 		</script>
@@ -196,18 +313,32 @@ class CCF_Feedback {
 		$reason  = isset( $reasons[ $key ] ) ? $reasons[ $key ] : __( '(none given)', 'custom-contact-forms' );
 		$comment = isset( $_POST['comment'] ) ? sanitize_textarea_field( wp_unslash( $_POST['comment'] ) ) : '';
 
+		// Capped: error output can run to hundreds of lines of stack trace, and
+		// the first part is where the useful detail is.
+		$error_text = isset( $_POST['error_text'] ) ? sanitize_textarea_field( wp_unslash( $_POST['error_text'] ) ) : '';
+		$error_text = mb_substr( $error_text, 0, 2000 );
+
 		$form_count = (int) wp_count_posts( 'ccf_form' )->publish;
 
 		$lines = array(
 			'Reason:  ' . $reason,
 			'Comment: ' . ( $comment ? $comment : '(none)' ),
+		);
+
+		if ( '' !== trim( $error_text ) ) {
+			$lines[] = '';
+			$lines[] = 'Error reported:';
+			$lines[] = $error_text;
+		}
+
+		$lines = array_merge( $lines, array(
 			'',
 			'Site:    ' . home_url(),
 			'Forms:   ' . $form_count,
 			'Plugin:  ' . ( defined( 'CCF_VERSION' ) ? CCF_VERSION : '?' ),
 			'WP:      ' . get_bloginfo( 'version' ),
 			'PHP:     ' . PHP_VERSION,
-		);
+		) );
 
 		$subject = sprintf( 'CCF deactivation feedback: %s', $reason );
 

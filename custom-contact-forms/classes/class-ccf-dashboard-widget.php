@@ -188,8 +188,9 @@ class CCF_Dashboard_Widget {
 				#ccf-dash-widget .ccf-dw-promo-close{position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;color:#8c8f94;font-size:14px;line-height:1;padding:3px}
 				#ccf-dash-widget .ccf-dw-promo-close:hover{color:#1d2327}
 			</style>
+			<?php $initial = $this->get_body_html( $period ); ?>
 			<div class="ccf-dw-head">
-				<span class="ccf-dw-total" id="ccf-dw-total"></span>
+				<span class="ccf-dw-total" id="ccf-dw-total"><?php echo $initial['total']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts. ?></span>
 				<select id="ccf-dw-period">
 					<option value="7" <?php selected( $period, '7' ); ?>><?php esc_html_e( 'Last 7 days', 'custom-contact-forms' ); ?></option>
 					<option value="30" <?php selected( $period, '30' ); ?>><?php esc_html_e( 'Last 30 days', 'custom-contact-forms' ); ?></option>
@@ -197,7 +198,7 @@ class CCF_Dashboard_Widget {
 				</select>
 			</div>
 			<?php echo $this->get_promo_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts. ?>
-			<div id="ccf-dw-body"><?php echo $this->get_body_html( $period ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts. ?></div>
+			<div id="ccf-dw-body"><?php echo $initial['body']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts. ?></div>
 			<?php echo $this->get_pro_row_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts. ?>
 			<script>
 			( function() {
@@ -237,6 +238,7 @@ class CCF_Dashboard_Widget {
 						.then( function( res ) {
 							if ( res && res.success ) {
 								document.getElementById( 'ccf-dw-body' ).innerHTML = res.data.body;
+								document.getElementById( 'ccf-dw-total' ).innerHTML = res.data.total;
 								wire();
 							}
 						} );
@@ -252,7 +254,10 @@ class CCF_Dashboard_Widget {
 	 *
 	 * @since 7.14.0
 	 * @param string $period Period key.
-	 * @return string
+	 * @return array {
+	 *     @type string $body  Markup for the widget body.
+	 *     @type string $total Markup for the total line.
+	 * }
 	 */
 	private function get_body_html( $period ) {
 		$data = $this->get_counts( $period );
@@ -265,7 +270,7 @@ class CCF_Dashboard_Widget {
 
 		if ( empty( $data['forms'] ) ) {
 			$html = '<div class="ccf-dw-empty">' . esc_html__( 'No submissions in this period — your forms will report here.', 'custom-contact-forms' ) . '</div>';
-			return '<script>document.getElementById("ccf-dw-total").innerHTML = ' . wp_json_encode( $total_line ) . ';</script>' . $html;
+			return array( 'body' => $html, 'total' => $total_line );
 		}
 
 		$rows    = '';
@@ -300,7 +305,7 @@ class CCF_Dashboard_Widget {
 			$html .= '<button type="button" class="ccf-dw-more">' . esc_html( sprintf( __( 'Show %d more', 'custom-contact-forms' ), $i - $visible ) ) . '</button>';
 		}
 
-		return '<script>document.getElementById("ccf-dw-total").innerHTML = ' . wp_json_encode( $total_line ) . ';</script>' . $html;
+		return array( 'body' => $html, 'total' => $total_line );
 	}
 
 	/**
@@ -402,7 +407,7 @@ class CCF_Dashboard_Widget {
 
 		update_user_meta( get_current_user_id(), 'ccf_dashboard_widget_period', $period );
 
-		wp_send_json_success( array( 'body' => $this->get_body_html( $period ) ) );
+		wp_send_json_success( $this->get_body_html( $period ) );
 	}
 
 	/**

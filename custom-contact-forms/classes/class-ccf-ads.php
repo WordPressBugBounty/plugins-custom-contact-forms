@@ -24,7 +24,9 @@ class CCF_Ads {
 	public function setup() {
 		// Disabled: original developer's subscribe banner is dead code
 		// add_action( 'admin_notices', array( $this, 'show_ad' ) );
-		add_action( 'init', array( $this, 'process_submission' ) );
+		// Admin-only handler: this reads $_POST for a screen that exists solely
+		// in wp-admin, so there is no reason to run it on front-end requests.
+		add_action( 'admin_init', array( $this, 'process_submission' ) );
 		add_action( 'in_admin_footer', array( $this, 'please_rate' ) );
 	}
 

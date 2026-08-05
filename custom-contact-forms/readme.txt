@@ -4,7 +4,7 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 7.14.0
+Stable tag: 7.15.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,6 +29,8 @@ Start from a prebuilt template — contact, quote request, newsletter, event reg
 
 = Recent Updates =
 
+* **Switching from another form plugin?** — Import your existing Contact Form 7 and WPForms forms in one step under Forms → Import. Your original forms are only read, never changed
+* **Submissions dashboard widget** — Totals and a per-form breakdown for the last 7 days, 30 days, or all time, right on your WordPress dashboard
 * **Modernized builder** — Yes/No options are now clean toggle switches, and fields display as cards in the builder canvas
 * **Friendly submission columns** — The submissions table now shows real field labels instead of internal slugs
 * **Redesigned templates screen** — Each form template now has its own custom icon, under Forms → Templates
@@ -42,6 +44,7 @@ Start from a prebuilt template — contact, quote request, newsletter, event reg
 * Gutenberg block, shortcode, widget, and PHP template support
 * Multiple form themes plus per-field width controls and custom CSS
 * AJAX form submission — no page reloads
+* Import your forms from Contact Form 7 and WPForms — fields, labels, required flags, placeholders, and choices, with a report of anything that needs your attention
 * Export submissions to CSV, and import submissions from CSV with automatic column mapping
 * Import and export forms via WordPress XML
 * Cloudflare Turnstile, reCAPTCHA, and simple captcha options
@@ -160,6 +163,15 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 
 == Changelog ==
 
+= 7.15.0 =
+* New: Import forms from Contact Form 7 and WPForms. Custom Contact Forms now reads your existing forms and rebuilds them as CCF forms — fields, labels, required flags, placeholders, dropdown and radio options, and the notification recipient where it can be resolved. Find it under Forms > Import.
+* New: The importer never changes your original forms, tells you exactly which tags it could not convert, and skips forms you have already imported instead of creating duplicates. After importing it shows the new shortcode so you know what to swap on your pages.
+* Fix: The submission total in the dashboard widget stayed on the old figure when you changed the time period. It now updates with the table.
+* Tweak: The plugin's admin form handler no longer runs on front-end page loads.
+* Tweak: If you mention an error when deactivating, the feedback form now asks for the error text so problems can actually be diagnosed.
+* Tweak: If the reason you give for deactivating names something the Pro add-on does, the plugin says so once before deactivating. It never blocks or delays deactivation.
+* Tweak: A one-time review request now appears after your forms have collected ten submissions, on Custom Contact Forms screens only. Dismissing it is remembered.
+
 = 7.14.0 =
 * New: Dashboard widget — see total submissions and a per-form breakdown for the last 7 days, 30 days, or all time, right on your WordPress dashboard
 * New: Click any form in the widget to jump straight to its submissions
@@ -270,6 +282,9 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [current_date_time] notification variable
 
 == Upgrade Notice ==
+
+= 7.15.0 =
+Import your Contact Form 7 and WPForms forms into Custom Contact Forms in one step, under Forms > Import. Your existing forms are only read, never changed. Also fixes the dashboard widget total when switching time periods.
 
 = 7.11.0 =
 A visual refresh of the form builder (toggle switches and card-style fields), a modernized submissions table with friendly column labels, and a redesigned templates screen. Tested up to WordPress 7.0. All existing forms and submissions are preserved — no data migration needed.
