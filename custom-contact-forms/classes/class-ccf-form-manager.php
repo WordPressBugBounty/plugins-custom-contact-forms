@@ -2541,6 +2541,7 @@ class CCF_Form_Manager {
 					'fields'  => array(
 						array( 'name' => esc_html__( 'Product', 'custom-contact-forms' ), 'desc' => esc_html__( 'Sell items with fixed prices, dropdown options, or customer-chosen amounts.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Stripe Card', 'custom-contact-forms' ), 'desc' => esc_html__( 'Take card, Apple Pay and Google Pay payments right on the form.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'PayPal', 'custom-contact-forms' ), 'desc' => esc_html__( 'Let visitors pay with PayPal without leaving your form.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Total', 'custom-contact-forms' ), 'desc' => esc_html__( 'Live order total that updates as visitors choose products.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Coupon', 'custom-contact-forms' ), 'desc' => esc_html__( 'Discount codes with percentage or fixed amounts.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Signature', 'custom-contact-forms' ), 'desc' => esc_html__( 'Ink signatures drawn with mouse, finger or stylus, saved as images.', 'custom-contact-forms' ) ),

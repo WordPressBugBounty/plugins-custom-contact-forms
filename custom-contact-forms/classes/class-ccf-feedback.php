@@ -320,6 +320,35 @@ class CCF_Feedback {
 
 		$form_count = (int) wp_count_posts( 'ccf_form' )->publish;
 
+		// A form count alone cannot tell "used it for a month and moved on"
+		// apart from "built a form and never launched it" — which mean
+		// opposite things. The submission count separates them.
+		$submission_counts = wp_count_posts( 'ccf_submission' );
+		$submissions       = isset( $submission_counts->publish ) ? (int) $submission_counts->publish : 0;
+
+		// How long they actually had it. No install date has ever been stored,
+		// so use the oldest form as a proxy — it works retroactively for every
+		// existing install, which a new option would not.
+		$age = '(no forms created)';
+
+		if ( $form_count > 0 ) {
+			$oldest = get_posts(
+				array(
+					'post_type'      => 'ccf_form',
+					'post_status'    => 'publish',
+					'posts_per_page' => 1,
+					'orderby'        => 'date',
+					'order'          => 'ASC',
+					'fields'         => 'ids',
+				)
+			);
+
+			if ( ! empty( $oldest ) ) {
+				$days = (int) floor( ( time() - get_post_time( 'U', true, $oldest[0] ) ) / DAY_IN_SECONDS );
+				$age  = sprintf( '%d day%s', $days, 1 === $days ? '' : 's' );
+			}
+		}
+
 		$lines = array(
 			'Reason:  ' . $reason,
 			'Comment: ' . ( $comment ? $comment : '(none)' ),
@@ -335,6 +364,8 @@ class CCF_Feedback {
 			'',
 			'Site:    ' . home_url(),
 			'Forms:   ' . $form_count,
+			'Entries: ' . $submissions,
+			'Age:     ' . $age,
 			'Plugin:  ' . ( defined( 'CCF_VERSION' ) ? CCF_VERSION : '?' ),
 			'WP:      ' . get_bloginfo( 'version' ),
 			'PHP:     ' . PHP_VERSION,

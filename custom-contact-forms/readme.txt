@@ -4,7 +4,7 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 7.15.0
+Stable tag: 7.15.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -67,6 +67,7 @@ Start from a prebuilt template — contact, quote request, newsletter, event reg
 Custom Contact Forms Pro turns the builder you already know into forms that sell, book, and sign — no e-commerce stack required.
 
 * **Stripe payments on the form** — cards, Apple Pay, Google Pay, and Link, with a live "Pay $25.00" button and server-verified totals
+* **PayPal payments** — pay in place without leaving your form, with the same server-verified totals
 * **Product & pricing fields** — fixed price, multiple options, or customer-chooses-amount, with quantities, images, and enforced minimums
 * **Coupons & live totals** — percentage or fixed discounts, order total updates as visitors choose
 * **Digital signature field** — draw with mouse, finger, or stylus; saved as an image with every submission
@@ -75,8 +76,10 @@ Custom Contact Forms Pro turns the builder you already know into forms that sell
 * **Multi-step forms** — page breaks, progress bar, per-step validation
 * **Conditional logic** — show or hide any field based on answers, priced fields included
 * **Survey & star rating fields** — Likert grids and quick ratings
+* **Address autocomplete** — visitors pick their address as they type and the street, city, state and ZIP fill themselves in (uses your own Google API key)
+* **SMS confirmations** — text customers the moment they book or pay, through your own Twilio account
 * **13 ready-made templates** — donations, orders, registrations, waivers, agreements, and more
-* **No added transaction fees** — you pay only Stripe's standard processing fees
+* **No added transaction fees** — you pay only Stripe's or PayPal's standard processing fees
 
 [Learn more about Custom Contact Forms Pro](https://customformspro.com/)
 
@@ -162,6 +165,12 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [Privacy Policy](https://www.cloudflare.com/privacypolicy/)
 
 == Changelog ==
+
+= 7.15.2 =
+* Tweak: Deactivation feedback now reports how many submissions the forms collected and how long the plugin was in use, so the reason given can be understood in context.
+
+= 7.15.1 =
+* Tweak: The Pro field preview in the form builder now includes the PayPal field.
 
 = 7.15.0 =
 * New: Import forms from Contact Form 7 and WPForms. Custom Contact Forms now reads your existing forms and rebuilds them as CCF forms — fields, labels, required flags, placeholders, dropdown and radio options, and the notification recipient where it can be resolved. Find it under Forms > Import.
