@@ -92,6 +92,10 @@ class CCF_Settings {
 			$restriction_classes = 'ccf-asset-loading-restrictions-wrap';
 		}
 
+		// First, because it is the thing most people have never heard of and
+		// cannot otherwise discover.
+		add_settings_section( 'ccf-ai-forms', esc_html__( 'Build forms with AI', 'custom-contact-forms' ), array( $this, 'ai_forms_summary' ), 'custom-contact-forms' );
+
 		add_settings_section( 'asset-loading-restriction', esc_html__( 'Asset Loading Restriction', 'custom-contact-forms' ), array( $this, 'asset_loading_restriction_summary' ), 'custom-contact-forms' );
 		add_settings_field( 'asset-loading-restriction-enable', esc_html__( 'Enable Asset Loading Restrictions', 'custom-contact-forms' ), array( $this, 'asset_loading_restriction_enable' ), 'custom-contact-forms', 'asset-loading-restriction' );
 		add_settings_field( 'asset-loading-restriction-choose', esc_html__( 'Restrict Asset Loading To', 'custom-contact-forms' ), array( $this, 'asset_loading_restriction_choose' ), 'custom-contact-forms', 'asset-loading-restriction', array( 'class' => $restriction_classes ) );
@@ -233,5 +237,65 @@ endforeach; else : ?>
 		}
 
 		return $instance;
+	}
+
+	/**
+	 * Explain AI form building, and why it is or is not usable here.
+	 *
+	 * The feature hides itself when it cannot work, which is correct but
+	 * leaves nobody any way to find out it exists or what is missing. This
+	 * says both.
+	 */
+	public function ai_forms_summary() {
+		$has_client = function_exists( 'wp_ai_client_prompt' );
+		$available  = class_exists( 'CCF_AI_Form_Builder' ) && CCF_AI_Form_Builder::is_available();
+
+		echo '<p>' . esc_html__( 'Describe the form you need in plain language and Custom Contact Forms will build it for you — fields, labels and all. You can change everything afterwards.', 'custom-contact-forms' ) . '</p>';
+
+		if ( $available ) {
+			echo '<div class="ccf-ai-callout">';
+			echo '<p><strong>' . esc_html__( 'Ready to use.', 'custom-contact-forms' ) . '</strong> ' . esc_html__( 'Start a new form and describe what you need.', 'custom-contact-forms' ) . '</p>';
+			echo '<a class="button button-primary" href="' . esc_url( admin_url( 'post-new.php?post_type=ccf_form' ) ) . '">&#10024; ' . esc_html__( 'Build a form with AI', 'custom-contact-forms' ) . '</a>';
+			echo '</div>';
+
+			return;
+		}
+
+		if ( ! $has_client ) {
+			echo '<p>' . esc_html__( 'This needs WordPress 7.0 or later, which introduced a built-in way for plugins to use AI. Update WordPress to turn it on.', 'custom-contact-forms' ) . '</p>';
+
+			return;
+		}
+
+		if ( ! current_user_can( 'prompt_ai' ) && ! current_user_can( 'manage_options' ) ) {
+			echo '<p>' . esc_html__( 'Your account does not have permission to use AI features on this site. An administrator can grant it.', 'custom-contact-forms' ) . '</p>';
+
+			return;
+		}
+
+		$check = CCF_AI_Form_Builder::diagnose();
+
+		if ( 'ai_off' === $check['status'] ) {
+			echo '<p>' . esc_html__( 'AI is switched off for this site. Turn it back on in the AI settings and this becomes available.', 'custom-contact-forms' ) . '</p>';
+
+			return;
+		}
+
+		// Client present, permission held, but no provider answering — the
+		// usual cause is a connector installed with no key saved.
+		echo '<p>';
+		printf(
+			/* translators: %s: link to the Connectors settings screen. */
+			esc_html__( 'Almost there. Connect an AI provider under %s and add its API key, then this turns on by itself. WordPress shares that one key with every plugin that needs it, so there is nothing to enter here.', 'custom-contact-forms' ),
+			'<a href="' . esc_url( admin_url( 'options-connectors.php' ) ) . '"><strong>' . esc_html__( 'Settings → Connectors', 'custom-contact-forms' ) . '</strong></a>'
+		);
+		echo '</p>';
+
+		// Shown only to administrators, and only while it is not working: four
+		// different causes otherwise produce the same message, which makes
+		// support conversations guesswork.
+		if ( current_user_can( 'manage_options' ) && ! empty( $check['detail'] ) ) {
+			echo '<p class="description"><em>' . esc_html( sprintf( 'Diagnostic: %s (%s)', $check['detail'], $check['status'] ) ) . '</em></p>';
+		}
 	}
 }

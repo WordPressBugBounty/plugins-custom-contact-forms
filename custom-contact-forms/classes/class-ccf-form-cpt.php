@@ -466,6 +466,10 @@ class CCF_Form_CPT {
 				<a class="button button-primary ccf-open-form-manager" <?php if ( 'post.php' === $pagenow ) : ?>data-form-id="<?php the_ID(); ?>"<?php endif; ?>>
 					<?php esc_html_e( 'Manage Form', 'custom-contact-forms' ); ?>
 				</a>
+
+				<?php if ( class_exists( 'CCF_AI_Form_Builder' ) ) : ?>
+					<button type="button" class="button ccf-ai-open ccf-ai-beside-manage">&#10024; <?php esc_html_e( 'Generate with AI', 'custom-contact-forms' ); ?></button>
+				<?php endif; ?>
 			</h1>
 		</div>
 		<?php

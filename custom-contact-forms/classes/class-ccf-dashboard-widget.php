@@ -323,7 +323,7 @@ class CCF_Dashboard_Widget {
 			return '';
 		}
 
-		$pro_url = apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' );
+		$pro_url = ccf_pro_url( 'dashboard-widget' );
 
 		return sprintf(
 			'<div class="ccf-dw-promo" id="ccf-dw-promo">
@@ -381,7 +381,7 @@ class CCF_Dashboard_Widget {
 			return '';
 		}
 
-		$pro_url = apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' );
+		$pro_url = ccf_pro_url( 'dashboard-widget-empty' );
 
 		return sprintf(
 			'<div class="ccf-dw-pro"><span aria-hidden="true">&#128274;</span> %s <a href="%s" target="_blank" rel="noopener">%s</a></div>',

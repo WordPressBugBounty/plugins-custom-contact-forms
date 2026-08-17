@@ -65,8 +65,8 @@ class CCF_Pro_Notice {
 			return;
 		}
 
-		$pro_url  = apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' );
-		$news_url = 'https://customformspro.com/introducing-custom-contact-forms-pro/';
+		$pro_url  = ccf_pro_url( 'admin-notice' );
+		$news_url = ccf_pro_url( 'admin-notice-announcement', '/introducing-custom-contact-forms-pro/' );
 		$nonce    = wp_create_nonce( 'ccf_dismiss_pro_notice' );
 		?>
 		<div class="notice ccf-pro-notice" id="ccf-pro-notice">
@@ -93,7 +93,7 @@ class CCF_Pro_Notice {
 					<h2><?php esc_html_e( 'Your forms can take payments now', 'custom-contact-forms' ); ?><span class="ccf-pn-badge"><?php esc_html_e( 'New', 'custom-contact-forms' ); ?></span></h2>
 					<p><?php esc_html_e( 'Custom Contact Forms Pro adds paid-form superpowers to the builder you already use — no e-commerce stack required.', 'custom-contact-forms' ); ?></p>
 					<ul class="ccf-pn-feats">
-						<li><?php esc_html_e( 'Stripe payments on the form', 'custom-contact-forms' ); ?></li>
+						<li><?php esc_html_e( 'Stripe and PayPal payments on the form', 'custom-contact-forms' ); ?></li>
 						<li><?php esc_html_e( 'Digital signatures', 'custom-contact-forms' ); ?></li>
 						<li><?php esc_html_e( 'PDF receipts', 'custom-contact-forms' ); ?></li>
 						<li><?php esc_html_e( 'Multi-step forms & conditional logic', 'custom-contact-forms' ); ?></li>
@@ -101,7 +101,15 @@ class CCF_Pro_Notice {
 				</div>
 				<div class="ccf-pn-actions">
 					<a class="ccf-pn-btn" href="<?php echo esc_url( $pro_url ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Explore Pro', 'custom-contact-forms' ); ?></a>
-					<a class="ccf-pn-link" href="<?php echo esc_url( $news_url ); ?>" target="_blank" rel="noopener"><?php esc_html_e( "See what's new in 7.14", 'custom-contact-forms' ); ?></a>
+					<a class="ccf-pn-link" href="<?php echo esc_url( $news_url ); ?>" target="_blank" rel="noopener"><?php
+					// Derived from the version constant so this cannot go stale
+					// again — a hardcoded "7.14" survived several releases.
+					printf(
+						/* translators: %s: plugin version, e.g. 7.16 */
+						esc_html__( "See what's new in %s", 'custom-contact-forms' ),
+						esc_html( implode( '.', array_slice( explode( '.', CCF_VERSION ), 0, 2 ) ) )
+					);
+					?></a>
 				</div>
 			</div>
 			<button type="button" class="ccf-pn-dismiss" aria-label="<?php esc_attr_e( 'Dismiss this notice', 'custom-contact-forms' ); ?>">&#10005;</button>

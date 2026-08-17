@@ -74,7 +74,7 @@ class CCF_Feedback {
 		}
 
 		return array(
-			'url'        => apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' ),
+			'url'        => ccf_pro_url( 'deactivation-survey' ),
 			'signature'  => __( 'Before you go — Custom Contact Forms Pro has a signature field. People sign with a finger, mouse or stylus, and it works on the same form as a payment.', 'custom-contact-forms' ),
 			'payments'   => __( 'Before you go — Custom Contact Forms Pro takes Stripe payments on the form itself. Cards, Apple Pay and Google Pay, with no cart or checkout page.', 'custom-contact-forms' ),
 			'pdf'        => __( 'Before you go — Custom Contact Forms Pro attaches a PDF receipt to notification emails, and any submission can be downloaded as a PDF.', 'custom-contact-forms' ),

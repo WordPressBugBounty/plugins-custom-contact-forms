@@ -152,6 +152,13 @@ class CCF_Form_Manager {
 
 			<div class="ccf-form-settings"></div>
 
+			<?php if ( class_exists( 'CCF_AI_Form_Builder' ) ) : ?>
+				<div class="ccf-ai-builder-cta">
+					<span class="ccf-ai-builder-cta-text"><?php esc_html_e( 'Not sure where to start?', 'custom-contact-forms' ); ?></span>
+					<button type="button" class="button button-primary ccf-ai-open">&#10024; <?php esc_html_e( 'Build with AI', 'custom-contact-forms' ); ?></button>
+				</div>
+			<?php endif; ?>
+
 			<div class="form-content" data-drag-message="<?php esc_html_e( '&larr; Drag fields from the left here.', 'custom-contact-forms' ); ?>">
 			</div>
 
@@ -2534,7 +2541,7 @@ class CCF_Form_Manager {
 			if ( ! defined( 'CCFP_VERSION' ) ) {
 				wp_enqueue_script( 'ccf-pro-teaser', plugins_url( '/assets/js/pro-teaser.js', dirname( __FILE__ ) ), array( 'ccf-form-manager' ), CCF_VERSION, true );
 				wp_localize_script( 'ccf-pro-teaser', 'ccfProTeaser', array(
-					'url'     => apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' ),
+					'url'     => ccf_pro_url( 'field-teaser' ),
 					'badge'   => esc_html__( 'Pro', 'custom-contact-forms' ),
 					'cta'     => esc_html__( 'Get Custom Contact Forms Pro', 'custom-contact-forms' ),
 					'dismiss' => esc_html__( 'Maybe later', 'custom-contact-forms' ),

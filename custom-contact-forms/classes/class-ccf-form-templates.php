@@ -546,7 +546,7 @@ class CCF_Form_Templates {
 		if ( ! defined( 'CCFP_VERSION' ) ) {
 			wp_enqueue_script( 'ccf-pro-teaser', plugins_url( '/assets/js/pro-teaser.js', dirname( __FILE__ ) ), array(), CCF_VERSION, true );
 			wp_localize_script( 'ccf-pro-teaser', 'ccfProTeaser', array(
-				'url'     => apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' ),
+				'url'     => ccf_pro_url( 'template-picker' ),
 				'badge'   => esc_html__( 'Pro', 'custom-contact-forms' ),
 				'cta'     => esc_html__( 'Get Custom Contact Forms Pro', 'custom-contact-forms' ),
 				'dismiss' => esc_html__( 'Maybe later', 'custom-contact-forms' ),
@@ -561,6 +561,7 @@ class CCF_Form_Templates {
 
 			<style>
 				.ccf-tpl-badge { display:inline-block; margin-left:6px; padding:1px 7px; border-radius:10px; font-size:10px; font-weight:600; letter-spacing:.4px; vertical-align:middle; background:#8659d6; color:#fff; }
+				.ccf-tpl-ai{background:linear-gradient(135deg,#faf5ff,#f0f4ff);border-color:#d8d3f5;}
 				.ccf-templates-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:20px;max-width:1200px;}
 				.ccf-tpl{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid #e2e4e7;border-radius:12px;padding:22px;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:box-shadow .18s ease,border-color .18s ease,transform .18s ease;}
 				.ccf-tpl:hover{border-color:#2271b1;box-shadow:0 6px 20px rgba(0,0,0,.08);transform:translateY(-1px);}
@@ -584,6 +585,18 @@ class CCF_Form_Templates {
 			</style>
 
 			<div class="ccf-templates-grid">
+				<?php if ( class_exists( 'CCF_AI_Form_Builder' ) ) : ?>
+					<div class="ccf-tpl ccf-tpl-ai">
+						<span class="ccf-tpl-chip" style="background:linear-gradient(135deg,#6d28d9,#8b5cf6);">
+							<span class="dashicons dashicons-superhero-alt" style="color:#fff;font-size:27px;width:27px;height:27px;"></span>
+						</span>
+						<h3><?php esc_html_e( 'Generate with AI', 'custom-contact-forms' ); ?> <span class="ccf-tpl-badge"><?php esc_html_e( 'NEW', 'custom-contact-forms' ); ?></span></h3>
+						<p class="ccf-tpl-desc"><?php esc_html_e( 'Describe the form you need and it will be built for you — any fields, any purpose.', 'custom-contact-forms' ); ?></p>
+						<p class="ccf-tpl-meta"><?php esc_html_e( 'Any number of fields', 'custom-contact-forms' ); ?></p>
+						<button type="button" class="button button-primary ccf-ai-open">&#10024; <?php esc_html_e( 'Generate Form', 'custom-contact-forms' ); ?></button>
+					</div>
+				<?php endif; ?>
+
 				<?php
 				foreach ( $templates as $key => $template ) :
 					$url  = wp_nonce_url(
@@ -615,7 +628,7 @@ class CCF_Form_Templates {
 				<?php endforeach; ?>
 
 				<?php if ( ! defined( 'CCFP_VERSION' ) ) :
-					$ccf_pro_url = apply_filters( 'ccf_pro_upgrade_url', 'https://customformspro.com/' );
+					$ccf_pro_url = ccf_pro_url( 'template-pro-badge' );
 					$ccf_pro_templates = array(
 						array( 'title' => __( 'Donation Form', 'custom-contact-forms' ), 'desc' => __( 'Giving tiers with an "Other" custom amount and enforced minimum.', 'custom-contact-forms' ), 'icon' => 'heart', 'color' => '#d63384' ),
 						array( 'title' => __( 'Product Order Form', 'custom-contact-forms' ), 'desc' => __( 'Sell products with quantities, coupons and card payment.', 'custom-contact-forms' ), 'icon' => 'cart', 'color' => '#2271b1' ),
