@@ -70,19 +70,7 @@ class CCF_Pro_Modal {
 		}
 
 		// The builder lives on the form edit screens, not the list table.
-		if ( ! in_array( $screen->base, array( 'post', 'post-new' ), true ) ) {
-			return false;
-		}
-
-		// Not until they have actually built something.
-		//
-		// "Customize more" means nothing to someone who has not customized
-		// anything yet, and interrupting a first visit costs goodwill from
-		// people who have not seen the plugin work. Waiting until a form
-		// exists also filters out everyone who installed, looked around and
-		// left — they were never going to buy, and they are the ones most
-		// likely to resent being sold to.
-		return wp_count_posts( 'ccf_form' )->publish > 0;
+		return in_array( $screen->base, array( 'post', 'post-new' ), true );
 	}
 
 	/**

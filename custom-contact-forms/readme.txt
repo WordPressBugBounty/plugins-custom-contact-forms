@@ -4,7 +4,7 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 7.16
+Stable tag: 7.16.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,33 +13,33 @@ Describe the form you need and AI builds it. Or drag and drop. Templates, Gutenb
 
 == Description ==
 
-**New: build a form by describing it.** Tell Custom Contact Forms what you need, for example "a booking form for a dog grooming appointment with the owner's details and their ", and it builds it, fields, labels and all, ready to edit. It uses the AI provider already connected to your site under Settings > Connectors, so there is no API key to enter here and nothing is sent anywhere else. Requires WordPress 7.0 or later; the option stays hidden otherwise.
+**New: build a form by describing it.** Tell Custom Contact Forms what you need — "a booking form for a dog grooming appointment with the owner's details and their preferred date" — and it builds it, fields, labels and all, ready to edit. It uses the AI provider already connected to your site under Settings > Connectors, so there is no API key to enter here and nothing is sent anywhere else. Requires WordPress 7.0 or later; the option stays hidden otherwise.
 
-Custom Contact Forms lets you build forms and manage submissions entirely within WordPress. The drag-and-drop builder lives inside the media manager, no separate admin pages, no learning a new interface. Live previews update as you build, and forms can be inserted via Gutenberg block, shortcode, widget, or PHP function.
+Custom Contact Forms lets you build forms and manage submissions entirely within WordPress. The drag-and-drop builder lives inside the media manager — no separate admin pages, no learning a new interface. Live previews update as you build, and forms can be inserted via Gutenberg block, shortcode, widget, or PHP function.
 
-Start from a prebuilt template, whether contact, quote request, newsletter, event registration, or feedback, and have a working form in seconds. Or build your own from scratch with text, email, phone, address, dropdowns, checkboxes, file uploads, and more. Style it with included form themes and per-field width controls, or add your own custom CSS.
+Start from a prebuilt template — contact, quote request, newsletter, event registration, or feedback — and have a working form in seconds. Or build your own from scratch with text, email, phone, address, dropdowns, checkboxes, file uploads, and more. Style it with included form themes and per-field width controls, or add your own custom CSS.
 
-**Powering thousands of active websites, with over 1.3 million all-time downloads.** Originally created by Taylor Lovett, Custom Contact Forms is now actively maintained by [Dmitry Alexander](https://oiopublisher.com/), rebuilt for modern WordPress with a hardened, PHP 8+ codebase, a refreshed builder, and new features added regularly.
+**Powering thousands of active websites, with over 1.3 million all-time downloads.** Originally created by Taylor Lovett, Custom Contact Forms is now actively maintained by [Dmitry Alexander](https://oiopublisher.com/) — rebuilt for modern WordPress with a hardened, PHP 8+ codebase, a refreshed builder, and new features added regularly.
 
 = What You Can Build =
 
 * Contact forms, quote requests, support forms, event registrations, newsletter signups
 * Text, paragraph, email (with optional confirmation), name, phone, website, address (US + international), date/time, dropdowns, checkboxes, radio buttons, file uploads, hidden fields, and HTML blocks
-* Conditional fields and sections, show/hide fields based on other field values
-* Multiple email notifications per form, customize recipients, subject, from name, reply-to, and body with field mapping
-* Post creation on submission, map form fields to post fields, meta, and taxonomies
+* Conditional fields and sections — show/hide fields based on other field values
+* Multiple email notifications per form — customize recipients, subject, from name, reply-to, and body with field mapping
+* Post creation on submission — map form fields to post fields, meta, and taxonomies
 
 = Recent Updates =
 
-* **Build a form with AI.** Describe what you need in plain language and get a working form. Uses your site's own AI connection, so nothing extra to sign up for
+* **Build a form with AI** — describe what you need in plain language and get a working form. Uses your site's own AI connection, so nothing extra to sign up for
 
-* **Switching from another form plugin?** Import your existing Contact Form 7 and WPForms forms in one step under Forms → Import. Your original forms are only read, never changed
-* **Submissions dashboard widget.** Totals and a per-form breakdown for the last 7 days, 30 days, or all time, right on your WordPress dashboard
-* **Modernized builder.** Yes/No options are now clean toggle switches, and fields display as cards in the builder canvas
-* **Friendly submission columns.** The submissions table now shows real field labels instead of internal slugs
-* **Redesigned templates screen.** Each form template now has its own custom icon, under Forms → Templates
-* **Developer hooks for add-ons.** Filter submission responses, field rendering, and notification timing
-* **WordPress 7.0 ready.** Tested up to the latest WordPress
+* **Switching from another form plugin?** — Import your existing Contact Form 7 and WPForms forms in one step under Forms → Import. Your original forms are only read, never changed
+* **Submissions dashboard widget** — Totals and a per-form breakdown for the last 7 days, 30 days, or all time, right on your WordPress dashboard
+* **Modernized builder** — Yes/No options are now clean toggle switches, and fields display as cards in the builder canvas
+* **Friendly submission columns** — The submissions table now shows real field labels instead of internal slugs
+* **Redesigned templates screen** — Each form template now has its own custom icon, under Forms → Templates
+* **Developer hooks for add-ons** — Filter submission responses, field rendering, and notification timing
+* **WordPress 7.0 ready** — Tested up to the latest WordPress
 
 = Powerful Features, Included Free =
 
@@ -47,43 +47,43 @@ Start from a prebuilt template, whether contact, quote request, newsletter, even
 * Prebuilt form templates for the most common form types
 * Gutenberg block, shortcode, widget, and PHP template support
 * Multiple form themes plus per-field width controls and custom CSS
-* AJAX form submission, no page reloads
-* Import your forms from Contact Form 7 and WPForms, fields, labels, required flags, placeholders, and choices, with a report of anything that needs your attention
+* AJAX form submission — no page reloads
+* Import your forms from Contact Form 7 and WPForms — fields, labels, required flags, placeholders, and choices, with a report of anything that needs your attention
 * Export submissions to CSV, and import submissions from CSV with automatic column mapping
 * Import and export forms via WordPress XML
 * Cloudflare Turnstile, reCAPTCHA, and simple captcha options
-* Built-in spam protection, honeypot, time-based trap, IP rate limiting, disposable email blocking, keyword blacklist
-* Email diagnostics, send test emails and view delivery failure logs
+* Built-in spam protection — honeypot, time-based trap, IP rate limiting, disposable email blocking, keyword blacklist
+* Email diagnostics — send test emails and view delivery failure logs
 * Restrict forms to logged-in users, or pause forms with a custom message
 * Customizable completion text or redirect URL
-* Conditional asset loading, only load scripts where forms appear
+* Conditional asset loading — only load scripts where forms appear
 * Extensible with hooks, filters, and custom field types
 
 = Quick Start =
 
-1. Go to Forms → Templates and pick a starting template, or go to Forms → Forms and Submissions to start from scratch
+1. Go to Forms → Templates and pick a starting template — or go to Forms → Forms and Submissions to start from scratch
 2. Drag fields from the sidebar into the form area, and click a field to edit its label, width, and options
 3. Save the form
 4. Insert it with the Gutenberg block (search "CCF" in the block inserter) or the `[ccf_form id="X"]` shortcode
 
 = Customize More with Pro =
 
-Custom Contact Forms Pro turns the builder you already know into forms that sell, book, and sign. No e-commerce stack required.
+Custom Contact Forms Pro turns the builder you already know into forms that sell, book, and sign — no e-commerce stack required.
 
-* **Stripe payments on the form.** Cards, Apple Pay, Google Pay, and Link, with a live "Pay $25.00" button and server-verified totals
-* **PayPal payments.** Pay in place without leaving your form, with the same server-verified totals
-* **Product & pricing fields.** Fixed price, multiple options, or customer-chooses-amount, with quantities, images, and enforced minimums
-* **Coupons & live totals.** Percentage or fixed discounts, order total updates as visitors choose
-* **Digital signature field.** Draw with mouse, finger, or stylus; saved as an image with every submission
-* **Consent / terms field.** Scrollable terms with versioned agreement records, snapshotted permanently
-* **PDF receipts.** Attached to notification emails for paid orders, plus one-click PDF download of any submission
-* **Multi-step forms.** Page breaks, progress bar, per-step validation
-* **Conditional logic.** Show or hide any field based on answers, priced fields included
-* **Survey & star rating fields.** Likert grids and quick ratings
-* **Address autocomplete.** Visitors pick their address as they type and the street, city, state and ZIP fill themselves in (uses your own Google API key)
-* **SMS confirmations.** Text customers the moment they book or pay, through your own Twilio account
-* **13 ready-made templates.** Donations, orders, registrations, waivers, agreements, and more
-* **No added transaction fees.** You pay only Stripe's or PayPal's standard processing fees
+* **Stripe payments on the form** — cards, Apple Pay, Google Pay, and Link, with a live "Pay $25.00" button and server-verified totals
+* **PayPal payments** — pay in place without leaving your form, with the same server-verified totals
+* **Product & pricing fields** — fixed price, multiple options, or customer-chooses-amount, with quantities, images, and enforced minimums
+* **Coupons & live totals** — percentage or fixed discounts, order total updates as visitors choose
+* **Digital signature field** — draw with mouse, finger, or stylus; saved as an image with every submission
+* **Consent / terms field** — scrollable terms with versioned agreement records, snapshotted permanently
+* **PDF receipts** — attached to notification emails for paid orders, plus one-click PDF download of any submission
+* **Multi-step forms** — page breaks, progress bar, per-step validation
+* **Conditional logic** — show or hide any field based on answers, priced fields included
+* **Survey & star rating fields** — Likert grids and quick ratings
+* **Address autocomplete** — visitors pick their address as they type and the street, city, state and ZIP fill themselves in (uses your own Google API key)
+* **SMS confirmations** — text customers the moment they book or pay, through your own Twilio account
+* **13 ready-made templates** — donations, orders, registrations, waivers, agreements, and more
+* **No added transaction fees** — you pay only Stripe's or PayPal's standard processing fees
 
 [Learn more about Custom Contact Forms Pro](https://customformspro.com/)
 
@@ -110,7 +110,7 @@ Go to Forms → Templates and choose one of the prebuilt forms (Contact, Quote R
 
 = How do I make fields sit side by side? =
 
-Click a field in the builder, open the Advanced panel, and set its Field Width (half, third, two-thirds, or quarter). Place two or more partial-width fields together and they line up in columns. Widths apply on the published form, in the block editor preview and on the front end, not inside the builder.
+Click a field in the builder, open the Advanced panel, and set its Field Width (half, third, two-thirds, or quarter). Place two or more partial-width fields together and they line up in columns. Widths apply on the published form — in the block editor preview and on the front end — not inside the builder.
 
 = How do I add custom styling? =
 
@@ -126,7 +126,7 @@ Use the Gutenberg block (search "CCF" or "Contact Form"), the shortcode `[ccf_fo
 
 = Can I export and import form submissions? =
 
-Yes. Edit any form and click the download icon to export submissions as a CSV file. To import, go to Forms → Import CSV, select a form, upload your CSV, and map the columns to form fields, the importer auto-detects matching columns by name.
+Yes. Edit any form and click the download icon to export submissions as a CSV file. To import, go to Forms → Import CSV, select a form, upload your CSV, and map the columns to form fields — the importer auto-detects matching columns by name.
 
 = Does this plugin create custom database tables? =
 
@@ -138,7 +138,7 @@ Yes. The plugin is fully compatible with PHP 8.0, 8.1, 8.2, 8.3, and 8.4.
 
 = What does the deactivation survey collect? =
 
-If you deactivate the plugin, an optional survey asks why. Nothing is sent unless you choose a reason or add a comment and click "Submit & Deactivate", the "Skip & Deactivate" option sends nothing. When you do submit, the plugin uses your site's own email to send the maintainer the reason you selected, your optional comment, your site URL, the number of forms you have, and your plugin, WordPress, and PHP versions. No personal data and no visitor data is collected, and no external tracking service is used.
+If you deactivate the plugin, an optional survey asks why. Nothing is sent unless you choose a reason or add a comment and click "Submit & Deactivate" — the "Skip & Deactivate" option sends nothing. When you do submit, the plugin uses your site's own email to send the maintainer the reason you selected, your optional comment, your site URL, the number of forms you have, and your plugin, WordPress, and PHP versions. No personal data and no visitor data is collected, and no external tracking service is used.
 
 == Screenshots ==
 
@@ -154,7 +154,7 @@ This plugin optionally connects to the following third-party services for spam p
 
 = Google reCAPTCHA =
 
-When enabled in the form builder, this plugin loads the Google reCAPTCHA widget on form pages and sends form submission verification requests to Google's servers. The user's reCAPTCHA response token is sent to Google for validation. No personal data is sent by the plugin itself, Google may collect usage data through their widget script.
+When enabled in the form builder, this plugin loads the Google reCAPTCHA widget on form pages and sends form submission verification requests to Google's servers. The user's reCAPTCHA response token is sent to Google for validation. No personal data is sent by the plugin itself — Google may collect usage data through their widget script.
 
 * Service provider: Google LLC
 * [Terms of Service](https://policies.google.com/terms)
@@ -170,8 +170,11 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 
 == Changelog ==
 
+= 7.16.1 =
+* Security: fixed a missing authorization issue in the form update REST route. Nested field and choice IDs supplied in a request are now verified to be the correct post type and to belong to the form being edited before any post meta is written or any post is deleted. Reported by Wordfence PRISM. CVE-2026-75018.
+
 = 7.16 =
-* Tweak: A one-time introduction to Pro appears in the form builder once you have built your first form. It is dismissible and never returns.
+* Tweak: A one-time introduction to Pro now appears in the form builder. It is dismissible and never returns.
 * Feature: Build a form by describing it. Uses the AI provider already connected under Settings > Connectors, so there is no API key to enter and nothing is sent anywhere else. Requires WordPress 7.0 or later; the option stays hidden otherwise.
 * Tweak: PayPal added to the Pro field preview in the form builder.
 * Tweak: Deactivation feedback now reports how many submissions the forms collected and how long the plugin was in use.
@@ -179,7 +182,7 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * Fix: The Pro banner showed an old version number. It now follows the installed version.
 
 = 7.15.0 =
-* New: Import forms from Contact Form 7 and WPForms. Custom Contact Forms now reads your existing forms and rebuilds them as CCF forms, fields, labels, required flags, placeholders, dropdown and radio options, and the notification recipient where it can be resolved. Find it under Forms > Import.
+* New: Import forms from Contact Form 7 and WPForms. Custom Contact Forms now reads your existing forms and rebuilds them as CCF forms — fields, labels, required flags, placeholders, dropdown and radio options, and the notification recipient where it can be resolved. Find it under Forms > Import.
 * New: The importer never changes your original forms, tells you exactly which tags it could not convert, and skips forms you have already imported instead of creating duplicates. After importing it shows the new shortcode so you know what to swap on your pages.
 * Fix: The submission total in the dashboard widget stayed on the old figure when you changed the time period. It now updates with the table.
 * Tweak: The plugin's admin form handler no longer runs on front-end page loads.
@@ -188,13 +191,13 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * Tweak: A one-time review request now appears after your forms have collected ten submissions, on Custom Contact Forms screens only. Dismissing it is remembered.
 
 = 7.14.0 =
-* New: Dashboard widget, see total submissions and a per-form breakdown for the last 7 days, 30 days, or all time, right on your WordPress dashboard
+* New: Dashboard widget — see total submissions and a per-form breakdown for the last 7 days, 30 days, or all time, right on your WordPress dashboard
 * New: Click any form in the widget to jump straight to its submissions
 * New: One-time notice introducing Custom Contact Forms Pro (permanently dismissible, admin-only, hidden when Pro is active)
 
 = 7.13.0 =
 * Refreshed plugin listing and documentation
-* Introduced Custom Contact Forms Pro, payments, signatures, PDFs, and more at customformspro.com
+* Introduced Custom Contact Forms Pro — payments, signatures, PDFs, and more at customformspro.com
 * Fix: The Pro field preview dialog in the form builder now displays correctly
 * New: Get Pro link on the Plugins screen (shown only when the Pro add-on is not active)
 
@@ -206,22 +209,22 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * Tweak: Tested up to the latest WordPress
 
 = 7.11.0 =
-* Tweak: Modernized form builder, Yes/No options now display as toggle switches and fields appear as cards in the canvas
-* Tweak: Friendly submission columns, the entry table now shows real field labels instead of internal slugs
+* Tweak: Modernized form builder — Yes/No options now display as toggle switches and fields appear as cards in the canvas
+* Tweak: Friendly submission columns — the entry table now shows real field labels instead of internal slugs
 * Tweak: Redesigned submissions table with a cleaner, more modern style
 * Tweak: Redesigned Form Templates screen with custom template icons
 * Dev: New ccf_pre_submission_errors filter so add-ons can run final pre-save validation
 * Compatibility: Tested up to WordPress 7.0
 
 = 7.10.0 =
-* New: Form templates, prebuilt Contact, Quote Request, Newsletter, Event Registration, and Feedback forms under Forms → Templates
-* New: Field width controls, set fields to full, half, third, two-thirds, or quarter width for multi-column layouts
-* New: Minimal form theme, modern underlined-input style, selectable per form and per block
-* New: Custom CSS setting, add site-wide form styles from Forms → Settings
+* New: Form templates — prebuilt Contact, Quote Request, Newsletter, Event Registration, and Feedback forms under Forms → Templates
+* New: Field width controls — set fields to full, half, third, two-thirds, or quarter width for multi-column layouts
+* New: Minimal form theme — modern underlined-input style, selectable per form and per block
+* New: Custom CSS setting — add site-wide form styles from Forms → Settings
 * Tweak: Refreshed form builder with field-type icons and a cleaner, more modern interface
 
 = 7.9.1 =
-* Privacy: Google reCAPTCHA API is no longer loaded by default, it now loads only on pages that actually render a reCAPTCHA field, preventing unsolicited third-party requests
+* Privacy: Google reCAPTCHA API is no longer loaded by default — it now loads only on pages that actually render a reCAPTCHA field, preventing unsolicited third-party requests
 * Fix: register_setting() calls updated to the modern array syntax with explicit sanitize_callback
 
 = 7.9.0 =
@@ -235,20 +238,20 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * Security: Sanitized IP address and nonce inputs throughout
 * New: Gutenberg block with form selector and live server-side preview
 * New: Cloudflare Turnstile integration (Settings → Cloudflare Turnstile)
-* New: Enhanced anti-spam, improved honeypot, time-based trap, IP rate limiting
+* New: Enhanced anti-spam — improved honeypot, time-based trap, IP rate limiting
 * New: Disposable email blocking and keyword blacklist
-* New: Email diagnostics, test email button and wp_mail failure logging
+* New: Email diagnostics — test email button and wp_mail failure logging
 * New: Copy shortcode button in form list, edit screen, and At a Glance panel
 * New: CSV submission importer (Forms → Import CSV) with column auto-mapping
 * New: Modern responsive form CSS with proper focus states and transitions
 * New: Dark and light theme overrides with modern styling
 * New: jQuery UI datepicker modern style override
-* Fix: PHP 8+ compatibility, resolved all deprecation warnings and type errors
+* Fix: PHP 8+ compatibility — resolved all deprecation warnings and type errors
 * Fix: session_start() checks session_status() and headers_sent()
 * Fix: (double) cast replaced with proper int math
 * Fix: Settings page array offset on false when options not yet set
 * Fix: Null-safe array access in submission CPT formatters
-* Fix: Import bug, choices saving to wrong meta key
+* Fix: Import bug — choices saving to wrong meta key
 * Fix: show_in_json replaced with show_in_rest
 * Fix: Removed obsolete vendored WP-API loader
 * Tweak: ABSPATH guards added to all PHP files
@@ -302,10 +305,10 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 Import your Contact Form 7 and WPForms forms into Custom Contact Forms in one step, under Forms > Import. Your existing forms are only read, never changed. Also fixes the dashboard widget total when switching time periods.
 
 = 7.11.0 =
-A visual refresh of the form builder (toggle switches and card-style fields), a modernized submissions table with friendly column labels, and a redesigned templates screen. Tested up to WordPress 7.0. All existing forms and submissions are preserved, no data migration needed.
+A visual refresh of the form builder (toggle switches and card-style fields), a modernized submissions table with friendly column labels, and a redesigned templates screen. Tested up to WordPress 7.0. All existing forms and submissions are preserved — no data migration needed.
 
 = 7.10.0 =
-Adds form templates, per-field width controls, a Minimal theme, custom CSS, and a refreshed builder. All existing forms and submissions are preserved, no data migration needed.
+Adds form templates, per-field width controls, a Minimal theme, custom CSS, and a refreshed builder. All existing forms and submissions are preserved — no data migration needed.
 
 = 7.9.0 =
-Major security and compatibility update. Fixes PHP 8+ errors, adds Gutenberg block, Cloudflare Turnstile spam protection, and modern form styling. All existing forms and submissions are preserved, no data migration needed. Recommended for all users.
+Major security and compatibility update. Fixes PHP 8+ errors, adds Gutenberg block, Cloudflare Turnstile spam protection, and modern form styling. All existing forms and submissions are preserved — no data migration needed. Recommended for all users.

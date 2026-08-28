@@ -253,6 +253,45 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	}
 
 	/**
+	 * SECURITY FIX (CVE-2026-75018): validate a nested ID from the request body.
+	 *
+	 * The update route authorizes the top level form ID only. Nested
+	 * fields[].ID and choices[].ID arrive straight from the request body, so each
+	 * one must be proven to be the expected post type AND parented to the object
+	 * the caller is already authorized to edit, before it is allowed to reach
+	 * update_post_meta() or wp_delete_post().
+	 *
+	 * The parent check is what carries the authorization: the caller has already
+	 * passed edit_post/publish_posts on $parent_id, so that object's own children
+	 * are legitimately theirs to change. A separate current_user_can( 'edit_post',
+	 * $id ) is deliberately not used, because ccf_field and ccf_choice register
+	 * with capability_type 'post' and are created with post_status 'publish', so
+	 * a contributor would fail edit_post on their own fields and legitimate form
+	 * saving would break.
+	 *
+	 * @param mixed  $id        Post ID supplied in the request.
+	 * @param string $post_type Expected post type.
+	 * @param int    $parent_id Expected post_parent.
+	 * @return bool
+	 * @since 7.16.1
+	 */
+	private function _is_owned_child( $id, $post_type, $parent_id ) {
+		$id = (int) $id;
+
+		if ( $id <= 0 ) {
+			return false;
+		}
+
+		$post = get_post( $id );
+
+		if ( empty( $post ) || $post_type !== $post->post_type ) {
+			return false;
+		}
+
+		return ( (int) $post->post_parent === (int) $parent_id );
+	}
+
+	/**
 	 * Create field choices and attach them to fields. Not an API route.
 	 *
 	 * @param array $choices
@@ -274,6 +313,11 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 
 					$choice_id = wp_insert_post( $args );
 				} else {
+					// SECURITY FIX (CVE-2026-75018): reject IDs that are not this field's own choices.
+					if ( ! $this->_is_owned_child( $choice['ID'], 'ccf_choice', $field_id ) ) {
+						continue;
+					}
+
 					$choice_id = (int) $choice['ID'];
 				}
 
@@ -287,7 +331,8 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 					$new_choices[] = $choice_id;
 				}
 			} else {
-				if ( ! empty( $choice['ID'] ) ) {
+				// SECURITY FIX (CVE-2026-75018): only delete this field's own choices.
+				if ( ! empty( $choice['ID'] ) && $this->_is_owned_child( $choice['ID'], 'ccf_choice', $field_id ) ) {
 					wp_delete_post( (int) $choice['ID'], true );
 				}
 			}
@@ -299,7 +344,10 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		if ( ! empty( $current_choices ) && is_array( $current_choices ) ) {
 			$deleted_choices = array_diff( $current_choices, $new_choices );
 			foreach ( $deleted_choices as $choice_id ) {
-				wp_delete_post( (int) $choice_id, true );
+				// SECURITY FIX (CVE-2026-75018): never delete a post that is not this field's own choice.
+				if ( $this->_is_owned_child( $choice_id, 'ccf_choice', $field_id ) ) {
+					wp_delete_post( (int) $choice_id, true );
+				}
 			}
 		}
 
@@ -327,6 +375,11 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 
 				$field_id = wp_insert_post( $args );
 			} else {
+				// SECURITY FIX (CVE-2026-75018): reject IDs that are not this form's own fields.
+				if ( ! $this->_is_owned_child( $field['ID'], 'ccf_field', $form_id ) ) {
+					continue;
+				}
+
 				$field_id = (int) $field['ID'];
 			}
 
@@ -357,7 +410,10 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		if ( ! empty( $current_fields ) && is_array( $current_fields ) ) {
 			$deleted_fields = array_diff( $current_fields, $new_fields );
 			foreach ( $deleted_fields as $field_id ) {
-				wp_delete_post( (int) $field_id, true );
+				// SECURITY FIX (CVE-2026-75018): never delete a post that is not this form's own field.
+				if ( $this->_is_owned_child( $field_id, 'ccf_field', $form_id ) ) {
+					wp_delete_post( (int) $field_id, true );
+				}
 			}
 		}
 
@@ -890,6 +946,12 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$attached_fields = get_post_meta( $form_id, 'ccf_attached_fields', true );
 		if ( ! empty( $attached_fields ) && is_array( $attached_fields ) ) {
 			foreach ( $attached_fields as $field_id ) {
+				// SECURITY FIX (CVE-2026-75018): the attached meta may have been
+				// poisoned before the nested ID guards existed, so re-verify here.
+				if ( ! $this->_is_owned_child( $field_id, 'ccf_field', $form_id ) ) {
+					continue;
+				}
+
 				$this->delete_choices( (int) $field_id );
 				wp_delete_post( (int) $field_id, true );
 			}
@@ -921,6 +983,12 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 		$attached_choices = get_post_meta( $field_id, 'ccf_attached_choices', true );
 		if ( ! empty( $attached_choices ) && is_array( $attached_choices ) ) {
 			foreach ( $attached_choices as $choice_id ) {
+				// SECURITY FIX (CVE-2026-75018): re-verify in case the attached
+				// meta was poisoned before the nested ID guards existed.
+				if ( ! $this->_is_owned_child( $choice_id, 'ccf_choice', $field_id ) ) {
+					continue;
+				}
+
 				wp_delete_post( (int) $choice_id, true );
 			}
 		}
