@@ -118,7 +118,7 @@ class CCF_Review_Request {
 		<div class="notice notice-info is-dismissible ccf-review-notice">
 			<p>
 				<strong><?php esc_html_e( 'Enjoying Custom Contact Forms?', 'custom-contact-forms' ); ?></strong><br>
-				<?php esc_html_e( 'Your forms have collected a good few submissions now. If the plugin has been useful, a review on WordPress.org genuinely helps other people find it — it takes a minute.', 'custom-contact-forms' ); ?>
+				<?php esc_html_e( 'Your forms have collected a good few submissions now. If the plugin has been useful, a review on WordPress.org genuinely helps other people find it. It takes a minute.', 'custom-contact-forms' ); ?>
 			</p>
 			<p>
 				<a href="https://wordpress.org/support/plugin/custom-contact-forms/reviews/#new-post" class="button button-primary" target="_blank" rel="noopener" data-ccf-review="done"><?php esc_html_e( 'Leave a review', 'custom-contact-forms' ); ?></a>

@@ -86,6 +86,10 @@ class CCF_Form_Handler {
 				'sanitizer' => 'sanitize_text_field',
 				'validator' => array( $this, 'not_empty_choiceable' ),
 			),
+			'signature' => array(
+				'sanitizer' => array( 'CCF_Signature_Field', 'sanitize' ),
+				'validator' => array( 'CCF_Signature_Field', 'validate' ),
+			),
 		) );
 	}
 
@@ -659,8 +663,8 @@ class CCF_Form_Handler {
 	 *
 	 * POST /wp-json/ccf/v1/submit with form_id, form_nonce (action
 	 * "ccf_form") and ccf_field_{slug} values. Runs the exact same
-	 * pipeline as the standard flow — sanitization, validation,
-	 * anti-spam, storage, notifications — and returns the same
+	 * pipeline as the standard flow - sanitization, validation,
+	 * anti-spam, storage, notifications - and returns the same
 	 * response shape as JSON.
 	 *
 	 * @since 7.12.5
@@ -707,7 +711,7 @@ class CCF_Form_Handler {
 		/**
 		 * Filter the submission response before it is returned to the browser.
 		 *
-		 * Lets add-ons (e.g. payment) alter the response — for example, turning
+		 * Lets add-ons (e.g. payment) alter the response - for example, turning
 		 * a successful submission into a redirect to a hosted checkout page.
 		 * With no add-on attached the response is returned unchanged.
 		 *
@@ -737,9 +741,10 @@ class CCF_Form_Handler {
 	 * @return array
 	 */
 	public function process_submission() {
-		// Anti-spam checks (honeypot, time trap, rate limiting) — runs first, fails fast
+		// Anti-spam checks (honeypot, time trap, rate limiting) - runs first, fails fast
 		$spam_check = CCF_Anti_Spam::factory()->check( 0 );
 		if ( true !== $spam_check ) {
+			CCF_Stats::record_spam();
 			return $spam_check;
 		}
 
@@ -759,6 +764,7 @@ class CCF_Form_Handler {
 		if ( class_exists( 'CCF_Turnstile' ) && CCF_Turnstile::factory()->is_active() ) {
 			$turnstile_token = isset( $_POST['cf-turnstile-response'] ) ? sanitize_text_field( wp_unslash( $_POST['cf-turnstile-response'] ) ) : '';
 			if ( ! CCF_Turnstile::factory()->verify( $turnstile_token ) ) {
+				CCF_Stats::record_spam();
 				return array( 'error' => 'turnstile_failed', 'success' => false );
 			}
 		}
@@ -850,9 +856,9 @@ class CCF_Form_Handler {
 		 *
 		 * Fires after all field validation and spam checks have passed, but
 		 * before the submission is saved. Add-ons can use this to perform
-		 * authoritative server-side work that must gate the submission —
+		 * authoritative server-side work that must gate the submission -
 		 * for example, recomputing an order total from the stored field
-		 * configuration and charging a payment — and halt the submission by
+		 * configuration and charging a payment - and halt the submission by
 		 * returning a non-empty array of errors. With no add-on attached the
 		 * array passes through unchanged, so core behavior is unaffected.
 		 *
@@ -1049,6 +1055,20 @@ class CCF_Form_Handler {
 										<?php elseif ( 'name' === $type ) : ?>
 
 											<?php echo esc_html( stripslashes( CCF_Submission_CPT::factory()->get_pretty_field_name( $field ) ) ); ?>
+
+										<?php elseif ( 'signature' === $type ) : ?>
+
+											<?php
+											// The signature has been saved as an image by now; read the
+											// stored URL instead of the posted drawing data.
+											$ccf_saved_data    = get_post_meta( $submission_id, 'ccf_submission_data', true );
+											$ccf_signature_url = ( is_array( $ccf_saved_data ) && ! empty( $ccf_saved_data[ $slug ] ) && is_string( $ccf_saved_data[ $slug ] ) && 0 === strpos( $ccf_saved_data[ $slug ], 'http' ) ) ? $ccf_saved_data[ $slug ] : '';
+											?>
+											<?php if ( $ccf_signature_url ) : ?>
+												<a href="<?php echo esc_url( $ccf_signature_url ); ?>"><img src="<?php echo esc_url( $ccf_signature_url ); ?>" alt="<?php esc_attr_e( 'Signature', 'custom-contact-forms' ); ?>" style="max-width: 300px; height: auto; border: 1px solid #dddddd;"></a>
+											<?php else : ?>
+												<?php esc_html_e( 'Signed', 'custom-contact-forms' ); ?>
+											<?php endif; ?>
 
 										<?php elseif ( 'file' === $type && is_array( $field ) ) : ?>
 

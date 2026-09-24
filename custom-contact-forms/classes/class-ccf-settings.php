@@ -125,7 +125,7 @@ class CCF_Settings {
 		$css    = ( is_array( $option ) && isset( $option['custom_css'] ) ) ? $option['custom_css'] : '';
 		?>
 		<textarea name="ccf_settings[custom_css]" id="ccf-custom-css" class="large-text code" rows="12" spellcheck="false" placeholder="<?php esc_attr_e( '.ccf-form { /* your styles */ }', 'custom-contact-forms' ); ?>"><?php echo esc_textarea( $css ); ?></textarea>
-		<p class="description"><?php esc_html_e( 'Target form elements with the .ccf-form class. Example: .ccf-form input { border-radius: 6px; } — if your theme overrides a style, add !important (e.g. border-radius: 6px !important;).', 'custom-contact-forms' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Target form elements with the .ccf-form class. Example: .ccf-form input { border-radius: 6px; } If your theme overrides a style, add !important (e.g. border-radius: 6px !important;).', 'custom-contact-forms' ); ?></p>
 		<?php
 	}
 
@@ -250,7 +250,7 @@ endforeach; else : ?>
 		$has_client = function_exists( 'wp_ai_client_prompt' );
 		$available  = class_exists( 'CCF_AI_Form_Builder' ) && CCF_AI_Form_Builder::is_available();
 
-		echo '<p>' . esc_html__( 'Describe the form you need in plain language and Custom Contact Forms will build it for you — fields, labels and all. You can change everything afterwards.', 'custom-contact-forms' ) . '</p>';
+		echo '<p>' . esc_html__( 'Describe the form you need in plain language and Custom Contact Forms will build it for you, fields, labels and all. You can change everything afterwards.', 'custom-contact-forms' ) . '</p>';
 
 		if ( $available ) {
 			echo '<div class="ccf-ai-callout">';
@@ -281,7 +281,7 @@ endforeach; else : ?>
 			return;
 		}
 
-		// Client present, permission held, but no provider answering — the
+		// Client present, permission held, but no provider answering - the
 		// usual cause is a connector installed with no key saved.
 		echo '<p>';
 		printf(

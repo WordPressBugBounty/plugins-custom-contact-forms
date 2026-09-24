@@ -25,7 +25,7 @@
 
 	// Build select options
 	var selectOptions = [
-		{ value: 0, label: blockData.selectText || '— Select a form —' }
+		{ value: 0, label: blockData.selectText || 'Select a form' }
 	];
 	forms.forEach( function( form ) {
 		selectOptions.push( { value: form.value, label: form.label } );
@@ -99,7 +99,7 @@
 				);
 			}
 
-			// Form selected — build the preview
+			// Form selected - build the preview
 			var preview;
 			if ( ServerSideRender ) {
 				preview = el( ServerSideRender, {
@@ -130,7 +130,7 @@
 		},
 
 		save: function() {
-			// Dynamic block — rendered server-side
+			// Dynamic block - rendered server-side
 			return null;
 		}
 	} );

@@ -269,7 +269,7 @@ class CCF_Dashboard_Widget {
 		);
 
 		if ( empty( $data['forms'] ) ) {
-			$html = '<div class="ccf-dw-empty">' . esc_html__( 'No submissions in this period — your forms will report here.', 'custom-contact-forms' ) . '</div>';
+			$html = '<div class="ccf-dw-empty">' . esc_html__( 'No submissions in this period. Your forms will report here.', 'custom-contact-forms' ) . '</div>';
 			return array( 'body' => $html, 'total' => $total_line );
 		}
 
@@ -333,7 +333,7 @@ class CCF_Dashboard_Widget {
 				<button type="button" class="ccf-dw-promo-close" aria-label="%s">&#10005;</button>
 			</div>',
 			esc_html__( 'Do more with your forms', 'custom-contact-forms' ),
-			esc_html__( 'Upgrade to Pro for Stripe payments, PDF receipts, digital signatures, and more premium fields.', 'custom-contact-forms' ),
+			esc_html__( 'Upgrade to Pro for Stripe payments, PDF receipts, signed agreements, and more premium fields.', 'custom-contact-forms' ),
 			esc_url( $pro_url ),
 			esc_html__( 'Upgrade to Pro', 'custom-contact-forms' ),
 			esc_attr__( 'Dismiss', 'custom-contact-forms' )
@@ -385,7 +385,7 @@ class CCF_Dashboard_Widget {
 
 		return sprintf(
 			'<div class="ccf-dw-pro"><span aria-hidden="true">&#128274;</span> %s <a href="%s" target="_blank" rel="noopener">%s</a></div>',
-			esc_html__( 'Payments collected: —', 'custom-contact-forms' ),
+			esc_html__( 'Payments collected: none', 'custom-contact-forms' ),
 			esc_url( $pro_url ),
 			esc_html__( 'Enable payments with Pro &rarr;', 'custom-contact-forms' )
 		);

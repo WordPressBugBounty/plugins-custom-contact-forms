@@ -170,7 +170,7 @@ class CCF_AI_Admin {
 
 		// The same form-level defaults a template sets. Without these the form
 		// renders with an unlabelled submit button and, worse, no notification
-		// emails — the fields are only half of what makes a working form.
+		// emails - the fields are only half of what makes a working form.
 		update_post_meta( $form_id, 'ccf_form_title', $spec['title'] );
 		update_post_meta( $form_id, 'ccf_form_description', '' );
 		update_post_meta( $form_id, 'ccf_form_buttonText', esc_attr( $spec['button'] ) );
@@ -184,7 +184,7 @@ class CCF_AI_Admin {
 		update_post_meta( $form_id, 'ccf_form_hide_title', false );
 		update_post_meta( $form_id, 'ccf_form_require_logged_in', false );
 		update_post_meta( $form_id, 'ccf_form_post_creation', false );
-		update_post_meta( $form_id, 'ccf_form_notifications', array() );
+		update_post_meta( $form_id, 'ccf_form_notifications', array( CCF_Form_CPT::default_notification() ) );
 		update_post_meta( $form_id, 'ccf_form_created_by_ai', 1 );
 
 		wp_send_json_success(
@@ -235,7 +235,7 @@ class CCF_AI_Admin {
 		   sizing and weight. */
 		.ccf-ai-beside-manage { font-size: 13px !important; font-weight: 400 !important; line-height: 2.15384615 !important; vertical-align: middle; margin-left: 6px !important; }
 
-		/* The wait is the weakest moment in this flow — a few seconds of
+		/* The wait is the weakest moment in this flow - a few seconds of
 		   nothing. These give it some shape without pretending to show real
 		   progress, which we cannot know. */
 		.ccf-ai-dialog-inner { animation: ccfAiRise .22s ease-out; }

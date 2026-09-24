@@ -46,7 +46,7 @@ class CCF_Pro_Notice {
 			return false;
 		}
 
-		// Keep the block editor clean — notices get relocated awkwardly there.
+		// Keep the block editor clean - notices get relocated awkwardly there.
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( $screen && ! empty( $screen->is_block_editor ) ) {
 			return false;
@@ -91,10 +91,10 @@ class CCF_Pro_Notice {
 			<div class="ccf-pn-inner">
 				<div class="ccf-pn-main">
 					<h2><?php esc_html_e( 'Your forms can take payments now', 'custom-contact-forms' ); ?><span class="ccf-pn-badge"><?php esc_html_e( 'New', 'custom-contact-forms' ); ?></span></h2>
-					<p><?php esc_html_e( 'Custom Contact Forms Pro adds paid-form superpowers to the builder you already use — no e-commerce stack required.', 'custom-contact-forms' ); ?></p>
+					<p><?php esc_html_e( 'Custom Contact Forms Pro adds paid-form superpowers to the builder you already use, with no e-commerce stack required.', 'custom-contact-forms' ); ?></p>
 					<ul class="ccf-pn-feats">
 						<li><?php esc_html_e( 'Stripe and PayPal payments on the form', 'custom-contact-forms' ); ?></li>
-						<li><?php esc_html_e( 'Digital signatures', 'custom-contact-forms' ); ?></li>
+						<li><?php esc_html_e( 'Signed agreements and waivers', 'custom-contact-forms' ); ?></li>
 						<li><?php esc_html_e( 'PDF receipts', 'custom-contact-forms' ); ?></li>
 						<li><?php esc_html_e( 'Multi-step forms & conditional logic', 'custom-contact-forms' ); ?></li>
 					</ul>
@@ -103,7 +103,7 @@ class CCF_Pro_Notice {
 					<a class="ccf-pn-btn" href="<?php echo esc_url( $pro_url ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Explore Pro', 'custom-contact-forms' ); ?></a>
 					<a class="ccf-pn-link" href="<?php echo esc_url( $news_url ); ?>" target="_blank" rel="noopener"><?php
 					// Derived from the version constant so this cannot go stale
-					// again — a hardcoded "7.14" survived several releases.
+					// again - a hardcoded "7.14" survived several releases.
 					printf(
 						/* translators: %s: plugin version, e.g. 7.16 */
 						esc_html__( "See what's new in %s", 'custom-contact-forms' ),

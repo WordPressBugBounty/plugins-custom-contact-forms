@@ -1,5 +1,5 @@
 /**
- * "Build with AI" — describe a form, get one built.
+ * "Build with AI" - describe a form, get one built.
  *
  * Deliberately creates a new form server-side and opens it in the builder,
  * rather than injecting fields into the running Backbone builder. The builder
@@ -75,8 +75,8 @@
 	/**
 	 * Fill the wait with something to look at.
 	 *
-	 * The status lines are not real progress — we cannot know how far along a
-	 * generation is — but a still screen for several seconds reads as broken,
+	 * The status lines are not real progress - we cannot know how far along a
+	 * generation is - but a still screen for several seconds reads as broken,
 	 * and the skeleton rows set the expectation that fields are coming.
 	 */
 	function showWorking( inner, textarea, actions ) {
@@ -220,7 +220,7 @@
 				body: body
 			} ).then( function ( res ) {
 				// Read as text first. A PHP fatal returns an HTML error page,
-				// and res.json() would throw on it — sending us to the generic
+				// and res.json() would throw on it - sending us to the generic
 				// "something went wrong" with the actual cause discarded.
 				return res.text().then( function ( raw ) {
 					try {
@@ -231,7 +231,7 @@
 						return {
 							success: false,
 							data: {
-								message: I18N.failed + ' (HTTP ' + res.status + ' — see the browser console for the server response.)'
+								message: I18N.failed + ' (HTTP ' + res.status + '. See the browser console for the server response.)'
 							}
 						};
 					}
@@ -262,7 +262,7 @@
 	 * Show what was built, then hand over to the builder.
 	 *
 	 * Anything the form needed that only Pro provides is named here rather
-	 * than inserted into the form — a field type the free plugin cannot render
+	 * than inserted into the form - a field type the free plugin cannot render
 	 * would break submission entirely.
 	 */
 	function showResult( inner, data ) {
@@ -360,7 +360,7 @@
 
 		var button = el( 'button', { type: 'button', class: 'page-title-action ccf-ai-open' }, I18N.button );
 
-		// A quiet sparkle rather than a coloured button — this sits beside
+		// A quiet sparkle rather than a coloured button - this sits beside
 		// core's own actions and should not shout over them.
 		button.insertBefore( document.createTextNode( '\u2728 ' ), button.firstChild );
 

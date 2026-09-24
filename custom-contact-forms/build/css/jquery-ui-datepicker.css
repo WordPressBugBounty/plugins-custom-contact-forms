@@ -1,7 +1,7 @@
 /**
  * Minimal jQuery UI Datepicker styles for Custom Contact Forms.
  * Replaces external Google CDN dependency.
- * Only includes datepicker-specific layout — visual overrides in ccf-modern.css.
+ * Only includes datepicker-specific layout - visual overrides in ccf-modern.css.
  */
 .ui-datepicker {
   width: 17em;

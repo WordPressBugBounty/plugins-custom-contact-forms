@@ -122,16 +122,16 @@ class CCF_Custom_Contact_Forms {
 	}
 
 	/**
-	 * Register REST API scripts — WP Core now includes REST API since 4.7
+	 * Register REST API scripts - WP Core now includes REST API since 4.7
 	 *
 	 * The vendored wp-api/ directory is no longer loaded. WordPress ships
 	 * its own REST API and wp-api backbone client. We keep the JS client
 	 * for the Backbone-based form builder.
 	 *
-	 * @since  7.9.0 — Replaces manually_load_api()
+	 * @since  7.9.0 - Replaces manually_load_api()
 	 */
 	public function register_api_scripts() {
-		// WP Core REST API is available since 4.7 — no need to load vendored copy
+		// WP Core REST API is available since 4.7 - no need to load vendored copy
 		add_action( 'wp_enqueue_scripts', array( $this, 'rest_register_scripts_manual' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'rest_register_scripts_manual' ) );
 	}

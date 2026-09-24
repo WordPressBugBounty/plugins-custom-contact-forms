@@ -187,7 +187,7 @@ class CCF_Anti_Spam {
 		$s = $this->get_settings();
 		$html = '';
 
-		// Enhanced honeypot — two fields with misleading names + CSS hiding
+		// Enhanced honeypot - two fields with misleading names + CSS hiding
 		if ( ! empty( $s['honeypot_enabled'] ) ) {
 			$hp_name_1 = 'ccf_website_url';
 			$hp_name_2 = 'ccf_phone_verify';
@@ -199,7 +199,7 @@ class CCF_Anti_Spam {
 			$html .= '</div>';
 		}
 
-		// Time trap — hidden timestamp
+		// Time trap - hidden timestamp
 		if ( ! empty( $s['time_trap_enabled'] ) ) {
 			$html .= '<input type="hidden" name="ccf_ts" value="' . esc_attr( (string) time() ) . '">';
 		}

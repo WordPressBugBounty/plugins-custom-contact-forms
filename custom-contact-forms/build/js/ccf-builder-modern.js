@@ -1,5 +1,5 @@
 /**
- * CCF Builder Modern — Yes/No dropdown -> toggle switch enhancer.
+ * CCF Builder Modern - Yes/No dropdown -> toggle switch enhancer.
  *
  * Progressive enhancement only. The original Backbone <select> elements are
  * left untouched in the DOM (just visually hidden); they remain the single

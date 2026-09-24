@@ -20,7 +20,7 @@
 	var blockData = window.ccfBlockData || {};
 	var forms = blockData.forms || [];
 
-	var selectOptions = [{ value: 0, label: blockData.selectText || "— Select a form —" }];
+	var selectOptions = [{ value: 0, label: blockData.selectText || "Select a form" }];
 	forms.forEach(function(f) {
 		selectOptions.push({ value: f.value, label: f.label });
 	});

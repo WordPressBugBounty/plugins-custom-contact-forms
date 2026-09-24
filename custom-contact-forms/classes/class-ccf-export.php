@@ -144,7 +144,7 @@ class CCF_Export {
 	}
 
 	/**
-	 * Filter query for exporting a single form — SECURITY FIX: proper integer cast
+	 * Filter query for exporting a single form - SECURITY FIX: proper integer cast
 	 *
 	 * @param string $query
 	 * @since 6.5

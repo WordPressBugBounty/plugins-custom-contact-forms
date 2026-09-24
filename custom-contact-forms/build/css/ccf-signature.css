@@ -1,0 +1,59 @@
+/**
+ * Signature field.
+ *
+ * @package Custom_Contact_Forms
+ * @since 7.17.0
+ */
+
+.ccf-form-wrapper .ccf-signature-wrap {
+	max-width: 100%;
+}
+
+.ccf-form-wrapper .ccf-signature-pad {
+	position: relative;
+	width: 100%;
+	height: 160px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.ccf-form-wrapper .field-error .ccf-signature-pad,
+.ccf-form-wrapper .has-error .ccf-signature-pad {
+	border-color: #d63638;
+}
+
+.ccf-form-wrapper .ccf-signature-canvas {
+	display: block;
+	width: 100%;
+	height: 100%;
+	cursor: crosshair;
+	/* Stop the page scrolling while someone signs on a touch screen. */
+	touch-action: none;
+	-ms-touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.ccf-form-wrapper .ccf-signature-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-top: 6px;
+}
+
+.ccf-form-wrapper .ccf-signature-hint {
+	font-size: 0.85em;
+	opacity: 0.75;
+}
+
+.ccf-form-wrapper .ccf-signature-clear {
+	margin: 0;
+	padding: 4px 12px;
+	font-size: 0.85em;
+	line-height: 1.6;
+	cursor: pointer;
+}

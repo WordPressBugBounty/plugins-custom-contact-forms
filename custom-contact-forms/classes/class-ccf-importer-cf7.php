@@ -66,7 +66,7 @@ class CCF_Importer_CF7 extends CCF_Importer {
 	 * Whether CF7 forms exist on this site.
 	 *
 	 * Checks for the post type rather than the class, so forms can still be
-	 * imported after CF7 has been deactivated — which is exactly when someone
+	 * imported after CF7 has been deactivated - which is exactly when someone
 	 * is most likely to be migrating.
 	 *
 	 * @since 7.15.0
@@ -163,7 +163,7 @@ class CCF_Importer_CF7 extends CCF_Importer {
 		$taken       = array();
 
 		// Matches [type name options...] and [type* name options...].
-		if ( ! preg_match_all( '/\[([a-zA-Z0-9_]+)(\*?)([^\]]*)\]/', $template, $matches, PREG_SET_ORDER ) ) {
+		if ( ! preg_match_all( '/\[([a-zA-Z0-9_]+)(\*?)([^\]]*)\]/', $template, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE ) ) {
 			return array(
 				'fields'      => $fields,
 				'skipped'     => $skipped,
@@ -171,10 +171,17 @@ class CCF_Importer_CF7 extends CCF_Importer {
 			);
 		}
 
+		$previous_end = 0;
+
 		foreach ( $matches as $match ) {
-			$tag      = strtolower( $match[1] );
-			$required = '*' === $match[2];
-			$rest     = trim( $match[3] );
+			$tag_start    = $match[0][1];
+			$tag_end      = $tag_start + strlen( $match[0][0] );
+			$visible      = $this->visible_label( substr( $template, $previous_end, $tag_start - $previous_end ) );
+			$previous_end = $tag_end;
+
+			$tag      = strtolower( $match[1][0] );
+			$required = '*' === $match[2][0];
+			$rest     = trim( $match[3][0] );
 
 			if ( 'submit' === $tag ) {
 				$label = $this->extract_quoted( $rest );
@@ -208,6 +215,15 @@ class CCF_Importer_CF7 extends CCF_Importer {
 				$name  = $this->extract_name( $rest );
 				$label = $this->extract_quoted( $rest );
 
+				// CF7 wraps the consent wording: [acceptance name] text [/acceptance].
+				$close = stripos( $template, '[/acceptance]', $tag_end );
+				if ( '' === $label && false !== $close ) {
+					$label = $this->clean_label_text( substr( $template, $tag_end, $close - $tag_end ) );
+				}
+
+				// Acceptance boxes are mandatory in CF7 unless marked optional.
+				$required = ! preg_match( '/(^|\s)optional(\s|$)/', $rest );
+
 				$fields[] = array(
 					'type'     => 'checkboxes',
 					'slug'     => $this->unique_slug( '' !== $name ? $name : 'acceptance', $taken ),
@@ -238,7 +254,7 @@ class CCF_Importer_CF7 extends CCF_Importer {
 			$field = array(
 				'type'     => $this->type_map[ $tag ],
 				'slug'     => $this->unique_slug( $name, $taken ),
-				'label'    => $this->humanize( $name ),
+				'label'    => '' !== $visible ? $visible : $this->humanize( $name ),
 				'required' => $required,
 			);
 
@@ -335,9 +351,74 @@ class CCF_Importer_CF7 extends CCF_Importer {
 				'fromNameType'  => 'default',
 				'fromAddress'   => '',
 				'fromName'      => '',
-				'content'       => '',
+				'content'       => '[all_fields]',
+				'includeUploads' => true,
 			),
 		);
+	}
+
+	/**
+	 * Find the visible label a CF7 form shows for a tag: the text written
+	 * between the previous tag and this one, such as "Your name" in
+	 * <label> Your name [text* your-name] </label>.
+	 *
+	 * Returns an empty string when there is no usable text, so the caller can
+	 * fall back to a label built from the field name.
+	 *
+	 * @since 7.17.0
+	 * @param string $segment Template text before the tag.
+	 * @return string
+	 */
+	protected function visible_label( $segment ) {
+		// Ignore anything that belongs to an earlier enclosing tag, such as
+		// the wording inside [acceptance] ... [/acceptance].
+		$last_close = strrpos( $segment, '[/' );
+		if ( false !== $last_close ) {
+			$after   = strpos( $segment, ']', $last_close );
+			$segment = false !== $after ? substr( $segment, $after + 1 ) : '';
+		}
+
+		// Only the text after the last closing label or block belongs to
+		// this field.
+		$parts   = preg_split( '#</(label|p|div|li|td|th|span)\s*>#i', $segment );
+		$segment = (string) end( $parts );
+
+		$text = $this->clean_label_text( $segment );
+
+		// Keep only the last line of text, which sits directly above the tag.
+		$lines = preg_split( '/\R/', $text );
+		$text  = trim( (string) end( $lines ) );
+
+		if ( '' === $text || strlen( $text ) > 100 ) {
+			return '';
+		}
+
+		return $text;
+	}
+
+	/**
+	 * Strip markup and CF7's "(required)" marker from label text, keeping
+	 * line breaks so the caller can pick a single line.
+	 *
+	 * @since 7.17.0
+	 * @param string $text Raw template text.
+	 * @return string
+	 */
+	protected function clean_label_text( $text ) {
+		$text  = preg_replace( '#<br\s*/?>#i', "\n", $text );
+		$text  = wp_strip_all_tags( $text, false );
+		$text  = html_entity_decode( $text, ENT_QUOTES, 'UTF-8' );
+		$text  = preg_replace( '/\((required|optional)\)/i', '', $text );
+		$lines = array();
+
+		foreach ( preg_split( '/\R/', $text ) as $line ) {
+			$line = trim( sanitize_text_field( $line ), " *:" );
+			if ( '' !== $line ) {
+				$lines[] = $line;
+			}
+		}
+
+		return implode( "\n", $lines );
 	}
 
 	/**

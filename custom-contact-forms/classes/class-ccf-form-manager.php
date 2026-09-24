@@ -2367,6 +2367,8 @@ class CCF_Form_Manager {
 									<# } #>
 
 								<# } #>
+							<# } else if ( submission.fields && submission.fields[column] && 'signature' === submission.fields[column].ccf_field_type && /^https?:\/\//.test( submission.data[column] ) ) { #>
+								<a href="{{ submission.data[column] }}" target="_blank" rel="noopener"><?php esc_html_e( 'View signature', 'custom-contact-forms' ); ?></a>
 							<# } else { #>
 								{{ utils.wordChop( submission.data[column], 30 ) }}
 							<# } #>
@@ -2417,6 +2419,8 @@ class CCF_Form_Manager {
 												-
 											<# } #>
 										<# } #>
+									<# } else if ( submission.fields && submission.fields[column] && 'signature' === submission.fields[column].ccf_field_type && /^https?:\/\//.test( submission.data[column] ) ) { #>
+										<a href="{{ submission.data[column] }}" target="_blank" rel="noopener"><img src="{{ submission.data[column] }}" alt="<?php esc_attr_e( 'Signature', 'custom-contact-forms' ); ?>" style="max-width: 100%; width: 300px; height: auto; border: 1px solid #dcdcde; background: #fff;"></a>
 									<# } else { #>
 										{{ submission.data[column] }}
 									<# } #>
@@ -2526,7 +2530,7 @@ class CCF_Form_Manager {
 			));
 
 			// moment.js is bundled with WordPress core since WP 4.7
-			// No need to register — WP will use its own copy when listed as a dependency
+			// No need to register - WP will use its own copy when listed as a dependency
 
 			// ccf-rest-api is registered in class-ccf-custom-contact-forms.php
 
@@ -2551,7 +2555,6 @@ class CCF_Form_Manager {
 						array( 'name' => esc_html__( 'PayPal', 'custom-contact-forms' ), 'desc' => esc_html__( 'Let visitors pay with PayPal without leaving your form.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Total', 'custom-contact-forms' ), 'desc' => esc_html__( 'Live order total that updates as visitors choose products.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Coupon', 'custom-contact-forms' ), 'desc' => esc_html__( 'Discount codes with percentage or fixed amounts.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Signature', 'custom-contact-forms' ), 'desc' => esc_html__( 'Ink signatures drawn with mouse, finger or stylus, saved as images.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Consent / Terms', 'custom-contact-forms' ), 'desc' => esc_html__( 'Scrollable terms with an agreement checkbox and versioned proof of consent.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Survey', 'custom-contact-forms' ), 'desc' => esc_html__( 'Likert-style survey grids with questions and answer scales.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Rating', 'custom-contact-forms' ), 'desc' => esc_html__( 'Star ratings for quick feedback.', 'custom-contact-forms' ) ),

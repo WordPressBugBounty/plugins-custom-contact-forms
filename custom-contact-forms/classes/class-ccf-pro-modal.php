@@ -50,7 +50,7 @@ class CCF_Pro_Modal {
 	 * @return bool
 	 */
 	private function should_show() {
-		// Pro is installed — nothing to sell.
+		// Pro is installed - nothing to sell.
 		if ( defined( 'CCFP_VERSION' ) ) {
 			return false;
 		}
@@ -76,7 +76,7 @@ class CCF_Pro_Modal {
 	/**
 	 * Features shown in the modal.
 	 *
-	 * Pro only. Conditional logic is deliberately absent — it ships in the free
+	 * Pro only. Conditional logic is deliberately absent - it ships in the free
 	 * plugin, and listing it here would be the first thing an existing user
 	 * noticed was wrong.
 	 *
@@ -87,7 +87,7 @@ class CCF_Pro_Modal {
 			array(
 				'icon'  => 'M2 5h20v14H2z M2 10h20',
 				'title' => __( 'Stripe &amp; PayPal payments', 'custom-contact-forms' ),
-				'desc'  => __( 'Take card, wallet or PayPal payments on the form itself — no cart, no redirect.', 'custom-contact-forms' ),
+				'desc'  => __( 'Take card, wallet or PayPal payments on the form itself, with no cart and no redirect.', 'custom-contact-forms' ),
 			),
 			array(
 				'icon'  => 'M3 3h18v18H3z M8 12h8 M12 8v8',
@@ -96,8 +96,8 @@ class CCF_Pro_Modal {
 			),
 			array(
 				'icon'  => 'M12 19l7-7 3 3-7 7-3-3z M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z',
-				'title' => __( 'Digital signatures', 'custom-contact-forms' ),
-				'desc'  => __( 'Signed with a finger or a mouse, saved with the submission.', 'custom-contact-forms' ),
+				'title' => __( 'Signed agreements', 'custom-contact-forms' ),
+				'desc'  => __( 'Consent records, waiver and agreement templates, and the signature included in PDF receipts.', 'custom-contact-forms' ),
 			),
 			array(
 				'icon'  => 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z M14 2v6h6 M9 15h6',
@@ -126,7 +126,7 @@ class CCF_Pro_Modal {
 		}
 
 		// Recorded as it is rendered rather than on dismissal. If the page is
-		// closed without a click it still counts as shown — the promise is one
+		// closed without a click it still counts as shown - the promise is one
 		// appearance, not one dismissal.
 		update_option( self::OPTION, time(), false );
 
@@ -140,7 +140,7 @@ class CCF_Pro_Modal {
 				<div class="ccf-pm-head">
 					<span class="ccf-pm-eyebrow"><?php esc_html_e( 'Custom Contact Forms Pro', 'custom-contact-forms' ); ?></span>
 					<h2 id="ccf-pm-title"><?php esc_html_e( 'Customize more with Pro', 'custom-contact-forms' ); ?></h2>
-					<p><?php esc_html_e( 'The same builder you are using now — with payments, signatures and receipts built in. No cart, no e-commerce stack.', 'custom-contact-forms' ); ?></p>
+					<p><?php esc_html_e( 'The same builder you are using now, with payments, signatures and receipts built in. No cart, no e-commerce stack.', 'custom-contact-forms' ); ?></p>
 				</div>
 
 				<div class="ccf-pm-body">
@@ -236,7 +236,7 @@ class CCF_Pro_Modal {
 				}
 			} );
 
-			// Following the link is not a dismissal to argue with — they acted
+			// Following the link is not a dismissal to argue with - they acted
 			// on it, so close behind them.
 			overlay.querySelector( '.ccf-pm-cta' ).addEventListener( 'click', close );
 		} )();

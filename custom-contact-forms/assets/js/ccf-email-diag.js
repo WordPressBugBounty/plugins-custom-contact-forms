@@ -1,5 +1,5 @@
 /**
- * Custom Contact Forms — Email Diagnostics
+ * Custom Contact Forms - Email Diagnostics
  * @since 7.9.0
  */
 (function($) {

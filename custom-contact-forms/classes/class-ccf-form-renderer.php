@@ -153,6 +153,17 @@ class CCF_Form_Renderer {
 			'website' => esc_html__( "This is not a valid URL. URL's must start with http(s)://", 'custom-contact-forms' ),
 		);
 		wp_localize_script( 'ccf-form', 'ccfSettings', apply_filters( 'ccf_localized_form_messages', $localized ) );
+
+		// Count one view per form per page load for the dashboard. Sent from
+		// the browser so cached pages are still counted. Views by people who
+		// can edit forms are ignored on the server.
+		if ( ! is_admin() && apply_filters( 'ccf_count_form_views', true ) ) {
+			wp_add_inline_script(
+				'ccf-form',
+				"(function(){function c(){if(!window.ccfSettings||!ccfSettings.ajaxurl){return;}var s={},w=document.querySelectorAll('.ccf-form-wrapper[data-form-id]');for(var i=0;i<w.length;i++){var id=w[i].getAttribute('data-form-id');if(!id||s[id]){continue;}s[id]=1;var d=new FormData();d.append('action','ccf_form_view');d.append('form_id',id);if(navigator.sendBeacon){navigator.sendBeacon(ccfSettings.ajaxurl,d);}else if(window.fetch){fetch(ccfSettings.ajaxurl,{method:'POST',body:d,credentials:'same-origin',keepalive:true});}}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',c);}else{c();}})();",
+				'after'
+			);
+		}
 	}
 
 	/**

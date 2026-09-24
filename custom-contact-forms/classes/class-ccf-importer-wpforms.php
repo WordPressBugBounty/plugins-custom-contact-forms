@@ -294,8 +294,9 @@ class CCF_Importer_WPForms extends CCF_Importer {
 	 *
 	 * Only the first notification is converted, and only its recipient and
 	 * subject. WPForms message bodies use smart tags such as {all_fields}
-	 * that have no direct equivalent, so the body is left to CCF's default
-	 * rather than carried across in a form that would not resolve.
+	 * that have no direct equivalent, so the body is set to CCF's
+	 * [all_fields] rather than carried across in a form that would not
+	 * resolve. An empty body would send a blank email.
 	 *
 	 * @since 7.15.0
 	 * @param array $settings WPForms form settings.
@@ -363,7 +364,8 @@ class CCF_Importer_WPForms extends CCF_Importer {
 				'fromNameType' => 'default',
 				'fromAddress'  => '',
 				'fromName'     => '',
-				'content'      => '',
+				'content'      => '[all_fields]',
+				'includeUploads' => true,
 			),
 		);
 	}

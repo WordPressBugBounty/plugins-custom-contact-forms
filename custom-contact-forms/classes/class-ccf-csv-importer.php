@@ -294,7 +294,7 @@ class CCF_CSV_Importer {
 						<th scope="row"><label for="ccf_form_id"><?php esc_html_e( 'Form', 'custom-contact-forms' ); ?></label></th>
 						<td>
 							<select name="ccf_form_id" id="ccf_form_id" required>
-								<option value=""><?php esc_html_e( '— Select a form —', 'custom-contact-forms' ); ?></option>
+								<option value=""><?php esc_html_e( 'Select a form', 'custom-contact-forms' ); ?></option>
 								<?php foreach ( $forms as $form ) : ?>
 									<option value="<?php echo (int) $form->ID; ?>">
 										<?php
@@ -413,7 +413,7 @@ class CCF_CSV_Importer {
 								<td><strong><?php echo esc_html( $header ); ?></strong></td>
 								<td>
 									<select name="ccf_mapping[<?php echo (int) $col_index; ?>]" style="width:100%;">
-										<option value=""><?php esc_html_e( '— Skip this column —', 'custom-contact-forms' ); ?></option>
+										<option value=""><?php esc_html_e( 'Skip this column', 'custom-contact-forms' ); ?></option>
 										<?php foreach ( $form_fields as $slug => $field ) : ?>
 											<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( isset( $auto_mapped[ $col_index ] ) ? $auto_mapped[ $col_index ] : '', $slug ); ?>>
 												<?php echo esc_html( $field['label'] . ' (' . $slug . ')' ); ?>

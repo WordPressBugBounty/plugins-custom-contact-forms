@@ -101,7 +101,7 @@ class CCF_Form_Templates {
 		update_post_meta( $form_id, 'ccf_form_hide_title', false );
 		update_post_meta( $form_id, 'ccf_form_require_logged_in', false );
 		update_post_meta( $form_id, 'ccf_form_post_creation', false );
-		update_post_meta( $form_id, 'ccf_form_notifications', array() );
+		update_post_meta( $form_id, 'ccf_form_notifications', array( CCF_Form_CPT::default_notification() ) );
 		update_post_meta( $form_id, 'ccf_form_post_field_mappings', array() );
 
 		// Create fields as child posts
@@ -493,7 +493,7 @@ class CCF_Form_Templates {
 		 *
 		 * Add-ons can register additional templates. Each template supports
 		 * 'title', 'description', 'button_text', 'badge' (small label shown
-		 * in the picker), 'icon'/'color', and 'fields' — where each field
+		 * in the picker), 'icon'/'color', and 'fields' - where each field
 		 * supports 'type', 'slug', 'label', 'required', 'placeholder',
 		 * 'description', 'choices', 'attributes' (arbitrary ccf_field_ meta)
 		 * and 'conditionals'.
@@ -591,7 +591,7 @@ class CCF_Form_Templates {
 							<span class="dashicons dashicons-superhero-alt" style="color:#fff;font-size:27px;width:27px;height:27px;"></span>
 						</span>
 						<h3><?php esc_html_e( 'Generate with AI', 'custom-contact-forms' ); ?> <span class="ccf-tpl-badge"><?php esc_html_e( 'NEW', 'custom-contact-forms' ); ?></span></h3>
-						<p class="ccf-tpl-desc"><?php esc_html_e( 'Describe the form you need and it will be built for you — any fields, any purpose.', 'custom-contact-forms' ); ?></p>
+						<p class="ccf-tpl-desc"><?php esc_html_e( 'Describe the form you need and it will be built for you: any fields, any purpose.', 'custom-contact-forms' ); ?></p>
 						<p class="ccf-tpl-meta"><?php esc_html_e( 'Any number of fields', 'custom-contact-forms' ); ?></p>
 						<button type="button" class="button button-primary ccf-ai-open">&#10024; <?php esc_html_e( 'Generate Form', 'custom-contact-forms' ); ?></button>
 					</div>

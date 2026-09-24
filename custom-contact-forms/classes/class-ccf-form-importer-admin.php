@@ -194,7 +194,7 @@ class CCF_Form_Importer_Admin {
 								<?php
 								printf(
 									/* translators: %s: form title. */
-									esc_html__( '%s was already imported — skipped.', 'custom-contact-forms' ),
+									esc_html__( '%s was already imported, so it was skipped.', 'custom-contact-forms' ),
 									'<strong>' . esc_html( $result['title'] ) . '</strong>'
 								);
 								?>
@@ -202,7 +202,7 @@ class CCF_Form_Importer_Admin {
 							</p>
 						<?php else : ?>
 							<p>
-								<strong><?php echo esc_html( $result['title'] ); ?></strong> —
+								<strong><?php echo esc_html( $result['title'] ); ?></strong>:
 								<a href="<?php echo esc_url( admin_url( 'post.php?post=' . absint( $result['form_id'] ) . '&action=edit' ) ); ?>"><?php esc_html_e( 'Edit form', 'custom-contact-forms' ); ?></a>
 								<br>
 								<?php esc_html_e( 'Replace the old shortcode on your pages with:', 'custom-contact-forms' ); ?>

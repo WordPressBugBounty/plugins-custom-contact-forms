@@ -22,7 +22,7 @@ class CCF_AI_Form_Builder {
 	 *
 	 * Generating a type that is not in this list would insert a field whose
 	 * validator does not exist, and CCF's submit handler constructs one per
-	 * field type with no guard — the form would silently stop submitting.
+	 * field type with no guard - the form would silently stop submitting.
 	 *
 	 * @return array
 	 */
@@ -40,6 +40,7 @@ class CCF_AI_Form_Builder {
 			'checkboxes',
 			'radio',
 			'file',
+			'signature',
 			'section-header',
 			'html',
 			'hidden',
@@ -58,7 +59,6 @@ class CCF_AI_Form_Builder {
 	public static function pro_capabilities() {
 		return array(
 			'payment'   => __( 'Take card or PayPal payments on the form', 'custom-contact-forms' ),
-			'signature' => __( 'Collect a drawn signature', 'custom-contact-forms' ),
 			'product'   => __( 'Sell products with prices and quantities', 'custom-contact-forms' ),
 			'agreement' => __( 'Record agreement to terms, with a versioned record', 'custom-contact-forms' ),
 			'multistep' => __( 'Split the form over several pages', 'custom-contact-forms' ),
@@ -70,7 +70,7 @@ class CCF_AI_Form_Builder {
 	/**
 	 * Whether the feature can run at all right now.
 	 *
-	 * Feature detection is free — is_supported_for_text_generation() answers
+	 * Feature detection is free - is_supported_for_text_generation() answers
 	 * from the registry without contacting a provider, so this is safe to call
 	 * on every admin page load.
 	 *
@@ -99,8 +99,8 @@ class CCF_AI_Form_Builder {
 		// prompt_ai is WordPress 7.0's capability for AI access. It is not
 		// granted to any role by default on every install, so an
 		// administrator can end up locked out of their own site's feature.
-		// Treat manage_options as sufficient — an administrator can grant
-		// themselves any capability anyway — while still honouring prompt_ai
+		// Treat manage_options as sufficient - an administrator can grant
+		// themselves any capability anyway - while still honouring prompt_ai
 		// where a site has deliberately handed it to other roles.
 		if ( ! current_user_can( 'prompt_ai' ) && ! current_user_can( 'manage_options' ) ) {
 			return array( 'status' => 'no_cap', 'detail' => 'neither prompt_ai nor manage_options' );
@@ -153,7 +153,7 @@ class CCF_AI_Form_Builder {
 			"- \"required\" is a boolean.\n" .
 			"- Keep it to what was asked for. Do not invent extra fields.\n" .
 			"- If the form needs something outside that list, do not invent a type. Instead add the matching token to \"pro\", chosen from: {$pro}\n" .
-			"- \"button\" is the submit button wording, a couple of words suited to the form — \"Register\", \"Send enquiry\", \"Book now\".\n" .
+			"- \"button\" is the submit button wording, a couple of words suited to the form, for example \"Register\", \"Send enquiry\", \"Book now\".\n" .
 			"- Labels in the same language as the description.\n\n" .
 			'Description: ' . $description;
 	}

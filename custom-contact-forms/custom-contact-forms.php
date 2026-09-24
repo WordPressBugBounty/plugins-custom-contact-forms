@@ -4,7 +4,7 @@
  * Plugin URI: https://customformspro.com/
  * Description: Build beautiful custom forms and manage submissions the WordPress way. Gutenberg block, Cloudflare Turnstile, anti-spam protection, and email diagnostics.
  * Author: Dmitry Alexander
- * Version: 7.16.1
+ * Version: 7.17.0
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.16.1' );
+define( 'CCF_VERSION', '7.17.0' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -60,6 +60,10 @@ require_once CCF_PLUGIN_DIR . 'classes/class-ccf-dashboard-widget.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-pro-modal.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-ai-form-builder.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-ai-admin.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-signature-field.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-stats.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-auto-updates.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-dashboard.php';
 
 CCF_Custom_Contact_Forms::factory();
 CCF_Constants::factory();
@@ -70,6 +74,12 @@ CCF_Choice_CPT::factory();
 CCF_Form_Manager::factory();
 CCF_Pro_Notice::factory();
 CCF_Dashboard_Widget::factory();
+CCF_Signature_Field::factory();
+CCF_Stats::factory();
+if ( is_admin() ) {
+	CCF_Auto_Updates::factory();
+	CCF_Dashboard::factory();
+}
 
 // Only ever surfaces on WordPress 7.0+ with an AI provider configured; the
 // class checks for itself and stays invisible otherwise.
@@ -123,7 +133,7 @@ function ccf_flush_rewrites() {
  *
  * Every prompt in the plugin previously linked to the same bare URL, so a
  * click from the deactivation survey and a click from the form builder were
- * indistinguishable once they arrived — there was no way to learn which
+ * indistinguishable once they arrived - there was no way to learn which
  * prompts actually work. The tag travels in the URL only; nothing is sent
  * anywhere from the user's site.
  *

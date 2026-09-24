@@ -1,5 +1,5 @@
 /**
- * Custom Contact Forms — Clipboard copy for shortcodes
+ * Custom Contact Forms - Clipboard copy for shortcodes
  * @since 7.9.0
  */
 (function() {

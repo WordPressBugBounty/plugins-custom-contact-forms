@@ -4,7 +4,7 @@
  *
  * When a user clicks "Deactivate" on the plugins screen, a short optional
  * survey asks why. If they choose to submit, the reason is emailed to the
- * maintainer via the site's own wp_mail() — no external server is contacted,
+ * maintainer via the site's own wp_mail() - no external server is contacted,
  * and nothing is sent unless the user explicitly clicks "Submit & Deactivate."
  * A "Skip & Deactivate" option sends nothing.
  *
@@ -75,12 +75,12 @@ class CCF_Feedback {
 
 		return array(
 			'url'        => ccf_pro_url( 'deactivation-survey' ),
-			'signature'  => __( 'Before you go — Custom Contact Forms Pro has a signature field. People sign with a finger, mouse or stylus, and it works on the same form as a payment.', 'custom-contact-forms' ),
-			'payments'   => __( 'Before you go — Custom Contact Forms Pro takes Stripe payments on the form itself. Cards, Apple Pay and Google Pay, with no cart or checkout page.', 'custom-contact-forms' ),
-			'pdf'        => __( 'Before you go — Custom Contact Forms Pro attaches a PDF receipt to notification emails, and any submission can be downloaded as a PDF.', 'custom-contact-forms' ),
-			'multistep'  => __( 'Before you go — Custom Contact Forms Pro splits long forms into steps, with a progress bar and validation on each step.', 'custom-contact-forms' ),
-			'survey'     => __( 'Before you go — Custom Contact Forms Pro adds survey grids and star rating fields.', 'custom-contact-forms' ),
-			'agreements' => __( 'Before you go — Custom Contact Forms Pro has a consent field that records the exact terms someone agreed to, alongside a signature field. Waiver and agreement templates are included.', 'custom-contact-forms' ),
+			'signature'  => __( 'Before you go: Custom Contact Forms has a free signature field. Open any form, add Signature from the field list, and people can sign with a finger, mouse or stylus.', 'custom-contact-forms' ),
+			'payments'   => __( 'Before you go: Custom Contact Forms Pro takes Stripe payments on the form itself. Cards, Apple Pay and Google Pay, with no cart or checkout page.', 'custom-contact-forms' ),
+			'pdf'        => __( 'Before you go: Custom Contact Forms Pro attaches a PDF receipt to notification emails, and any submission can be downloaded as a PDF.', 'custom-contact-forms' ),
+			'multistep'  => __( 'Before you go: Custom Contact Forms Pro splits long forms into steps, with a progress bar and validation on each step.', 'custom-contact-forms' ),
+			'survey'     => __( 'Before you go: Custom Contact Forms Pro adds survey grids and star rating fields.', 'custom-contact-forms' ),
+			'agreements' => __( 'Before you go: Custom Contact Forms Pro has a consent field that records the exact terms someone agreed to, and PDF receipts that include the signature. Waiver and agreement templates are included.', 'custom-contact-forms' ),
 		);
 	}
 
@@ -198,7 +198,7 @@ class CCF_Feedback {
 
 			// Someone reporting a fault has the error on screen in another tab.
 			// Ask for it then, rather than leaving "it didn't work" as the whole
-			// report — the text usually names the file and line.
+			// report - the text usually names the file and line.
 			var errorWrap = document.getElementById( 'ccf-deactivate-error-wrap' );
 			var commentBox = document.getElementById( 'ccf-deactivate-comment' );
 
@@ -229,7 +229,7 @@ class CCF_Feedback {
 			// People who leave because a feature seemed missing have just told
 			// us, in their own words, what they were looking for. Where that
 			// names something Pro does, say so once. It never blocks the
-			// deactivation — they have already decided.
+			// deactivation - they have already decided.
 			var proMatches = [
 				{ re: /\bsign|signature|e-?sign|initial\b/i, msg: proCopy.signature },
 				{ re: /\bpay|payment|stripe|checkout|charge|deposit|invoice|credit card\b/i, msg: proCopy.payments },
@@ -263,7 +263,7 @@ class CCF_Feedback {
 				var comment = document.getElementById( 'ccf-deactivate-comment' ).value || '';
 				var errorText = document.getElementById( 'ccf-deactivate-error' ).value || '';
 
-				// Nothing selected and nothing written — just deactivate, send nothing.
+				// Nothing selected and nothing written - just deactivate, send nothing.
 				if ( ! reason && ! comment.trim() && ! errorText.trim() ) { go(); return; }
 
 				var body = new URLSearchParams();
@@ -321,13 +321,13 @@ class CCF_Feedback {
 		$form_count = (int) wp_count_posts( 'ccf_form' )->publish;
 
 		// A form count alone cannot tell "used it for a month and moved on"
-		// apart from "built a form and never launched it" — which mean
+		// apart from "built a form and never launched it" - which mean
 		// opposite things. The submission count separates them.
 		$submission_counts = wp_count_posts( 'ccf_submission' );
 		$submissions       = isset( $submission_counts->publish ) ? (int) $submission_counts->publish : 0;
 
 		// How long they actually had it. No install date has ever been stored,
-		// so use the oldest form as a proxy — it works retroactively for every
+		// so use the oldest form as a proxy - it works retroactively for every
 		// existing install, which a new option would not.
 		$age = '(no forms created)';
 

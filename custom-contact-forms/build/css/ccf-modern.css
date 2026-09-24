@@ -1,5 +1,5 @@
 /**
- * Custom Contact Forms — Modern Styles v7.9.0
+ * Custom Contact Forms - Modern Styles v7.9.0
  * Complete override for all field types, themes, and states.
  * Works in both frontend and Gutenberg editor preview.
  */
@@ -61,7 +61,7 @@
 }
 
 /* ========================================
-   All Fields — Common Layout
+   All Fields - Common Layout
    ======================================== */
 
 .ccf-form-wrapper .field {
@@ -76,7 +76,7 @@
 }
 
 /* ========================================
-   Labels — All Types
+   Labels - All Types
    ======================================== */
 
 .ccf-form-wrapper .field label.main-label {
@@ -117,7 +117,7 @@
 }
 
 /* ========================================
-   Text Inputs — single-line, phone, website, email, date
+   Text Inputs - single-line, phone, website, email, date
    ======================================== */
 
 .ccf-form-wrapper .field input[type="text"],
@@ -161,7 +161,7 @@
 }
 
 /* ========================================
-   Textarea — paragraph-text
+   Textarea - paragraph-text
    ======================================== */
 
 .ccf-form-wrapper .field textarea,
@@ -927,7 +927,7 @@
 }
 
 /* ============================================
-   Minimal Theme — high-specificity overrides
+   Minimal Theme - high-specificity overrides
    Matches the base input selector pattern exactly
    so it reliably wins against the default boxed style.
    ============================================ */

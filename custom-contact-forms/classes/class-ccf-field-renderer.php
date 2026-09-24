@@ -1309,6 +1309,9 @@ endif; ?>
 			case 'email':
 				$field_html = $this->email( $field_id, $form_id );
 				break;
+			case 'signature':
+				$field_html = CCF_Signature_Field::factory()->render( $field_id, $form_id );
+				break;
 		}
 
 		return $field_html;

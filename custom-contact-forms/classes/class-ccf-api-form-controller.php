@@ -1017,7 +1017,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
-	 * @since  7.9.0 — Per-post capability check.
+	 * @since  7.9.0 - Per-post capability check.
 	 * @return WP_Error|bool
 	 */
 	public function get_item_permissions_check( $request ) {
@@ -1038,7 +1038,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
-	 * @since  7.9.0 — Uses publish_posts capability.
+	 * @since  7.9.0 - Uses publish_posts capability.
 	 * @return WP_Error|bool
 	 */
 	public function create_item_permissions_check( $request ) {
@@ -1053,7 +1053,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
-	 * @since  7.9.0 — Per-post capability check.
+	 * @since  7.9.0 - Per-post capability check.
 	 * @return WP_Error|bool
 	 */
 	public function update_item_permissions_check( $request ) {
@@ -1069,7 +1069,7 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 	 *
 	 * @param  WP_REST_Request $request Full data about the request.
 	 * @since  7.0
-	 * @since  7.9.0 — Per-post capability check.
+	 * @since  7.9.0 - Per-post capability check.
 	 * @return WP_Error|bool
 	 */
 	public function delete_item_permissions_check( $request ) {

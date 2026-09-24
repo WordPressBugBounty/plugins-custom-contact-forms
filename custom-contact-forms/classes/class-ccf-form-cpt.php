@@ -516,7 +516,7 @@ class CCF_Form_CPT {
 
 			wp_enqueue_script( 'ccf-form-cpt-preview', plugins_url( $form_cpt_preview_js_path, dirname( __FILE__ ) ), array( 'jquery', 'backbone', 'ccf-form-manager' ), CCF_VERSION, true );
 
-			// Toolbar injection script — runs after Backbone creates the submissions table
+			// Toolbar injection script - runs after Backbone creates the submissions table
 			$toolbar_js = '(function(){var ci=setInterval(function(){var m=document.getElementById("ccf-submissions");if(!m)return;var ins=m.querySelector(".inside");if(!ins)return;var t=ins.querySelector("table");if(!t)return;clearInterval(ci);var old=m.querySelectorAll(".ccf-submission-icon,.ccf-submission-icon-btn");for(var i=0;i<old.length;i++)old[i].parentNode.removeChild(old[i]);if(m.querySelector(".ccf-toolbar"))return;var s=window.ccfSettings||{};var url=s.adminUrl+"post.php?action=edit&post="+parseInt(s.postId)+"&download_submissions=1&download_submissions_nonce="+s.downloadSubmissionsNonce;var tb=document.createElement("div");tb.className="ccf-toolbar";tb.innerHTML=\'<a href="\'+url+\'" class="button button-small" title="Download CSV"><span class="dashicons dashicons-download"></span> Export CSV</a><button type="button" class="button button-small" title="Column Settings" onclick="var b=document.getElementById(\\\'show-settings-link\\\');if(b){b.click();}else{var w=document.getElementById(\\\'screen-options-wrap\\\');if(w){w.style.display=w.style.display===\\\'none\\\'?\\\'block\\\':\\\'none\\\';}}"><span class="dashicons dashicons-admin-generic"></span> Columns</button>\';ins.insertBefore(tb,ins.firstChild);},200);setTimeout(function(){clearInterval(ci);},10000);})();';
 			wp_add_inline_script( 'ccf-form-cpt-preview', $toolbar_js );
 
@@ -660,9 +660,49 @@ class CCF_Form_CPT {
 	}
 
 	/**
+	 * Build the notification seeded on forms that CCF creates for the user
+	 * (AI generator and templates), so a first test submission sends an email
+	 * to the site admin. Mirrors the builder's default notification.
+	 *
+	 * @since 7.17.0
+	 * @return array
+	 */
+	public static function default_notification() {
+		$admin_email = get_option( 'admin_email' );
+
+		return array(
+			'title'            => __( 'Admin notification', 'custom-contact-forms' ),
+			'content'          => '[all_fields]',
+			'active'           => true,
+			'includeUploads'   => true,
+			'addresses'        => is_email( $admin_email ) ? array(
+				array(
+					'type'  => 'custom',
+					'field' => '',
+					'email' => sanitize_email( $admin_email ),
+				),
+			) : array(),
+			'fromType'         => 'default',
+			'fromAddress'      => '',
+			'fromField'        => '',
+			'subjectType'      => 'default',
+			'subject'          => '',
+			'subjectField'     => '',
+			'fromNameType'     => 'custom',
+			'fromName'         => 'WordPress',
+			'fromNameField'    => '',
+			'replyToType'      => 'default',
+			'replyToAddress'   => '',
+			'replyToField'     => '',
+			'replyToNameType'  => 'custom',
+			'replyToName'      => 'WordPress',
+			'replyToNameField' => '',
+		);
+	}
+
+	/**
 	 * Return singleton instance of class
 	 *
-	 * @since 6.0
 	 * @return object
 	 */
 	public static function factory() {

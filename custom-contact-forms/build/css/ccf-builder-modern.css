@@ -40,11 +40,11 @@
 }
 
 /* ------------------------------------------------------------------
-   Field rows in the form canvas — card style (7.11.0)
+   Field rows in the form canvas - card style (7.11.0)
 
    The canvas is an accordion: each .field is a collapsed <h4> bar that
    expands its .preview inline when edited. We style each row as a card.
-   Layout-safe: only shadows / insets / radius / colour — no added borders
+   Layout-safe: only shadows / insets / radius / colour - no added borders
    or width/margin changes that would break the half/third width math.
    ------------------------------------------------------------------ */
 .ccf-main-modal .form-content .field {
@@ -93,7 +93,7 @@
 	background: #fff;
 }
 
-/* Validation accents — inset bar, no size change */
+/* Validation accents - inset bar, no size change */
 .ccf-main-modal .form-content .field.field-incomplete h4 {
 	box-shadow: inset 3px 0 0 #dba617, 0 1px 2px rgba( 0, 0, 0, .04 );
 }
@@ -161,7 +161,7 @@
 }
 
 /* ------------------------------------------------------------------
-   Submissions table — modern restyle (presentation only)
+   Submissions table - modern restyle (presentation only)
    The submissions table renders as table.widefat.fixed with a
    tbody.submission-rows, inside the #ccf-submissions metabox.
    ------------------------------------------------------------------ */
@@ -214,7 +214,7 @@
 	border-bottom: 0;
 }
 
-/* Pagination — modern */
+/* Pagination - modern */
 .ccf-pagination {
 	font-size: 13px;
 	margin-top: 14px;

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * backward compatibility with hooks and filters.
  *
  * @since 6.9.4
- * @since 7.9.0 — Neutralized dead Mailchimp integration, added nonce checks
+ * @since 7.9.0 - Neutralized dead Mailchimp integration, added nonce checks
  */
 class CCF_Ads {
 
@@ -31,7 +31,7 @@ class CCF_Ads {
 	}
 
 	/**
-	 * Process dismiss — no longer sends to external Mailchimp
+	 * Process dismiss - no longer sends to external Mailchimp
 	 *
 	 * @since 7.9.0
 	 */
