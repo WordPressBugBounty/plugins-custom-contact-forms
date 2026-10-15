@@ -607,6 +607,18 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 				update_post_meta( $result, 'ccf_form_pause_message', sanitize_text_field( $data['pauseMessage'] ) );
 			}
 
+			/**
+			 * Fires after a form and its fields are saved from the builder.
+			 *
+			 * Lets integrations store their own per-form settings from the
+			 * same request. Each listener must sanitize what it reads.
+			 *
+			 * @since 7.18.0
+			 * @param int   $form_id Saved form ID.
+			 * @param array $data    Raw request data.
+			 */
+			do_action( 'ccf_save_form', $result, $data );
+
 			return $result;
 		} else {
 			return new WP_Error( 'create-form-error' );
@@ -1262,7 +1274,14 @@ class CCF_API_Form_Controller extends WP_REST_Controller {
 
 		$data['submissions'] = count( $submissions );
 
-		return $data;
+		/**
+		 * Filter the form data sent to the builder.
+		 *
+		 * @since 7.18.0
+		 * @param array   $data Form data.
+		 * @param WP_Post $item Form post.
+		 */
+		return apply_filters( 'ccf_form_response', $data, $item );
 	}
 
 	/**

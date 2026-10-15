@@ -57,7 +57,9 @@ class CCF_Ads {
 	public function please_rate() {
 		global $pagenow;
 
-		if ( apply_filters( 'ccf_hide_please_rate', false ) ) {
+		// Replaced in 7.17.1 by the rating line in the admin footer
+		// (CCF_Review_Request), so two requests never show at once.
+		if ( apply_filters( 'ccf_hide_please_rate', true ) ) {
 			return;
 		}
 

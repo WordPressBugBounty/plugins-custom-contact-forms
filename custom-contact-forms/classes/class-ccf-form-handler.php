@@ -725,6 +725,88 @@ class CCF_Form_Handler {
 	}
 
 	/**
+	 * Keep a submission in the spam folder.
+	 *
+	 * @since 7.18.0
+	 * @param int    $form_id          Form ID.
+	 * @param array  $submission       Sanitized data.
+	 * @param array  $field_slug_to_id Field map.
+	 * @param array  $all_form_fields  Field settings at the time of submission.
+	 * @param array  $file_ids         Uploaded file attachment IDs.
+	 * @param string $reason           Why it was flagged.
+	 * @return array Response for the visitor.
+	 */
+	private function save_spam( $form_id, $submission, $field_slug_to_id, $all_form_fields, $file_ids, $reason ) {
+		$submission_id = wp_insert_post( array(
+			'post_status' => 'ccf_spam',
+			'post_type'   => 'ccf_submission',
+			'post_parent' => $form_id,
+			'post_title'  => 'Form Submission ' . $form_id,
+		) );
+
+		CCF_Stats::record_spam();
+
+		if ( is_wp_error( $submission_id ) || ! $submission_id ) {
+			return $this->completion_output( $form_id );
+		}
+
+		update_post_meta( $submission_id, 'ccf_submission_data', $submission );
+		update_post_meta( $submission_id, 'ccf_submission_data_map', $field_slug_to_id );
+		update_post_meta( $submission_id, 'ccf_submission_form_fields', $all_form_fields );
+		update_post_meta( $submission_id, 'ccf_submission_ip', $this->get_client_ip() );
+		update_post_meta( $submission_id, 'ccf_spam_reason', sanitize_key( $reason ) );
+
+		if ( ! empty( $_POST['form_page'] ) ) {
+			update_post_meta( $submission_id, 'ccf_submission_form_page', esc_url_raw( wp_unslash( $_POST['form_page'] ) ) );
+		}
+
+		foreach ( $file_ids as $file_id ) {
+			wp_update_post( array(
+				'ID'          => (int) $file_id,
+				'post_parent' => $submission_id,
+			) );
+		}
+
+		/**
+		 * Fires when a submission is kept as spam.
+		 *
+		 * @since 7.18.0
+		 * @param int    $submission_id Entry ID.
+		 * @param int    $form_id       Form ID.
+		 * @param string $reason        Why it was flagged.
+		 */
+		do_action( 'ccf_spam_submission', $submission_id, $form_id, $reason );
+
+		return $this->completion_output( $form_id );
+	}
+
+	/**
+	 * The normal success response for a form, without sending anything.
+	 *
+	 * @since 7.18.0
+	 * @param int $form_id Form ID.
+	 * @return array
+	 */
+	private function completion_output( $form_id ) {
+		$output = array(
+			'success'     => true,
+			'action_type' => get_post_meta( $form_id, 'ccf_form_completion_action_type', true ),
+		);
+
+		if ( 'redirect' === $output['action_type'] ) {
+			$output['completion_redirect_url'] = apply_filters( 'ccf_form_completion_redirect_url', get_post_meta( $form_id, 'ccf_form_completion_redirect_url', true ), $form_id );
+		} else {
+			$output['completion_message'] = get_post_meta( $form_id, 'ccf_form_completion_message', true );
+
+			if ( empty( $output['completion_message'] ) ) {
+				$output['completion_message'] = esc_html__( 'Thank you for your submission.', 'custom-contact-forms' );
+			}
+		}
+
+		return $output;
+	}
+
+	/**
 	 * Get client IP address safely
 	 *
 	 * @since 7.9.0
@@ -766,6 +848,15 @@ class CCF_Form_Handler {
 			if ( ! CCF_Turnstile::factory()->verify( $turnstile_token ) ) {
 				CCF_Stats::record_spam();
 				return array( 'error' => 'turnstile_failed', 'success' => false );
+			}
+		}
+
+		// hCaptcha verification
+		if ( class_exists( 'CCF_Hcaptcha' ) && CCF_Hcaptcha::factory()->is_active() ) {
+			$hcaptcha_token = isset( $_POST['h-captcha-response'] ) ? sanitize_text_field( wp_unslash( $_POST['h-captcha-response'] ) ) : '';
+			if ( ! CCF_Hcaptcha::factory()->verify( $hcaptcha_token ) ) {
+				CCF_Stats::record_spam();
+				return array( 'error' => 'hcaptcha_failed', 'success' => false );
 			}
 		}
 
@@ -872,6 +963,26 @@ class CCF_Form_Handler {
 		if ( ! empty( $errors ) ) {
 			$this->errors_by_form[ $form_id ] = $errors;
 			return array( 'error' => 'invalid_fields', 'field_errors' => $errors, 'success' => false );
+		}
+
+		/**
+		 * Decide whether a valid submission is spam, for example with Akismet.
+		 *
+		 * Return a short reason (such as "akismet") to keep the entry in the
+		 * spam folder instead of the entries list. Spam entries send no
+		 * emails and run no integrations, and the visitor sees the normal
+		 * completion message.
+		 *
+		 * @since 7.18.0
+		 * @param false|string $spam             False, or the reason.
+		 * @param array        $submission       Sanitized slug => value data.
+		 * @param array        $field_slug_to_id Map of field slug => field ID and type.
+		 * @param int          $form_id          The form ID.
+		 */
+		$spam_reason = apply_filters( 'ccf_submission_spam_check', false, $submission, $field_slug_to_id, $form_id );
+
+		if ( $spam_reason ) {
+			return $this->save_spam( $form_id, $submission, $field_slug_to_id, $all_form_fields, $file_ids, (string) $spam_reason );
 		}
 
 		{

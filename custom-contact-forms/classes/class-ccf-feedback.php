@@ -144,6 +144,11 @@ class CCF_Feedback {
 					<button type="button" class="button button-primary" id="ccf-deactivate-submit"><?php esc_html_e( 'Submit &amp; Deactivate', 'custom-contact-forms' ); ?></button>
 					<a href="#" class="ccf-deactivate-skip" id="ccf-deactivate-skip"><?php esc_html_e( 'Skip &amp; Deactivate', 'custom-contact-forms' ); ?></a>
 				</div>
+
+				<p class="ccf-deactivate-review">
+					<?php esc_html_e( 'Whatever your reason, a review on WordPress.org helps other site owners decide, and helps us improve Custom Contact Forms.', 'custom-contact-forms' ); ?>
+					<a href="<?php echo esc_url( CCF_Review_Request::REVIEW_URL ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Leave a review', 'custom-contact-forms' ); ?></a>
+				</p>
 			</div>
 		</div>
 
@@ -166,6 +171,7 @@ class CCF_Feedback {
 			.ccf-deactivate-actions{display:flex;align-items:center;gap:14px;margin-top:16px;}
 			.ccf-deactivate-skip{color:#787c82;font-size:13px;text-decoration:none;}
 			.ccf-deactivate-skip:hover{color:#d63638;}
+			.ccf-deactivate-review{margin:14px 0 0;padding-top:12px;border-top:1px solid #f0f0f1;font-size:12px;color:#646970;}
 		</style>
 
 		<script>
@@ -326,28 +332,45 @@ class CCF_Feedback {
 		$submission_counts = wp_count_posts( 'ccf_submission' );
 		$submissions       = isset( $submission_counts->publish ) ? (int) $submission_counts->publish : 0;
 
-		// How long they actually had it. No install date has ever been stored,
-		// so use the oldest form as a proxy - it works retroactively for every
-		// existing install, which a new option would not.
-		$age = '(no forms created)';
+		// Forms in the trash keep their entries, so a site can show one young
+		// form next to thousands of old entries. Report the trash count too.
+		$form_counts = wp_count_posts( 'ccf_form' );
+		$forms_trash = isset( $form_counts->trash ) ? (int) $form_counts->trash : 0;
+		$forms_line  = (string) $form_count;
 
-		if ( $form_count > 0 ) {
-			$oldest = get_posts(
-				array(
-					'post_type'      => 'ccf_form',
-					'post_status'    => 'publish',
-					'posts_per_page' => 1,
-					'orderby'        => 'date',
-					'order'          => 'ASC',
-					'fields'         => 'ids',
-				)
-			);
-
-			if ( ! empty( $oldest ) ) {
-				$days = (int) floor( ( time() - get_post_time( 'U', true, $oldest[0] ) ) / DAY_IN_SECONDS );
-				$age  = sprintf( '%d day%s', $days, 1 === $days ? '' : 's' );
-			}
+		if ( $forms_trash > 0 ) {
+			$forms_line .= sprintf( ' (%d in trash)', $forms_trash );
 		}
+
+		// No install date has ever been stored, so two proxies are reported:
+		// the oldest published form and the oldest saved entry. The oldest
+		// entry is the better measure of how long the site has used CCF.
+		$oldest_form  = $this->oldest_age( 'ccf_form', '(no forms created)' );
+		$oldest_entry = $this->oldest_age( 'ccf_submission', '(no entries)' );
+
+		// Entries in the last 24 hours. A large number here next to a young
+		// form points to a spam flood rather than a long-time user.
+		$recent = new WP_Query(
+			array(
+				'post_type'              => 'ccf_submission',
+				'post_status'            => 'publish',
+				'posts_per_page'         => 1,
+				'fields'                 => 'ids',
+				'no_found_rows'          => false,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+				'date_query'             => array(
+					array(
+						// An absolute GMT time, so the site's timezone setting
+						// cannot shift the window when compared to post_date_gmt.
+						'after'     => gmdate( 'Y-m-d H:i:s', time() - DAY_IN_SECONDS ),
+						'column'    => 'post_date_gmt',
+						'inclusive' => true,
+					),
+				),
+			)
+		);
+		$entries_24h = (int) $recent->found_posts;
 
 		$lines = array(
 			'Reason:  ' . $reason,
@@ -362,13 +385,15 @@ class CCF_Feedback {
 
 		$lines = array_merge( $lines, array(
 			'',
-			'Site:    ' . home_url(),
-			'Forms:   ' . $form_count,
-			'Entries: ' . $submissions,
-			'Age:     ' . $age,
-			'Plugin:  ' . ( defined( 'CCF_VERSION' ) ? CCF_VERSION : '?' ),
-			'WP:      ' . get_bloginfo( 'version' ),
-			'PHP:     ' . PHP_VERSION,
+			'Site:          ' . home_url(),
+			'Forms:         ' . $forms_line,
+			'Entries:       ' . $submissions,
+			'Entries (24h): ' . $entries_24h,
+			'Oldest form:   ' . $oldest_form,
+			'Oldest entry:  ' . $oldest_entry,
+			'Plugin:        ' . ( defined( 'CCF_VERSION' ) ? CCF_VERSION : '?' ),
+			'WP:            ' . get_bloginfo( 'version' ),
+			'PHP:           ' . PHP_VERSION,
 		) );
 
 		$subject = sprintf( 'CCF deactivation feedback: %s', $reason );
@@ -376,5 +401,35 @@ class CCF_Feedback {
 		wp_mail( $this->admin_email, $subject, implode( "\n", $lines ) );
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Age of the oldest published post of a type, as "N days" plus its date.
+	 *
+	 * @param string $post_type Post type to check.
+	 * @param string $empty     Text to return when none exist.
+	 * @return string
+	 */
+	private function oldest_age( $post_type, $empty ) {
+		$oldest = get_posts(
+			array(
+				'post_type'        => $post_type,
+				'post_status'      => 'publish',
+				'posts_per_page'   => 1,
+				'orderby'          => 'date',
+				'order'            => 'ASC',
+				'fields'           => 'ids',
+				'suppress_filters' => true,
+			)
+		);
+
+		if ( empty( $oldest ) ) {
+			return $empty;
+		}
+
+		$time = (int) get_post_time( 'U', true, $oldest[0] );
+		$days = (int) floor( ( time() - $time ) / DAY_IN_SECONDS );
+
+		return sprintf( '%d day%s (%s)', $days, 1 === $days ? '' : 's', gmdate( 'Y-m-d', $time ) );
 	}
 }

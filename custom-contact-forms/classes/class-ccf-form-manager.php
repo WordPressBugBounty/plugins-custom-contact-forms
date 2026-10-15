@@ -2561,7 +2561,7 @@ class CCF_Form_Manager {
 						array( 'name' => esc_html__( 'Page Break', 'custom-contact-forms' ), 'desc' => esc_html__( 'Multi-step forms with progress bar and per-step validation.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'Section Break', 'custom-contact-forms' ), 'desc' => esc_html__( 'Titled dividers to organize long forms.', 'custom-contact-forms' ) ),
 						array( 'name' => esc_html__( 'File Upload Pro', 'custom-contact-forms' ), 'desc' => esc_html__( 'Advanced uploads with type and size rules.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Email Opt-in', 'custom-contact-forms' ), 'desc' => esc_html__( 'Grow your list with Mailchimp and MailerLite sync.', 'custom-contact-forms' ) ),
+						array( 'name' => esc_html__( 'Email Opt-in', 'custom-contact-forms' ), 'desc' => esc_html__( 'A ready-made consent checkbox, plus MailerLite, Brevo, Kit, ActiveCampaign and MailPoet.', 'custom-contact-forms' ) ),
 					),
 				) );
 			}

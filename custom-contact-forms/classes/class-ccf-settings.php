@@ -215,6 +215,16 @@ endforeach; else : ?>
 			<div class="wrap">
 				<h1><?php esc_html_e( 'Custom Contact Forms Settings', 'custom-contact-forms' ); ?></h1>
 
+				<p>
+					<?php
+					printf(
+						/* translators: %s: link to the Integrations page */
+						wp_kses_post( __( 'Mailchimp, webhooks, Akismet, hCaptcha and Cloudflare Turnstile are set up on the <a href="%s">Integrations</a> page.', 'custom-contact-forms' ) ),
+						esc_url( ccf_integrations_url() )
+					);
+					?>
+				</p>
+
 				<form action="options.php" method="post">
 					<?php settings_fields( 'ccf-settings' ); ?>
 					<?php do_settings_sections( 'custom-contact-forms' ); ?>

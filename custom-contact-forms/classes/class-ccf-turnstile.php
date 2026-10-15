@@ -68,53 +68,32 @@ class CCF_Turnstile {
 	 * @since 7.9.0
 	 */
 	public function register_settings() {
+		// Saved from its card on Forms > Integrations (since 7.18.0).
 		register_setting(
-			'ccf-settings',
+			'ccf-int-turnstile',
 			'ccf_turnstile_settings',
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => array( $this, 'sanitize_settings' ),
 			)
 		);
+	}
 
-		add_settings_section(
-			'ccf-turnstile',
-			esc_html__( 'Cloudflare Turnstile', 'custom-contact-forms' ),
-			array( $this, 'section_description' ),
-			'custom-contact-forms'
-		);
-
-		add_settings_field(
-			'ccf-turnstile-enabled',
-			esc_html__( 'Enable Turnstile', 'custom-contact-forms' ),
-			array( $this, 'field_enabled' ),
-			'custom-contact-forms',
-			'ccf-turnstile'
-		);
-
-		add_settings_field(
-			'ccf-turnstile-site-key',
-			esc_html__( 'Site Key', 'custom-contact-forms' ),
-			array( $this, 'field_site_key' ),
-			'custom-contact-forms',
-			'ccf-turnstile'
-		);
-
-		add_settings_field(
-			'ccf-turnstile-secret-key',
-			esc_html__( 'Secret Key', 'custom-contact-forms' ),
-			array( $this, 'field_secret_key' ),
-			'custom-contact-forms',
-			'ccf-turnstile'
-		);
-
-		add_settings_field(
-			'ccf-turnstile-theme',
-			esc_html__( 'Widget Theme', 'custom-contact-forms' ),
-			array( $this, 'field_theme' ),
-			'custom-contact-forms',
-			'ccf-turnstile'
-		);
+	/**
+	 * Settings shown inside the card on Forms > Integrations.
+	 *
+	 * @since 7.18.0
+	 */
+	public function render_settings() {
+		$this->section_description();
+		?>
+		<table class="form-table" role="presentation"><tbody>
+			<tr><th scope="row"><?php esc_html_e( 'Turn on', 'custom-contact-forms' ); ?></th><td><?php $this->field_enabled(); ?></td></tr>
+			<tr><th scope="row"><?php esc_html_e( 'Site Key', 'custom-contact-forms' ); ?></th><td><?php $this->field_site_key(); ?></td></tr>
+			<tr><th scope="row"><?php esc_html_e( 'Secret Key', 'custom-contact-forms' ); ?></th><td><?php $this->field_secret_key(); ?></td></tr>
+			<tr><th scope="row"><?php esc_html_e( 'Widget Theme', 'custom-contact-forms' ); ?></th><td><?php $this->field_theme(); ?></td></tr>
+		</tbody></table>
+		<?php
 	}
 
 	/**
@@ -223,6 +202,8 @@ class CCF_Turnstile {
 	public function maybe_enqueue_script() {
 		if ( $this->is_active() ) {
 			wp_enqueue_script( 'ccf-turnstile', 'https://challenges.cloudflare.com/turnstile/v0/api.js', array(), null, true );
+			wp_enqueue_script( 'ccf-captcha', plugins_url( '/assets/js/ccf-captcha.js', dirname( __FILE__ ) ), array(), CCF_VERSION, true );
+			wp_localize_script( 'ccf-captcha', 'ccfCaptcha', array( 'failed' => __( 'Please complete the security check and try again.', 'custom-contact-forms' ) ) );
 		}
 	}
 

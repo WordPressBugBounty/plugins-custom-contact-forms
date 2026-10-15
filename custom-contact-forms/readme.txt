@@ -4,58 +4,87 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 7.17.0
+Stable tag: 7.18.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Describe the form you need and AI builds it. Or drag and drop. Templates, Gutenberg block, and modern spam protection.
+Build powerful custom forms with drag and drop. Saved entries, dashboard, signatures, Mailchimp, webhooks, and modern spam protection.
 
 == Description ==
 
-**New: build a form by describing it.** Tell Custom Contact Forms what you need, such as "a booking form for a dog grooming appointment with the owner's details and their preferred date", and it builds it, fields, labels and all, ready to edit. It uses the AI provider already connected to your site under Settings > Connectors, so there is no API key to enter here and nothing is sent anywhere else. Requires WordPress 7.0 or later; the option stays hidden otherwise.
+**Build powerful custom forms with an intuitive drag-and-drop builder.** Create everything from simple contact forms to advanced forms with templates, Gutenberg, modern spam protection, and more.
 
-Custom Contact Forms lets you build forms and manage submissions entirely within WordPress. The drag-and-drop builder lives inside the media manager, so there are no separate admin pages and no new interface to learn. Live previews update as you build, and forms can be inserted via Gutenberg block, shortcode, widget, or PHP function.
+Custom Contact Forms gives you features many form plugins keep for their paid versions: every entry saved to your database, conditional logic, file uploads, signatures, Mailchimp, webhooks, and a dashboard that shows how each form performs. Build with drag and drop, start from a template, or describe the form you need.
 
-Start from a prebuilt template (contact, quote request, newsletter, event registration, or feedback) and have a working form in seconds. Or build your own from scratch with text, email, phone, address, dropdowns, checkboxes, file uploads, and more. Style it with included form themes and per-field width controls, or add your own custom CSS.
+**Try it before you install:** click Preview above to open a demo site with sample forms and a month of entries.
+
+= Every Entry, Saved and Measured =
+
+Each submission is stored in your WordPress database, so nothing is lost if a notification email goes astray. The Forms dashboard shows entries, form views, conversion rate and blocked spam for any date range, with a chart and a per-form breakdown. A weekly summary email brings the same numbers to your inbox every Monday. Export entries to CSV at any time.
+
+= Mailchimp, Webhooks and More, on One Page =
+
+Add people who fill in a form to a Mailchimp audience, with double opt-in and an optional consent checkbox. Each form chooses its own audience. Webhooks send every new entry to Zapier, Make, n8n or any other service that accepts them, so your forms can reach the apps you already use.
+
+Everything connects from one Integrations page: Mailchimp, webhooks, Akismet, hCaptcha, Cloudflare Turnstile and reCAPTCHA, each on its own card that shows whether it is connected. If a subscriber or webhook does not go through, the reason is listed under Recent problems, so you are not left guessing.
+
+= Signatures, Free =
+
+Add a signature field to any form. Visitors sign with a mouse, finger or stylus, and the signature is saved with the entry and included in the notification email.
+
+= Smart Forms Without Code =
+
+Conditional logic is included free: show or hide fields and sections based on answers. Accept file uploads, lay fields out in columns, send multiple email notifications per form, and create a WordPress post from a submission.
+
+= Switch From Contact Form 7 in One Step =
+
+Contact Form 7 does not save submissions. Import your Contact Form 7 and WPForms forms with their labels, fields and notification email under Forms → Import. Your original forms are only read, never changed.
+
+= AI That Stays On Your Site =
+
+Describe the form you need, such as "a booking form for a dog grooming appointment with the owner's details and their preferred date", and it is built for you, ready to edit. It uses the AI provider already connected to your site under Settings > Connectors, so there is no API key to enter and nothing is sent to us. Requires WordPress 7.0 or later; the option stays hidden otherwise.
+
+= Spam Protection Built In =
+
+Cloudflare Turnstile, hCaptcha, reCAPTCHA, honeypot, time trap, rate limiting, disposable email blocking and a keyword blacklist, with every blocked attempt counted on the dashboard. If you use Akismet, entries it flags go to a spam folder instead of being thrown away, so a real message caught by mistake is never lost.
+
+= Build Your Way =
+
+The drag-and-drop builder lives inside the media manager, so there are no separate admin pages and no new interface to learn. Live previews update as you build. Start from a prebuilt template (contact, quote request, newsletter, event registration, or feedback), style forms with included themes, per-field widths or your own CSS, and insert them with the Gutenberg block, shortcode, widget, or PHP function.
 
 **Powering thousands of active websites, with over 1.3 million all-time downloads.** Originally created by Taylor Lovett, Custom Contact Forms is now actively maintained by [Dmitry Alexander](https://oiopublisher.com/), rebuilt for modern WordPress with a hardened, PHP 8+ codebase, a refreshed builder, and new features added regularly.
 
 = What You Can Build =
 
-* Contact forms, quote requests, support forms, event registrations, newsletter signups
+* Contact forms, quote requests, support forms, event registrations, newsletter signups, service agreements
 * Text, paragraph, email (with optional confirmation), name, phone, website, address (US + international), date/time, dropdowns, checkboxes, radio buttons, file uploads, signatures, hidden fields, and HTML blocks
 * Conditional fields and sections: show/hide fields based on other field values
 * Multiple email notifications per form: customize recipients, subject, from name, reply-to, and body with field mapping
 * Post creation on submission: map form fields to post fields, meta, and taxonomies
 
-= Recent Updates =
-
-* **Forms dashboard**: the first screen under Forms shows entries, form views, conversion rate and blocked spam for any date range, with a chart, a per-form breakdown and suggested next steps
-* **Signature field, free**: visitors sign with a mouse, finger or stylus. The signature is saved as an image with the submission, shown on the entries screen, and included in notification emails
-* **Build a form with AI**: describe what you need in plain language and get a working form. Uses your site's own AI connection, so nothing extra to sign up for
-* **Switching from another form plugin?** Import your existing Contact Form 7 and WPForms forms in one step under Forms → Import. Your original forms are only read, never changed
-* **Submissions dashboard widget**: Totals and a per-form breakdown for the last 7 days, 30 days, or all time, right on your WordPress dashboard
-* **Modernized builder**: Yes/No options are now clean toggle switches, and fields display as cards in the builder canvas
-* **Friendly submission columns**: The submissions table now shows real field labels instead of internal slugs
-* **Redesigned templates screen**: Each form template now has its own custom icon, under Forms → Templates
-* **Developer hooks for add-ons**: Filter submission responses, field rendering, and notification timing
-* **WordPress 7.1 ready**: Tested up to the latest WordPress
-
 = Powerful Features, Included Free =
 
-* Drag-and-drop form builder with live preview in the media manager
+* Forms dashboard with entries, views, conversion rate and blocked spam for any date range
+* Weekly summary email with entries and views per form (easy to turn off)
+* Mailchimp: add subscribers to a different audience per form, with double opt-in
+* Webhooks: send each new entry as JSON to Zapier, Make, n8n or any URL
 * Signature field that works on phones, tablets and desktops
+* Drag-and-drop form builder with live preview in the media manager
 * Prebuilt form templates for the most common form types
+* Build a form by describing it, using your site's own AI connection
 * Gutenberg block, shortcode, widget, and PHP template support
 * Multiple form themes plus per-field width controls and custom CSS
 * AJAX form submission: no page reloads
 * Import your forms from Contact Form 7 and WPForms: fields, labels, required flags, placeholders, and choices, with a report of anything that needs your attention
 * Export submissions to CSV, and import submissions from CSV with automatic column mapping
 * Import and export forms via WordPress XML
-* Cloudflare Turnstile, reCAPTCHA, and simple captcha options
+* Cloudflare Turnstile, hCaptcha, reCAPTCHA, and simple captcha options
+* Akismet checks with a spam folder: move a flagged entry back with one click
+* Integrations page: every integration on one screen, with what is free, what needs Pro, and what is connected
 * Built-in spam protection: honeypot, time-based trap, IP rate limiting, disposable email blocking, keyword blacklist
 * Email diagnostics: send test emails and view delivery failure logs
+* Submissions widget on your WordPress dashboard
 * Restrict forms to logged-in users, or pause forms with a custom message
 * Customizable completion text or redirect URL
 * Conditional asset loading: only load scripts where forms appear
@@ -81,7 +110,8 @@ Custom Contact Forms Pro turns the builder you already know into forms that sell
 * **Consent / terms field**: scrollable terms with versioned agreement records, snapshotted permanently
 * **PDF receipts**: attached to notification emails for paid orders, plus one-click PDF download of any submission
 * **Multi-step forms**: page breaks, progress bar, per-step validation
-* **Conditional logic**: show or hide any field based on answers, priced fields included
+* **Conditional pricing**: show or hide products and priced fields based on answers
+* **More email marketing**: MailerLite, Brevo, Kit, ActiveCampaign and MailPoet, alongside the free Mailchimp connection
 * **Survey & star rating fields**: Likert grids and quick ratings
 * **Address autocomplete**: visitors pick their address as they type and the street, city, state and ZIP fill themselves in (uses your own Google API key)
 * **SMS confirmations**: text customers the moment they book or pay, through your own Twilio account
@@ -121,11 +151,11 @@ Click a field in the builder, open the Advanced panel, and set its Field Width (
 
 = How do I add custom styling? =
 
-For per-form looks, choose a Form Theme (including the new Minimal theme) on the form or in the block settings. For site-wide custom styles, go to Forms → Settings and add your CSS in the Custom CSS box.
+For per-form looks, choose a Form Theme (including the Minimal theme) on the form or in the block settings. For site-wide custom styles, go to Forms → Settings and add your CSS in the Custom CSS box.
 
-= How do I add Cloudflare Turnstile? =
+= How do I add Cloudflare Turnstile or hCaptcha? =
 
-Go to Forms → Settings and scroll to "Cloudflare Turnstile." Enter your site key and secret key (free from [Cloudflare Dashboard](https://dash.cloudflare.com/?to=/:account/turnstile)), enable it, and save. All forms will automatically show the Turnstile challenge.
+Go to Forms → Integrations and click Set up on the Cloudflare Turnstile or hCaptcha card. Enter your site key and secret key (free from the [Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/turnstile) or the [hCaptcha dashboard](https://dashboard.hcaptcha.com/)), turn it on, and save. All forms then show the check automatically. If a visitor fails it, the check resets and asks them to try again.
 
 = How do I insert a form? =
 
@@ -139,6 +169,22 @@ Yes. Edit any form and click the download icon to export submissions as a CSV fi
 
 No. All data is stored using WordPress custom post types and post meta. Nothing custom is added to your database schema.
 
+= How do I add people to my Mailchimp audience? =
+
+Go to Forms → Integrations, click Set up on the Mailchimp card, and paste a Mailchimp API key. Then open a form, go to Form Settings, and under Email Marketing choose Mailchimp and an audience. The form's first Email field and Name field are used. To ask for permission first, add a Checkboxes field such as "Send me updates" and choose it under "Only add people who tick". Problems, such as a deleted audience, are listed under Recent problems at the bottom of Forms → Integrations.
+
+= How do webhooks work? =
+
+Open a form, go to Form Settings, and paste one or more webhook URLs under Webhooks. Each new entry is sent to those URLs as JSON, with the form, the entry date, and every field's label and value. Use "Send a test" to send sample data, which tools like Zapier need before you map fields.
+
+= What happens to entries Akismet flags? =
+
+When Akismet checks are on (the Akismet card on Forms → Integrations), flagged entries go to Forms → Spam instead of the entries list. They send no email. Choose "Not spam" to move one to its form's entries, which also tells Akismet it made a mistake. Spam is deleted automatically after 30 days.
+
+= What is the weekly summary, and how do I turn it off? =
+
+Every Monday morning your site emails the admin address the past week's entries, form views and blocked spam. It is sent by your own site, and weeks with no activity are skipped. Turn it off with the link at the bottom of the email, or under Forms → Settings → Weekly Summary, where you can also change who receives it.
+
 = Is this plugin compatible with PHP 8? =
 
 Yes. The plugin is fully compatible with PHP 8.0, 8.1, 8.2, 8.3, and 8.4.
@@ -147,23 +193,28 @@ Yes. The plugin is fully compatible with PHP 8.0, 8.1, 8.2, 8.3, and 8.4.
 
 The dashboard counts entries from your saved submissions. It also counts form views and blocked spam from version 7.17 onward. A view is counted once per page load when a visitor's browser shows a form. Only daily totals are stored, in your own database. Nothing about the visitor is recorded, nothing is sent to any outside service, and views by people who can edit forms or by obvious bots are not counted. Developers can turn view counting off with the `ccf_count_form_views` filter.
 
+= What does the "How are we doing?" card send? =
+
+Nothing, unless you click a button. "Post on WordPress.org" copies what you typed to your clipboard and opens the review page, where you post it yourself. "Send feedback" uses your site's own email to send us your star rating, your note, your site URL, the number of forms and entries you have, and your plugin, WordPress, and PHP versions. No visitor data is sent, and no external tracking service is used.
+
 = What does the deactivation survey collect? =
 
-If you deactivate the plugin, an optional survey asks why. Nothing is sent unless you choose a reason or add a comment and click "Submit & Deactivate". The "Skip & Deactivate" option sends nothing. When you do submit, the plugin uses your site's own email to send the maintainer the reason you selected, your optional comment, your site URL, the number of forms you have, and your plugin, WordPress, and PHP versions. No personal data and no visitor data is collected, and no external tracking service is used.
+If you deactivate the plugin, an optional survey asks why. Nothing is sent unless you choose a reason or add a comment and click "Submit & Deactivate". The "Skip & Deactivate" option sends nothing. When you do submit, the plugin uses your site's own email to send us the reason you selected, your optional comment, your site URL, the number of forms you have, and your plugin, WordPress, and PHP versions. No personal data and no visitor data is collected, and no external tracking service is used.
 
 == Screenshots ==
 
 1. Drag-and-drop form builder with live preview and field settings
 2. Form submissions management with CSV export
 3. Gutenberg block with live preview and selectable form themes
-4. Settings page with Cloudflare Turnstile and spam protection options
+4. Settings page with spam protection and style options
 5. Prebuilt form templates to start a new form in one click
 6. Forms dashboard with entries, views, conversion rate and blocked spam for any date range
 7. Signature field: visitors sign with a mouse, finger or stylus, and the signature is saved with the entry
+8. Integrations page: every integration on one screen, showing what is free, what needs Pro, and what is connected
 
 == External Services ==
 
-This plugin optionally connects to the following third-party services for spam protection. These services are only used when the site administrator explicitly enables and configures them.
+This plugin optionally connects to the following third-party services for spam protection, email marketing and webhooks. These services are only used when the site administrator explicitly enables and configures them.
 
 = Google reCAPTCHA =
 
@@ -175,13 +226,59 @@ When enabled in the form builder, this plugin loads the Google reCAPTCHA widget 
 
 = Cloudflare Turnstile =
 
-When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads the Cloudflare Turnstile widget script on form pages and sends form submission verification requests to Cloudflare's servers. The user's Turnstile response token and the visitor's IP address are sent to Cloudflare for validation.
+When enabled on the Cloudflare Turnstile card in Forms → Integrations, this plugin loads the Cloudflare Turnstile widget script on form pages and sends form submission verification requests to Cloudflare's servers. The user's Turnstile response token and the visitor's IP address are sent to Cloudflare for validation.
 
 * Service provider: Cloudflare, Inc.
 * [Terms of Service](https://www.cloudflare.com/terms/)
 * [Privacy Policy](https://www.cloudflare.com/privacypolicy/)
 
+= hCaptcha =
+
+When enabled on the hCaptcha card in Forms → Integrations, this plugin loads the hCaptcha widget script on form pages and sends form submission verification requests to hCaptcha's servers. The visitor's hCaptcha response token, the site key and the visitor's IP address are sent to hCaptcha for validation.
+
+* Service provider: Intuition Machines, Inc.
+* [Terms of Service](https://www.hcaptcha.com/terms)
+* [Privacy Policy](https://www.hcaptcha.com/privacy)
+
+= Akismet =
+
+When the Akismet plugin is installed and set up, and Akismet checks are turned on in its card on Forms → Integrations, the name, email, website and text fields of each entry, the visitor's IP address, browser user agent and referring page are sent to Akismet to check for spam. When you choose "Not spam", the entry is sent to Akismet again so it can learn from the correction.
+
+* Service provider: Automattic, Inc.
+* [Terms of Service](https://akismet.com/tos/)
+* [Privacy Policy](https://automattic.com/privacy/)
+
+= Mailchimp =
+
+When you add a Mailchimp API key in Forms → Integrations and choose an audience for a form, this plugin connects to the Mailchimp Marketing API to list your audiences, and sends the email address and name from each entry of that form to the chosen audience. If you choose a consent checkbox, only entries where it is ticked are sent.
+
+* Service provider: The Rocket Science Group LLC (Intuit Mailchimp)
+* [Terms of Use](https://mailchimp.com/legal/terms/)
+* [Privacy Statement](https://mailchimp.com/legal/privacy/)
+
+= Webhooks =
+
+When you add webhook URLs to a form, each new entry of that form (the form name, entry date, page address and every field's label and value) is sent to those URLs. Only the URLs you enter are contacted. The terms and privacy policy of the service you choose apply to the data it receives.
+
 == Changelog ==
+
+= 7.18.0 =
+* New: Mailchimp. Add people who fill in a form to a Mailchimp audience, chosen per form, with double opt-in and an optional consent checkbox. Connect it under Forms → Integrations, then choose an audience under Form Settings in the form builder.
+* New: Webhooks. Send each new entry as JSON to Zapier, Make, n8n or any URL, set per form under Form Settings, with a "Send a test" button.
+* New: hCaptcha, as an alternative to Cloudflare Turnstile and reCAPTCHA.
+* New: Akismet checks. When the Akismet plugin is set up and the option is on, flagged entries go to a new spam folder under Forms → Spam instead of being thrown away. Move one back with "Not spam". Spam is deleted after 30 days.
+* New: A weekly summary email every Monday with the past week's entries, views and blocked spam per form. On by default for new and existing sites; turn it off from the email or under Forms → Settings.
+* New: Forms → Integrations, one page with a card for every integration, showing what is free, what needs Pro, and what is connected. Mailchimp, Akismet, hCaptcha and Cloudflare Turnstile are set up there, and their settings moved off the Settings page.
+* New: A "Recent problems" list on the Integrations page shows why a subscriber or webhook did not go through.
+* New: A "How are we doing?" card on the Forms dashboard when your forms reach 10, 100, 500 and 1,000 entries. Pick a star rating, and either post a review on WordPress.org or send us a private note. Each milestone appears once and can be dismissed.
+* Tweak: The review request no longer appears as a notice across Custom Contact Forms screens. It now lives on the Forms dashboard only.
+* Tweak: A short line in the admin footer on Custom Contact Forms screens links to the WordPress.org review page.
+* Tweak: The deactivation survey includes an optional link to leave a review.
+* Tweak: When you choose to send deactivation feedback, it now also includes the dates of your oldest form and oldest entry, the number of entries in the last 24 hours, and how many forms are in the trash. No entry content is sent.
+* Tweak: After a failed hCaptcha or Turnstile check, the widget resets and the visitor sees a message asking them to try again.
+* Tweak: Removed an older "please rate" line that appeared next to the newer footer line on some screens.
+* Tweak: Custom Contact Forms Pro 1.x users with Mailchimp set up in Pro: your API key and audience move to the free plugin automatically, and nothing changes for your forms. Pro keeps sending until you update Pro.
+* Developers: new `ccf_save_form`, `ccf_form_response`, `ccf_submission_spam_check`, `ccf_spam_submission`, `ccf_email_providers`, `ccf_email_marketing_subscribed` and `ccf_webhook_payload` hooks.
 
 = 7.17.0 =
 * New: Forms dashboard, now the first screen under Forms. It shows entries, form views, conversion rate and blocked spam for the last 7, 30 or 90 days or any custom range, with an entries chart, a per-form table and suggested next steps.
@@ -324,6 +421,9 @@ When enabled in Forms → Settings → Cloudflare Turnstile, this plugin loads t
 * [current_date_time] notification variable
 
 == Upgrade Notice ==
+
+= 7.18.0 =
+Adds free Mailchimp and webhooks per form, hCaptcha, Akismet with a spam folder, and a weekly summary email you can turn off. All existing forms and submissions are preserved.
 
 = 7.17.0 =
 Adds a Forms dashboard with entries, views, conversion rate and blocked spam, and a free signature field. Also fixes blank notification emails on imported forms and missing notifications on new template forms. All existing forms and submissions are preserved.

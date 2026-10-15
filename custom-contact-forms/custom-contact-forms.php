@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Custom Contact Forms
  * Plugin URI: https://customformspro.com/
- * Description: Build beautiful custom forms and manage submissions the WordPress way. Gutenberg block, Cloudflare Turnstile, anti-spam protection, and email diagnostics.
+ * Description: Build custom forms with a drag-and-drop builder. Saved entries, a forms dashboard, signatures, Mailchimp, webhooks, and modern spam protection.
  * Author: Dmitry Alexander
- * Version: 7.17.0
+ * Version: 7.18.0
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.17.0' );
+define( 'CCF_VERSION', '7.18.0' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -64,6 +64,16 @@ require_once CCF_PLUGIN_DIR . 'classes/class-ccf-signature-field.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-stats.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-auto-updates.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-dashboard.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-integration-log.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-provider.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-provider-mailchimp.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-marketing.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-webhooks.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-integrations.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-hcaptcha.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-spam.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-summary.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-integrations-page.php';
 
 CCF_Custom_Contact_Forms::factory();
 CCF_Constants::factory();
@@ -96,6 +106,15 @@ CCF_Ads::factory();
 CCF_Settings::factory();
 CCF_Gutenberg_Block::factory();
 CCF_Turnstile::factory();
+CCF_Hcaptcha::factory();
+CCF_Spam::factory();
+CCF_Email_Marketing::factory();
+CCF_Webhooks::factory();
+CCF_Form_Integrations::factory();
+CCF_Email_Summary::factory();
+if ( is_admin() ) {
+	CCF_Integrations_Page::factory();
+}
 CCF_Anti_Spam::factory();
 CCF_Email_Logger::factory();
 CCF_CSV_Importer::factory();
@@ -128,6 +147,19 @@ function ccf_flush_rewrites() {
  *
  * @since 7.1
  */
+/**
+ * Address of the Forms > Integrations page, optionally opening one card.
+ *
+ * @since 7.18.0
+ * @param string $open Card ID to open, such as "mailchimp".
+ * @return string
+ */
+function ccf_integrations_url( $open = '' ) {
+	$url = admin_url( 'edit.php?post_type=ccf_form&page=ccf-integrations' );
+
+	return $open ? add_query_arg( 'open', sanitize_key( $open ), $url ) . '#ccf-int-' . sanitize_key( $open ) : $url;
+}
+
 /**
  * Build the Pro upgrade URL, tagged so its source is identifiable in analytics.
  *
@@ -173,5 +205,16 @@ function ccf_upgrade() {
 	update_option( 'ccf_db_version', '7.9' );
 }
 
+/**
+ * Remove scheduled events on deactivation. They are added again on the next
+ * page load after the plugin is activated.
+ *
+ * @since 7.18.0
+ */
+function ccf_deactivate() {
+	wp_clear_scheduled_hook( 'ccf_weekly_summary' );
+	wp_clear_scheduled_hook( 'ccf_spam_cleanup' );
+}
+register_deactivation_hook( __FILE__, 'ccf_deactivate' );
 register_activation_hook( __FILE__, 'ccf_flush_rewrites' );
 register_activation_hook( __FILE__, 'ccf_upgrade' );

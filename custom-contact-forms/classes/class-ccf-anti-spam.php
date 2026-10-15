@@ -115,7 +115,7 @@ class CCF_Anti_Spam {
 
 	public function section_description() {
 		?>
-		<p><?php esc_html_e( 'These protections work automatically alongside Turnstile or reCAPTCHA. No user interaction required.', 'custom-contact-forms' ); ?></p>
+		<p><?php esc_html_e( 'These protections work automatically, with nothing for visitors to do. Captchas and Akismet are on the Integrations page.', 'custom-contact-forms' ); ?></p>
 		<?php
 	}
 

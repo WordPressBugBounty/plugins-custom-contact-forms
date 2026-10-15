@@ -96,7 +96,7 @@ class CCF_Pro_Notice {
 						<li><?php esc_html_e( 'Stripe and PayPal payments on the form', 'custom-contact-forms' ); ?></li>
 						<li><?php esc_html_e( 'Signed agreements and waivers', 'custom-contact-forms' ); ?></li>
 						<li><?php esc_html_e( 'PDF receipts', 'custom-contact-forms' ); ?></li>
-						<li><?php esc_html_e( 'Multi-step forms & conditional logic', 'custom-contact-forms' ); ?></li>
+						<li><?php esc_html_e( 'Multi-step forms with a progress bar', 'custom-contact-forms' ); ?></li>
 					</ul>
 				</div>
 				<div class="ccf-pn-actions">

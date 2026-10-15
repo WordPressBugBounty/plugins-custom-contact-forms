@@ -213,12 +213,12 @@ class CCF_Dashboard {
 			);
 		}
 
-		$turnstile = class_exists( 'CCF_Turnstile' ) && CCF_Turnstile::factory()->is_active();
+		$turnstile = ( class_exists( 'CCF_Turnstile' ) && CCF_Turnstile::factory()->is_active() ) || ( class_exists( 'CCF_Hcaptcha' ) && CCF_Hcaptcha::factory()->is_active() );
 		if ( ! $turnstile && ! empty( $forms ) && current_user_can( 'manage_options' ) ) {
 			$steps[] = array(
 				'title' => __( 'Stop more spam', 'custom-contact-forms' ),
 				'text'  => __( 'Cloudflare Turnstile blocks bots without making visitors solve puzzles. It is free.', 'custom-contact-forms' ),
-				'url'   => admin_url( 'edit.php?post_type=ccf_form&page=ccf-settings' ),
+				'url'   => ccf_integrations_url( 'turnstile' ),
 				'cta'   => __( 'Set up Turnstile', 'custom-contact-forms' ),
 			);
 		}
@@ -226,7 +226,7 @@ class CCF_Dashboard {
 		if ( ! defined( 'CCFP_VERSION' ) ) {
 			$steps[] = array(
 				'title' => __( 'Take payments on your forms', 'custom-contact-forms' ),
-				'text'  => __( 'Custom Contact Forms Pro adds Stripe and PayPal payments, PDF receipts and signed agreements to the forms you already have.', 'custom-contact-forms' ),
+				'text'  => __( 'Custom Contact Forms Pro adds Stripe and PayPal payments, PDF receipts and versioned consent records to the forms you already have.', 'custom-contact-forms' ),
 				'url'   => ccf_pro_url( 'dashboard-next-steps' ),
 				'cta'   => __( 'See Pro', 'custom-contact-forms' ),
 				'pro'   => true,
@@ -266,6 +266,8 @@ class CCF_Dashboard {
 				</div>
 			</div>
 			<hr class="wp-header-end">
+
+			<?php do_action( 'ccf_dashboard_top' ); ?>
 
 
 			<div class="ccf-dash-range" role="group" aria-label="<?php esc_attr_e( 'Date range', 'custom-contact-forms' ); ?>">
