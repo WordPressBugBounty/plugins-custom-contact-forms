@@ -230,6 +230,8 @@ endforeach; else : ?>
 					<?php do_settings_sections( 'custom-contact-forms' ); ?>
 					<?php submit_button(); ?>
 				</form>
+
+				<?php do_action( 'ccf_settings_after' ); ?>
 			</div>
 		<?php
 	}

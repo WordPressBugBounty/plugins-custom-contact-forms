@@ -154,7 +154,7 @@ class CCF_Email_Summary {
 			}
 		}
 
-		$site = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
+		$site = ccf_site_name();
 
 		$subject = sprintf(
 			/* translators: 1: site name, 2: number of entries */
@@ -165,7 +165,7 @@ class CCF_Email_Summary {
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
 
-		return (bool) wp_mail( $this->recipient(), $subject, $this->html( $data ), $headers );
+		return ccf_mail( $site, $this->recipient(), $subject, $this->html( $data ), $headers );
 	}
 
 	/**
@@ -187,7 +187,8 @@ class CCF_Email_Summary {
 	}
 
 	/**
-	 * One tip, rotating by week. Pro tips are left out when Pro is active.
+	 * One tip about a free feature, rotating by week. Pro gets its own line
+	 * further down the email instead (see html()).
 	 *
 	 * @return array { text, url, link }
 	 */
@@ -212,18 +213,16 @@ class CCF_Email_Summary {
 			),
 		);
 
-		if ( ! defined( 'CCFP_VERSION' ) ) {
-			$tips[] = array(
-				'text' => __( 'Take payments right on your forms with Stripe, PayPal, Apple Pay and Google Pay, using Custom Contact Forms Pro.', 'custom-contact-forms' ),
-				'url'  => ccf_pro_url( 'weekly-summary-payments' ),
-				'link' => __( 'See Pro', 'custom-contact-forms' ),
-			);
-			$tips[] = array(
-				'text' => __( 'Long forms get more replies when split into steps. Custom Contact Forms Pro adds multi-step forms with a progress bar.', 'custom-contact-forms' ),
-				'url'  => ccf_pro_url( 'weekly-summary-multistep' ),
-				'link' => __( 'See Pro', 'custom-contact-forms' ),
-			);
-		}
+		$tips[] = array(
+			'text' => __( 'Turn on Akismet checks so entries it flags go to a spam folder you can review, instead of being thrown away.', 'custom-contact-forms' ),
+			'url'  => ccf_integrations_url( 'akismet' ),
+			'link' => __( 'Set up Akismet', 'custom-contact-forms' ),
+		);
+		$tips[] = array(
+			'text' => __( 'Stop bots without puzzles. Cloudflare Turnstile and hCaptcha are free to set up.', 'custom-contact-forms' ),
+			'url'  => ccf_integrations_url( 'turnstile' ),
+			'link' => __( 'Open Integrations', 'custom-contact-forms' ),
+		);
 
 		$week = (int) wp_date( 'W' );
 
@@ -259,7 +258,7 @@ class CCF_Email_Summary {
 		$report   = $data['report'];
 		$previous = $data['previous'];
 		$totals   = $report['totals'];
-		$site     = get_bloginfo( 'name' );
+		$site     = ccf_site_name();
 		/* translators: 1: first day, 2: last day */
 		$range    = sprintf( __( '%1$s to %2$s', 'custom-contact-forms' ), wp_date( 'M j', strtotime( $report['start'] . ' 12:00:00' ) ), wp_date( 'M j', strtotime( $report['end'] . ' 12:00:00' ) ) );
 		$tip      = $this->tip();
@@ -320,17 +319,17 @@ class CCF_Email_Summary {
 
 	<?php if ( $forms ) : ?>
 	<tr><td style="padding:8px 24px;">
-		<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;border-collapse:collapse;">
+		<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;border-collapse:collapse;">
 			<tr>
-				<th align="left" style="padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;"><?php esc_html_e( 'Form', 'custom-contact-forms' ); ?></th>
-				<th align="right" style="padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;"><?php esc_html_e( 'Entries', 'custom-contact-forms' ); ?></th>
-				<th align="right" style="padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;"><?php esc_html_e( 'Views', 'custom-contact-forms' ); ?></th>
+				<th align="left" style="text-align:left;padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;"><?php esc_html_e( 'Form', 'custom-contact-forms' ); ?></th>
+				<th align="right" width="80" style="width:80px;text-align:right;padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;"><?php esc_html_e( 'Entries', 'custom-contact-forms' ); ?></th>
+				<th align="right" width="80" style="width:80px;text-align:right;padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;font-weight:600;"><?php esc_html_e( 'Views', 'custom-contact-forms' ); ?></th>
 			</tr>
 			<?php foreach ( $forms as $form ) : ?>
 			<tr>
 				<td style="padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;"><a href="<?php echo esc_url( admin_url( 'post.php?post=' . (int) $form['id'] . '&action=edit' ) ); ?>" style="color:<?php echo esc_attr( $accent ); ?>;text-decoration:none;"><?php echo esc_html( $form['title'] ); ?></a></td>
-				<td align="right" style="padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;"><?php echo esc_html( number_format_i18n( (int) $form['entries'] ) ); ?></td>
-				<td align="right" style="padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;"><?php echo esc_html( number_format_i18n( (int) $form['views'] ) ); ?></td>
+				<td align="right" width="80" style="width:80px;text-align:right;padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;"><?php echo esc_html( number_format_i18n( (int) $form['entries'] ) ); ?></td>
+				<td align="right" width="80" style="width:80px;text-align:right;padding:8px 6px;border-bottom:1px solid <?php echo esc_attr( $line ); ?>;"><?php echo esc_html( number_format_i18n( (int) $form['views'] ) ); ?></td>
 			</tr>
 			<?php endforeach; ?>
 		</table>
@@ -338,7 +337,7 @@ class CCF_Email_Summary {
 	<?php endif; ?>
 
 	<tr><td style="padding:16px 24px;">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=ccf-dashboard' ) ); ?>" style="display:inline-block;background:<?php echo esc_attr( $accent ); ?>;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:6px;font-size:14px;font-weight:600;"><?php esc_html_e( 'Open the Forms dashboard', 'custom-contact-forms' ); ?></a>
+		<a href="<?php echo esc_url( CCF_Dashboard::url() ); ?>" style="display:inline-block;background:<?php echo esc_attr( $accent ); ?>;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:6px;font-size:14px;font-weight:600;"><?php esc_html_e( 'Open the Forms dashboard', 'custom-contact-forms' ); ?></a>
 	</td></tr>
 
 	<tr><td style="padding:4px 24px 20px;">
@@ -348,6 +347,16 @@ class CCF_Email_Summary {
 			<a href="<?php echo esc_url( $tip['url'] ); ?>" style="color:<?php echo esc_attr( $accent ); ?>;"><?php echo esc_html( $tip['link'] ); ?></a>
 		</div>
 	</td></tr>
+
+	<?php if ( ! defined( 'CCFP_VERSION' ) ) : ?>
+	<tr><td style="padding:0 24px 20px;">
+		<div style="border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:6px;padding:12px 14px;font-size:13px;line-height:1.5;">
+			<strong><?php esc_html_e( 'Do more with your forms:', 'custom-contact-forms' ); ?></strong>
+			<?php esc_html_e( 'take Stripe and PayPal payments, send PDF receipts, record signed agreements and build multi-step forms with Custom Contact Forms Pro.', 'custom-contact-forms' ); ?>
+			<a href="<?php echo esc_url( ccf_pro_url( 'weekly-summary' ) ); ?>" style="color:<?php echo esc_attr( $accent ); ?>;"><?php esc_html_e( 'See Pro', 'custom-contact-forms' ); ?></a>
+		</div>
+	</td></tr>
+	<?php endif; ?>
 
 	<tr><td style="padding:0 24px 24px;font-size:12px;color:<?php echo esc_attr( $muted ); ?>;line-height:1.5;">
 		<?php esc_html_e( 'Sent by Custom Contact Forms on your site. Views and entries are counted on your site and never leave it.', 'custom-contact-forms' ); ?>

@@ -166,8 +166,47 @@ class CCF_Importer_WPForms extends CCF_Importer {
 			'skipped'            => $parsed['skipped'],
 			'notifications'      => $this->convert_notifications( $settings ),
 			'button_text'        => ! empty( $settings['submit_text'] ) ? (string) $settings['submit_text'] : __( 'Submit', 'custom-contact-forms' ),
-			'completion_message' => ! empty( $settings['confirmation_message'] ) ? wp_strip_all_tags( (string) $settings['confirmation_message'] ) : '',
+			'completion_message' => $this->confirmation_message( $settings ),
 		);
+	}
+
+	/**
+	 * Find the form's thank-you message.
+	 *
+	 * Current WPForms versions keep confirmations in a "confirmations" map, each
+	 * with a type (message, page or redirect). Older versions stored a single
+	 * "confirmation_message" setting. The first message-type confirmation wins;
+	 * page and redirect confirmations have no text to carry over, so the form
+	 * falls back to the default thank-you text.
+	 *
+	 * @since 7.19.0
+	 * @param array $settings WPForms form settings.
+	 * @return string
+	 */
+	protected function confirmation_message( $settings ) {
+		if ( ! empty( $settings['confirmations'] ) && is_array( $settings['confirmations'] ) ) {
+			foreach ( $settings['confirmations'] as $confirmation ) {
+				if ( ! is_array( $confirmation ) || empty( $confirmation['message'] ) ) {
+					continue;
+				}
+
+				if ( isset( $confirmation['type'] ) && 'message' !== $confirmation['type'] ) {
+					continue;
+				}
+
+				$message = trim( wp_strip_all_tags( (string) $confirmation['message'] ) );
+
+				if ( '' !== $message ) {
+					return $message;
+				}
+			}
+		}
+
+		if ( ! empty( $settings['confirmation_message'] ) ) {
+			return trim( wp_strip_all_tags( (string) $settings['confirmation_message'] ) );
+		}
+
+		return '';
 	}
 
 	/**

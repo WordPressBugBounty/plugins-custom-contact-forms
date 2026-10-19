@@ -4,7 +4,7 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 7.18.0
+Stable tag: 7.19.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@ Build powerful custom forms with drag and drop. Saved entries, dashboard, signat
 
 **Build powerful custom forms with an intuitive drag-and-drop builder.** Create everything from simple contact forms to advanced forms with templates, Gutenberg, modern spam protection, and more.
 
-Custom Contact Forms gives you features many form plugins keep for their paid versions: every entry saved to your database, conditional logic, file uploads, signatures, Mailchimp, webhooks, and a dashboard that shows how each form performs. Build with drag and drop, start from a template, or describe the form you need.
+Custom Contact Forms gives you features many form plugins keep for their paid versions: every entry saved to your database, conditional logic, file uploads, a signature field, Mailchimp signup forms, webhooks to Zapier, Make and n8n, and a dashboard that shows how each form performs. Build with drag and drop, start from a template, or describe the form you need.
 
 **Try it before you install:** click Preview above to open a demo site with sample forms and a month of entries.
 
@@ -58,6 +58,9 @@ The drag-and-drop builder lives inside the media manager, so there are no separa
 = What You Can Build =
 
 * Contact forms, quote requests, support forms, event registrations, newsletter signups, service agreements
+* Mailchimp newsletter signup forms with double opt-in and a consent checkbox
+* Signed agreements, release forms and waivers with a signature field
+* Forms that send every entry to Zapier, Make, n8n or your own app with webhooks
 * Text, paragraph, email (with optional confirmation), name, phone, website, address (US + international), date/time, dropdowns, checkboxes, radio buttons, file uploads, signatures, hidden fields, and HTML blocks
 * Conditional fields and sections: show/hide fields based on other field values
 * Multiple email notifications per form: customize recipients, subject, from name, reply-to, and body with field mapping
@@ -100,7 +103,7 @@ The drag-and-drop builder lives inside the media manager, so there are no separa
 
 = Customize More with Pro =
 
-Custom Contact Forms Pro turns the builder you already know into forms that sell, book, and sign, with no e-commerce stack required.
+Custom Contact Forms Pro turns the builder you already know into forms that sell, book, and sign, with no e-commerce stack required: Stripe and PayPal payment forms, donation forms, deposit and booking forms, and waivers with signed PDF records.
 
 * **Stripe payments on the form**: cards, Apple Pay, Google Pay, and Link, with a live "Pay $25.00" button and server-verified totals
 * **PayPal payments**: pay in place without leaving your form, with the same server-verified totals
@@ -177,6 +180,10 @@ Go to Forms → Integrations, click Set up on the Mailchimp card, and paste a Ma
 
 Open a form, go to Form Settings, and paste one or more webhook URLs under Webhooks. Each new entry is sent to those URLs as JSON, with the form, the entry date, and every field's label and value. Use "Send a test" to send sample data, which tools like Zapier need before you map fields.
 
+= Can I take payments or donations with a form? =
+
+Not with the free plugin. [Custom Contact Forms Pro](https://customformspro.com/) adds Stripe (cards, Apple Pay, Google Pay and Link) and PayPal payments right on the form, with product, total and coupon fields, ready-made donation, order and booking deposit templates, and PDF receipts. It adds no transaction fees of its own.
+
 = What happens to entries Akismet flags? =
 
 When Akismet checks are on (the Akismet card on Forms → Integrations), flagged entries go to Forms → Spam instead of the entries list. They send no email. Choose "Not spam" to move one to its form's entries, which also tells Akismet it made a mistake. Spam is deleted automatically after 30 days.
@@ -184,6 +191,10 @@ When Akismet checks are on (the Akismet card on Forms → Integrations), flagged
 = What is the weekly summary, and how do I turn it off? =
 
 Every Monday morning your site emails the admin address the past week's entries, form views and blocked spam. It is sent by your own site, and weeks with no activity are skipped. Turn it off with the link at the bottom of the email, or under Forms → Settings → Weekly Summary, where you can also change who receives it.
+
+= What does the tips and news signup send? =
+
+Nothing unless you click Subscribe. If you do, the email address and first name you entered, your site address, and your plugin and WordPress versions are sent to us so we can email you tips and release news. "No thanks" is remembered on your site only and contacts no one. Every email has an unsubscribe link. See External Services below for details.
 
 = Is this plugin compatible with PHP 8? =
 
@@ -260,7 +271,31 @@ When you add a Mailchimp API key in Forms → Integrations and choose an audienc
 
 When you add webhook URLs to a form, each new entry of that form (the form name, entry date, page address and every field's label and value) is sent to those URLs. Only the URLs you enter are contacted. The terms and privacy policy of the service you choose apply to the data it receives.
 
+= Custom Contact Forms tips and news (oiopublisher.com) =
+
+The plugin offers an optional signup for tips and release news, once on the Forms dashboard and once in the form builder, and on Forms > Settings. Only if you click Subscribe, the plugin sends the email address and first name you entered, your site address, your Custom Contact Forms and WordPress versions, where you signed up, and the consent wording shown to you, to our server at api.oiopublisher.com. Choosing "No thanks" or closing the box sends nothing. Every email we send has an unsubscribe link, and you can ask us to remove your details at any time.
+
+* Service provider: OIO Publisher (the publisher of Custom Contact Forms)
+* [Privacy Policy](https://customformspro.com/privacy-policy/)
+
+= Custom Contact Forms blog (customformspro.com) =
+
+The Custom Contact Forms widget on the WordPress Dashboard and the Forms Dashboard page show the titles and dates of the three latest posts from our blog. To get them, your site's server reads the public feed at https://customformspro.com/feed/ at most once every 12 hours and keeps a copy. Like every request WordPress makes, it carries your site's address and WordPress version in its user agent. No form entries, user details or visitor data are sent, and nothing is loaded from our site in your visitors' or users' browsers. Hide the widget under Screen Options on the Dashboard, or developers can turn the blog posts off in both places with `add_filter( 'ccf_dashboard_blog_feed', '__return_false' );`.
+
+* Service provider: OIO Publisher (the publisher of Custom Contact Forms)
+* [Privacy Policy](https://customformspro.com/privacy-policy/)
+
 == Changelog ==
+
+= 7.19.0 =
+* New: An optional signup for Custom Contact Forms tips and release news, shown once as a card on the Forms dashboard and once in the form builder. Nothing is sent unless you click Subscribe, and "No thanks" is remembered on your site only. You can subscribe later from Forms > Settings. It replaces the one-time Pro introduction that used to appear in the form builder.
+* Tweak: The weekly summary email now always ends with a short note about Custom Contact Forms Pro on sites without Pro, and its weekly tip now always covers a free feature (Mailchimp, webhooks, signatures, Akismet or Turnstile and hCaptcha).
+* Fix: Importing a WPForms form now brings over its thank-you message. Forms built with current versions of WPForms previously fell back to the default "Thank you for your submission."
+* Tweak: The email tip under a form's notifications now points to Email Diagnostics for a test email and to SMTP plugins on WordPress.org, replacing an outdated single-plugin recommendation.
+* Tweak: Notification emails are now sent with the form's name as the sender name, such as "Contact us", instead of "WordPress", when no sender name is set. The sending address does not change, and a sender name set in the notification or by an SMTP plugin still takes priority.
+* Tweak: The weekly summary email is sent with your site's name instead of "WordPress", and its per-form table lines up in more email apps.
+* Fix: When a site has no Site Title, email subjects now use the site's address instead of showing empty brackets, such as "[]" in the weekly summary.
+* New: The Custom Contact Forms dashboard widget and the Forms Dashboard now show the three latest posts from our blog, with tips on forms, email delivery and spam. See the External Services section for what this loads.
 
 = 7.18.0 =
 * New: Mailchimp. Add people who fill in a form to a Mailchimp audience, chosen per form, with double opt-in and an optional consent checkbox. Connect it under Forms → Integrations, then choose an audience under Form Settings in the form builder.
@@ -421,6 +456,9 @@ When you add webhook URLs to a form, each new entry of that form (the form name,
 * [current_date_time] notification variable
 
 == Upgrade Notice ==
+
+= 7.19.0 =
+Adds an optional signup for tips and release news (nothing is sent unless you subscribe), clearer sender names on emails, our latest blog posts on the dashboards, and a fix for WPForms imports. No changes to your forms or entries.
 
 = 7.18.0 =
 Adds free Mailchimp and webhooks per form, hCaptcha, Akismet with a spam folder, and a weekly summary email you can turn off. All existing forms and submissions are preserved.

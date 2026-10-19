@@ -141,6 +141,7 @@
 .ccf-dash-grid {
 	display: grid;
 	grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+	align-items: start;
 	gap: 16px;
 	margin-bottom: 16px;
 }
@@ -359,6 +360,47 @@
 	font-size: 11px;
 	font-weight: 600;
 	vertical-align: 1px;
+}
+
+.ccf-dash-side {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	min-width: 0;
+}
+
+.ccf-dash-blog ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ccf-dash-blog li {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin: 0;
+	padding: 10px 0;
+	border-top: 1px solid #f0f0f1;
+}
+
+.ccf-dash-blog li:first-child {
+	padding-top: 0;
+	border-top: 0;
+}
+
+.ccf-dash-blog li a {
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.ccf-dash-blog li a:hover {
+	text-decoration: underline;
+}
+
+.ccf-dash-blog .ccf-dw-date {
+	color: var(--ccf-dash-muted);
+	font-size: 12px;
 }
 
 .ccf-dash-empty {

@@ -34,6 +34,7 @@ class CCF_Dashboard_Widget {
 		add_action( 'wp_dashboard_setup', array( $this, 'register_widget' ) );
 		add_action( 'wp_ajax_ccf_dashboard_widget', array( $this, 'ajax_widget_data' ) );
 		add_action( 'wp_ajax_ccf_dismiss_widget_promo', array( $this, 'ajax_dismiss_promo' ) );
+		add_action( 'wp_ajax_ccf_dashboard_blog', array( $this, 'ajax_blog_posts' ) );
 		add_action( 'pre_get_posts', array( $this, 'filter_submissions_by_form' ) );
 		add_action( 'save_post_ccf_submission', array( $this, 'clear_cache' ) );
 		add_action( 'deleted_post', array( $this, 'clear_cache' ) );
@@ -187,6 +188,13 @@ class CCF_Dashboard_Widget {
 				#ccf-dash-widget .ccf-dw-promo-btn:hover{background:#7248c0;border-color:#7248c0;color:#fff}
 				#ccf-dash-widget .ccf-dw-promo-close{position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;color:#8c8f94;font-size:14px;line-height:1;padding:3px}
 				#ccf-dash-widget .ccf-dw-promo-close:hover{color:#1d2327}
+				#ccf-dash-widget .ccf-dw-blog{margin-top:12px;padding-top:10px;border-top:1px solid #f0f0f1}
+				#ccf-dash-widget .ccf-dw-blog h3{margin:0 0 6px;font-size:13px;font-weight:600;color:#1d2327}
+				#ccf-dash-widget .ccf-dw-blog ul{margin:0;padding:0;list-style:none}
+				#ccf-dash-widget .ccf-dw-blog li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0;padding:5px 0;font-size:13px}
+				#ccf-dash-widget .ccf-dw-blog li a{text-decoration:none}
+				#ccf-dash-widget .ccf-dw-blog li a:hover{text-decoration:underline}
+				#ccf-dash-widget .ccf-dw-blog .ccf-dw-date{flex:none;color:#646970;font-size:12px}
 			</style>
 			<?php $initial = $this->get_body_html( $period ); ?>
 			<div class="ccf-dw-head">
@@ -200,6 +208,9 @@ class CCF_Dashboard_Widget {
 			<?php echo $this->get_promo_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts. ?>
 			<div id="ccf-dw-body"><?php echo $initial['body']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts. ?></div>
 			<?php echo $this->get_pro_row_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts. ?>
+			<?php if ( $this->blog_enabled() ) : ?>
+				<div class="ccf-dw-blog" id="ccf-dw-blog" hidden></div>
+			<?php endif; ?>
 			<script>
 			( function() {
 				var root = document.getElementById( 'ccf-dash-widget' );
@@ -216,6 +227,24 @@ class CCF_Dashboard_Widget {
 				}
 
 				wire();
+
+				// Blog posts load after the dashboard has drawn, so a slow or
+				// unreachable feed can never hold up the page.
+				var blog = document.getElementById( 'ccf-dw-blog' );
+				if ( blog ) {
+					var bd = new FormData();
+					bd.append( 'action', 'ccf_dashboard_blog' );
+					bd.append( 'nonce', root.getAttribute( 'data-nonce' ) );
+					fetch( ajaxurl, { method: 'POST', credentials: 'same-origin', body: bd } )
+						.then( function( r ) { return r.json(); } )
+						.then( function( res ) {
+							if ( res && res.success && res.data.html ) {
+								blog.innerHTML = res.data.html;
+								blog.hidden = false;
+							}
+						} )
+						.catch( function() {} );
+				}
 
 				var promo = document.getElementById( 'ccf-dw-promo' );
 				if ( promo ) {
@@ -388,6 +417,138 @@ class CCF_Dashboard_Widget {
 			esc_html__( 'Payments collected: none', 'custom-contact-forms' ),
 			esc_url( $pro_url ),
 			esc_html__( 'Enable payments with Pro &rarr;', 'custom-contact-forms' )
+		);
+	}
+
+	/**
+	 * Whether the "From our blog" section is shown.
+	 *
+	 * Developers can turn it off with:
+	 * add_filter( 'ccf_dashboard_blog_feed', '__return_false' );
+	 *
+	 * @since 7.19.0
+	 * @return bool
+	 */
+	public function blog_enabled() {
+		return (bool) apply_filters( 'ccf_dashboard_blog_feed', true );
+	}
+
+	/**
+	 * Get the latest posts from the Custom Contact Forms blog.
+	 *
+	 * The feed is read from this site's server, never from the visitor's
+	 * browser, and the result is cached for 12 hours (1 hour after a failed
+	 * fetch), so a dashboard visit normally makes no outside request at all.
+	 * Only titles, links and dates are used: no images, scripts or styles are
+	 * loaded from the blog. Links pointing anywhere other than
+	 * customformspro.com are dropped.
+	 *
+	 * @since 7.19.0
+	 * @return array List of array( title, url, date ) items, newest first.
+	 */
+	private function get_blog_posts() {
+		$cache_key = 'ccf_dash_blog_posts';
+		$cached    = get_transient( $cache_key );
+
+		if ( false !== $cached && is_array( $cached ) ) {
+			return $cached;
+		}
+
+		if ( ! function_exists( 'fetch_feed' ) ) {
+			require_once ABSPATH . WPINC . '/feed.php';
+		}
+
+		$set_timeout = function ( $feed ) {
+			$feed->set_timeout( 5 );
+			$feed->enable_cache( false );
+		};
+
+		add_action( 'wp_feed_options', $set_timeout );
+		$feed = fetch_feed( 'https://customformspro.com/feed/' );
+		remove_action( 'wp_feed_options', $set_timeout );
+
+		$posts = array();
+
+		if ( ! is_wp_error( $feed ) ) {
+			foreach ( $feed->get_items( 0, 3 ) as $item ) {
+				$title = trim( wp_strip_all_tags( html_entity_decode( (string) $item->get_title(), ENT_QUOTES, 'UTF-8' ) ) );
+				$link  = esc_url_raw( (string) $item->get_permalink() );
+				$host  = wp_parse_url( $link, PHP_URL_HOST );
+
+				if ( '' === $title || ! in_array( $host, array( 'customformspro.com', 'www.customformspro.com' ), true ) ) {
+					continue;
+				}
+
+				$posts[] = array(
+					'title' => $title,
+					'url'   => $link,
+					'date'  => (int) $item->get_date( 'U' ),
+				);
+			}
+		}
+
+		set_transient( $cache_key, $posts, empty( $posts ) ? HOUR_IN_SECONDS : 12 * HOUR_IN_SECONDS );
+
+		return $posts;
+	}
+
+	/**
+	 * AJAX: return the "From our blog" markup.
+	 *
+	 * Used by both the WordPress dashboard widget and the Forms dashboard,
+	 * which share one cached copy of the feed. "html" is the widget section
+	 * with its heading, "list" is the bare list for the Forms dashboard panel.
+	 *
+	 * @since 7.19.0
+	 */
+	public function ajax_blog_posts() {
+		check_ajax_referer( 'ccf_dashboard_widget', 'nonce' );
+
+		if ( ! current_user_can( 'edit_posts' ) || ! $this->blog_enabled() ) {
+			wp_send_json_error();
+		}
+
+		$posts = $this->get_blog_posts();
+
+		if ( empty( $posts ) ) {
+			wp_send_json_success(
+				array(
+					'html' => '',
+					'list' => '',
+				)
+			);
+		}
+
+		$source = ( isset( $_POST['context'] ) && 'forms-dashboard' === sanitize_key( wp_unslash( $_POST['context'] ) ) ) ? 'forms-dashboard' : 'dashboard-widget';
+		$items  = '';
+
+		foreach ( $posts as $post ) {
+			$url = add_query_arg(
+				array(
+					'utm_source'   => 'ccf-free',
+					'utm_medium'   => 'plugin',
+					'utm_campaign' => 'blog',
+					'utm_content'  => $source,
+				),
+				$post['url']
+			);
+
+			$items .= sprintf(
+				'<li><a href="%s" target="_blank" rel="noopener">%s</a>%s</li>',
+				esc_url( $url ),
+				esc_html( $post['title'] ),
+				$post['date'] > 0 ? '<span class="ccf-dw-date">' . esc_html( date_i18n( get_option( 'date_format' ), $post['date'] ) ) . '</span>' : ''
+			);
+		}
+
+		$list = '<ul>' . $items . '</ul>';
+		$html = '<h3>' . esc_html__( 'From our blog', 'custom-contact-forms' ) . '</h3>' . $list;
+
+		wp_send_json_success(
+			array(
+				'html' => $html,
+				'list' => $list,
+			)
 		);
 	}
 

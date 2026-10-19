@@ -1380,7 +1380,7 @@ class CCF_Form_Handler {
 						$email_notification_subject_type = isset( $notification['subjectType'] ) ? $notification['subjectType'] : '';
 
 						/* translators: %s: site name */
-						$subject = sprintf( __( '%s: Form Submission', 'custom-contact-forms' ), wp_specialchars_decode( get_bloginfo( 'name' ) ) );
+						$subject = sprintf( __( '%s: Form Submission', 'custom-contact-forms' ), ccf_site_name() );
 						if ( ! empty( $form->post_title ) ) {
 							/* translators: %s: form title */
 							$subject .= sprintf( __( ' to "%s"', 'custom-contact-forms' ), wp_specialchars_decode( $form->post_title ) );
@@ -1438,7 +1438,11 @@ class CCF_Form_Handler {
 
 									do_action( 'ccf_send_notification', $send_email, $subject, $notification_content, $notification_headers, $send_uploads, $notification );
 
-									wp_mail( sanitize_email( $send_email ), $subject, $notification_content, $notification_headers, $send_uploads );
+									// Sent as the form's title rather than "WordPress" when no sender name is set (7.19.0).
+									$sender_name = '' !== trim( (string) $form->post_title ) ? wp_specialchars_decode( $form->post_title, ENT_QUOTES ) : ccf_site_name();
+									$sender_name = apply_filters( 'ccf_email_from_name', $sender_name, $form_id, $notification );
+
+									ccf_mail( $sender_name, sanitize_email( $send_email ), $subject, $notification_content, $notification_headers, $send_uploads );
 								}
 							}
 						}

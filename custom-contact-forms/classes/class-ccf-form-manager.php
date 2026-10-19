@@ -250,7 +250,7 @@ class CCF_Form_Manager {
 							</div>
 						</p>
 
-						<p><em><?php echo wp_kses_post( __( 'If you are not receiving email notifications, we highly recommend installing the <a href="https://wordpress.org/plugins/easy-wp-smtp/">WP Easy SMTP</a> plugin as there is probably an issue with emailing on your host.', 'custom-contact-forms' ) ); ?></em></p>
+						<p><em><?php echo wp_kses_post( __( 'Not receiving notifications? Your host may not be sending email reliably. Send a test email under Forms &rarr; Settings &rarr; Email Diagnostics, and if it fails, install an <a href="https://wordpress.org/plugins/search/smtp/">SMTP plugin from WordPress.org</a> to send through a proper email service. Every entry is still saved under Submissions either way.', 'custom-contact-forms' ) ); ?></em></p>
 					</div>
 					<div class="right">
 						<p class="email-notification-active">

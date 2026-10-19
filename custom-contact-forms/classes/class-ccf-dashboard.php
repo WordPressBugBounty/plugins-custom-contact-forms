@@ -306,6 +306,7 @@ class CCF_Dashboard {
 					<p class="ccf-dash-note"><?php esc_html_e( 'Views and spam are counted from version 7.17 onward. Views by people who can edit forms are not counted.', 'custom-contact-forms' ); ?></p>
 				</div>
 
+				<div class="ccf-dash-side">
 				<div class="ccf-dash-panel ccf-dash-steps">
 					<h2><?php esc_html_e( 'Next steps', 'custom-contact-forms' ); ?></h2>
 					<?php if ( empty( $steps ) ) : ?>
@@ -321,6 +322,34 @@ class CCF_Dashboard {
 							<?php endforeach; ?>
 						</ul>
 					<?php endif; ?>
+				</div>
+
+				<?php if ( class_exists( 'CCF_Dashboard_Widget' ) && CCF_Dashboard_Widget::factory()->blog_enabled() ) : ?>
+					<?php // Filled in after the page loads, from the same cached feed as the WordPress dashboard widget (7.19.0). ?>
+					<div class="ccf-dash-panel ccf-dash-blog" id="ccf-dash-blog" data-nonce="<?php echo esc_attr( wp_create_nonce( 'ccf_dashboard_widget' ) ); ?>" hidden>
+						<h2><?php esc_html_e( 'From our blog', 'custom-contact-forms' ); ?></h2>
+						<div class="ccf-dash-blog-list"></div>
+					</div>
+					<script>
+					( function() {
+						var panel = document.getElementById( 'ccf-dash-blog' );
+						if ( ! panel || ! window.fetch || typeof ajaxurl === 'undefined' ) { return; }
+						var data = new FormData();
+						data.append( 'action', 'ccf_dashboard_blog' );
+						data.append( 'nonce', panel.getAttribute( 'data-nonce' ) );
+						data.append( 'context', 'forms-dashboard' );
+						fetch( ajaxurl, { method: 'POST', credentials: 'same-origin', body: data } )
+							.then( function( r ) { return r.json(); } )
+							.then( function( res ) {
+								if ( res && res.success && res.data.list ) {
+									panel.querySelector( '.ccf-dash-blog-list' ).innerHTML = res.data.list;
+									panel.hidden = false;
+								}
+							} )
+							.catch( function() {} );
+					} )();
+					</script>
+				<?php endif; ?>
 				</div>
 			</div>
 

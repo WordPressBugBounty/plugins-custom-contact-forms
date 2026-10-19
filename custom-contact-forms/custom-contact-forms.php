@@ -4,7 +4,7 @@
  * Plugin URI: https://customformspro.com/
  * Description: Build custom forms with a drag-and-drop builder. Saved entries, a forms dashboard, signatures, Mailchimp, webhooks, and modern spam protection.
  * Author: Dmitry Alexander
- * Version: 7.18.0
+ * Version: 7.19.0
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.18.0' );
+define( 'CCF_VERSION', '7.19.0' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -74,6 +74,7 @@ require_once CCF_PLUGIN_DIR . 'classes/class-ccf-hcaptcha.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-spam.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-summary.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-integrations-page.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-newsletter.php';
 
 CCF_Custom_Contact_Forms::factory();
 CCF_Constants::factory();
@@ -95,7 +96,8 @@ if ( is_admin() ) {
 // class checks for itself and stays invisible otherwise.
 if ( is_admin() ) {
 	CCF_AI_Admin::factory();
-	CCF_Pro_Modal::factory();
+	// The one-time builder popup is now the tips and news signup (7.19.0).
+	CCF_Newsletter::factory();
 }
 CCF_Form_Renderer::factory();
 CCF_Field_Renderer::factory();
@@ -193,6 +195,61 @@ function ccf_pro_url( $source, $path = '/' ) {
 	 * @param string $source Prompt identifier.
 	 */
 	return apply_filters( 'ccf_pro_upgrade_url', $url, $source );
+}
+
+/**
+ * The site's name for use in emails.
+ *
+ * Uses the Site Title, or the site's domain when the title is blank, so
+ * subjects never read "[]" or ": Form Submission".
+ *
+ * @since 7.19.0
+ * @return string
+ */
+function ccf_site_name() {
+	$name = trim( wp_specialchars_decode( (string) get_bloginfo( 'name' ), ENT_QUOTES ) );
+
+	if ( '' === $name ) {
+		$name = (string) wp_parse_url( home_url(), PHP_URL_HOST );
+
+		if ( 0 === strpos( $name, 'www.' ) ) {
+			$name = substr( $name, 4 );
+		}
+	}
+
+	return $name;
+}
+
+/**
+ * Send an email with a clearer sender name than WordPress's default.
+ *
+ * WordPress sends every email as "WordPress" unless something sets a name.
+ * This swaps only that built-in default for the name given, such as the
+ * form's title. The sending address is never changed, and a name set in the
+ * From header, by an SMTP plugin or by another filter is left alone.
+ *
+ * @since 7.19.0
+ * @param string       $from_name   Sender name to use instead of "WordPress".
+ * @param string|array $to          Recipient(s).
+ * @param string       $subject     Subject.
+ * @param string       $message     Message.
+ * @param string|array $headers     Headers.
+ * @param string|array $attachments Attachments.
+ * @return bool Whether wp_mail() reported success.
+ */
+function ccf_mail( $from_name, $to, $subject, $message, $headers = '', $attachments = array() ) {
+	$from_name = trim( wp_strip_all_tags( (string) $from_name ) );
+
+	$swap = function ( $name ) use ( $from_name ) {
+		return ( 'WordPress' === $name && '' !== $from_name ) ? $from_name : $name;
+	};
+
+	// Early priority, so an SMTP plugin that forces its own name still wins.
+	add_filter( 'wp_mail_from_name', $swap, 5 );
+	$sent = wp_mail( $to, $subject, $message, $headers, $attachments );
+	remove_filter( 'wp_mail_from_name', $swap, 5 );
+
+	return (bool) $sent;
 }
 
 function ccf_upgrade() {
