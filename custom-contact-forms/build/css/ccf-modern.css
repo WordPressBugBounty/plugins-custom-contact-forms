@@ -993,3 +993,10 @@
 		margin-right: 0 !important;
 	}
 }
+
+/* Conditional logic: a hidden field must stay hidden, even when it has a
+   width setting above (those rules use display with !important). */
+.ccf-form-wrapper .field.field-hide,
+.ccf-form-wrapper .ccf-section.field-hide {
+	display: none !important;
+}

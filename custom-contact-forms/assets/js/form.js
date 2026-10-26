@@ -544,57 +544,61 @@
 
 							var fieldInput = fieldsBySlug[condition.field].querySelectorAll( '.field-input' );
 
-							function adjustConditions( value ) {
+							// Every current value of the source field. Checkboxes and radio
+							// buttons contribute only their checked options, so a checkbox
+							// group is judged on everything that is ticked, not just the
+							// box that was last clicked.
+							function getConditionValues() {
+								var values = [];
+
+								_.each( fieldInput, function( input ) {
+									if ( 'checkbox' === input.type || 'radio' === input.type ) {
+										if ( input.checked ) {
+											values.push( input.value );
+										}
+									} else if ( 'SELECT' === input.tagName && input.multiple ) {
+										_.each( input.options, function( option ) {
+											if ( option.selected ) {
+												values.push( option.value );
+											}
+										} );
+									} else {
+										values.push( input.value || '' );
+									}
+								} );
+
+								return values;
+							}
+
+							function adjustConditions( values ) {
+								var expected = String( condition.value );
+
 								if ( 'is' === condition.compare ) {
-									if ( value === condition.value ) {
-										// one piece of condition is true
-										condition.state = true;
-									} else {
-										// one part of condition is false
-										condition.state = false;
-									}
+									condition.state = _.indexOf( values, expected ) !== -1;
 								} else if ( 'is-not' === condition.compare ) {
-									if ( value !== condition.value ) {
-										// one piece of condition is true
-										condition.state = true;
-									} else {
-										// one part of condition is false
-										condition.state = false;
-									}
+									condition.state = _.indexOf( values, expected ) === -1;
 								} else if ( 'greater-than' === condition.compare ) {
-									if ( parseInt( value ) > parseInt( condition.value ) ) {
-										// one piece of condition is true
-										condition.state = true;
-									} else {
-										// one part of condition is false
-										condition.state = false;
-									}
+									condition.state = _.some( values, function( value ) {
+										return parseInt( value, 10 ) > parseInt( expected, 10 );
+									} );
 								} else if ( 'less-than' === condition.compare ) {
-									if ( parseInt( value ) < parseInt( condition.value ) ) {
-										// one piece of condition is true
-										condition.state = true;
-									} else {
-										// one part of condition is false
-										condition.state = false;
-									}
+									condition.state = _.some( values, function( value ) {
+										return parseInt( value, 10 ) < parseInt( expected, 10 );
+									} );
 								} else if ( 'contains' === condition.compare ) {
-									if ( value.match( condition.value ) ) {
-										// one piece of condition is true
-										condition.state = true;
-									} else {
-										// one part of condition is false
-										condition.state = false;
-									}
+									condition.state = '' !== expected && _.some( values, function( value ) {
+										return -1 !== String( value ).indexOf( expected );
+									} );
 								}
 							}
 
-							$( fieldInput ).on( 'change keyup', _.debounce( function( event ) {
-								adjustConditions( event.currentTarget.value );
+							$( fieldInput ).on( 'change keyup', _.debounce( function() {
+								adjustConditions( getConditionValues() );
 
 								wp.ccf.conditionals[formId][slug].trigger();
 							}, 250 ) );
 
-							adjustConditions( fieldInput.value );
+							adjustConditions( getConditionValues() );
 
 							wp.ccf.conditionals[formId][slug].trigger();
 						} );
@@ -606,6 +610,12 @@
 
 					_.each( fieldsBySlug, function( field ) {
 						if ( field.className.match( / skip-field/i ) ) {
+							return;
+						}
+
+						// Fields hidden by conditional logic, on their own or inside a
+						// hidden section, aren't filled in, so don't validate them.
+						if ( /(^|\s)field-hide(\s|$)/.test( field.className ) || $( field ).closest( '.ccf-section.field-hide' ).length ) {
 							return;
 						}
 

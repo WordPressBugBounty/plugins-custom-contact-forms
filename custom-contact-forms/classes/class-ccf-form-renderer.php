@@ -31,12 +31,13 @@ class CCF_Form_Renderer {
 		$allowed = wp_kses_allowed_html( 'post' );
 		$form_tags = array(
 			'form'     => array( 'method' => true, 'action' => true, 'class' => true, 'id' => true, 'enctype' => true, 'data-form-id' => true ),
-			'input'    => array( 'type' => true, 'name' => true, 'value' => true, 'id' => true, 'class' => true, 'placeholder' => true, 'required' => true, 'aria-required' => true, 'aria-hidden' => true, 'checked' => true, 'selected' => true, 'maxlength' => true, 'style' => true, 'readonly' => true, 'disabled' => true, 'min' => true, 'max' => true, 'step' => true, 'multiple' => true, 'accept' => true, 'tabindex' => true, 'autocomplete' => true ),
+			'input'    => array( 'type' => true, 'name' => true, 'value' => true, 'id' => true, 'class' => true, 'placeholder' => true, 'required' => true, 'aria-required' => true, 'aria-hidden' => true, 'checked' => true, 'selected' => true, 'maxlength' => true, 'style' => true, 'readonly' => true, 'disabled' => true, 'min' => true, 'max' => true, 'step' => true, 'multiple' => true, 'accept' => true, 'tabindex' => true, 'autocomplete' => true, 'data-row' => true ),
 			'select'   => array( 'name' => true, 'id' => true, 'class' => true, 'required' => true, 'aria-required' => true, 'multiple' => true, 'style' => true ),
 			'option'   => array( 'value' => true, 'selected' => true ),
 			'optgroup' => array( 'label' => true ),
 			'textarea' => array( 'name' => true, 'id' => true, 'class' => true, 'placeholder' => true, 'required' => true, 'aria-required' => true, 'rows' => true, 'cols' => true, 'style' => true ),
-			'label'    => array( 'for' => true, 'class' => true ),
+			'label'    => array( 'for' => true, 'class' => true, 'title' => true ),
+			'output'   => array( 'class' => true, 'for' => true ),
 			'fieldset' => array( 'class' => true ),
 			'legend'   => array( 'class' => true ),
 			'button'   => array( 'type' => true, 'name' => true, 'value' => true, 'class' => true, 'id' => true ),

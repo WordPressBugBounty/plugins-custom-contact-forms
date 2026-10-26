@@ -4,7 +4,7 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 7.19.0
+Stable tag: 7.19.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -287,6 +287,14 @@ The Custom Contact Forms widget on the WordPress Dashboard and the Forms Dashboa
 
 == Changelog ==
 
+= 7.19.1 =
+* Fix: Fields with a width setting (such as half width) now hide correctly when conditional logic hides them.
+* Fix: A required field hidden by conditional logic no longer stops the form from being submitted. Hidden fields, and fields in a hidden section, are skipped when the form is checked and are not saved with the entry.
+* Fix: Conditional logic based on checkboxes now looks at every box that is ticked. Unticking a box hides the fields it showed, and ticking a second box no longer hides them.
+* Fix: Conditional logic now checks values that are already filled in or selected when the page loads.
+* Fix: Survey grid answers from Custom Contact Forms Pro are saved with their question, such as "Delivery was on time: Agree", instead of "null: Agree".
+* Fix: The number next to a Custom Contact Forms Pro slider now updates as the slider moves.
+
 = 7.19.0 =
 * New: An optional signup for Custom Contact Forms tips and release news, shown once as a card on the Forms dashboard and once in the form builder. Nothing is sent unless you click Subscribe, and "No thanks" is remembered on your site only. You can subscribe later from Forms > Settings. It replaces the one-time Pro introduction that used to appear in the form builder.
 * Tweak: The weekly summary email now always ends with a short note about Custom Contact Forms Pro on sites without Pro, and its weekly tip now always covers a free feature (Mailchimp, webhooks, signatures, Akismet or Turnstile and hCaptcha).
@@ -456,6 +464,9 @@ The Custom Contact Forms widget on the WordPress Dashboard and the Forms Dashboa
 * [current_date_time] notification variable
 
 == Upgrade Notice ==
+
+= 7.19.1 =
+Fixes conditional logic: hidden fields with a width setting now hide, hidden required fields no longer block submissions, and checkbox rules work as expected. Also fixes Pro survey grid answers and slider values. No changes to your forms or entries.
 
 = 7.19.0 =
 Adds an optional signup for tips and release news (nothing is sent unless you subscribe), clearer sender names on emails, our latest blog posts on the dashboards, and a fix for WPForms imports. No changes to your forms or entries.

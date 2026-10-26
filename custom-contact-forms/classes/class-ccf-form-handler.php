@@ -876,6 +876,10 @@ class CCF_Form_Handler {
 		$file_ids = array();
 		$all_form_fields = array();
 
+		// Fields the visitor couldn't see, because conditional logic hid them
+		// (or the section they're in), are not validated or saved.
+		$hidden_fields = $this->get_conditionally_hidden_fields( $fields );
+
 		foreach ( $fields as $field_id ) {
 			$field_id = (int) $field_id;
 
@@ -906,6 +910,10 @@ class CCF_Form_Handler {
 
 			// We save this to reference later
 			$field_slug_to_id[ $slug ] = array( 'id' => $field_id, 'type' => sanitize_text_field( $type ) );
+
+			if ( isset( $hidden_fields[ $field_id ] ) ) {
+				continue;
+			}
 
 			$custom_value_mapping = array( 'recaptcha' => 'g-recaptcha-response' );
 
@@ -1508,6 +1516,185 @@ class CCF_Form_Handler {
 		}
 
 		return $return;
+	}
+
+	/**
+	 * Find the fields that conditional logic hid for the submitted values.
+	 *
+	 * Mirrors the conditional logic in assets/js/form.js: a field is hidden
+	 * when its own rule hides it, or when it sits in a section whose Section
+	 * Header is hidden. Sections run from one Section Header to the next.
+	 *
+	 * @since 7.19.1
+	 * @param array $field_ids Field IDs in form order.
+	 * @return array Field ID => true for each hidden field.
+	 */
+	public function get_conditionally_hidden_fields( $field_ids ) {
+		$hidden         = array();
+		$section_hidden = false;
+		$slug_to_id     = array();
+
+		foreach ( (array) $field_ids as $field_id ) {
+			$field_id = (int) $field_id;
+			$slug_to_id[ get_post_meta( $field_id, 'ccf_field_slug', true ) ] = $field_id;
+		}
+
+		foreach ( (array) $field_ids as $field_id ) {
+			$field_id = (int) $field_id;
+			$visible  = $this->is_field_conditionally_visible( $field_id, $slug_to_id );
+
+			if ( 'section-header' === get_post_meta( $field_id, 'ccf_field_type', true ) ) {
+				$section_hidden = ! $visible;
+			}
+
+			if ( $section_hidden || ! $visible ) {
+				$hidden[ $field_id ] = true;
+			}
+		}
+
+		return apply_filters( 'ccf_conditionally_hidden_fields', $hidden, $field_ids );
+	}
+
+	/**
+	 * Whether a field's own conditional logic shows it for the submitted values.
+	 *
+	 * When a condition depends on a field whose value can't be read from the
+	 * submission (for example a file upload, or a field added by another
+	 * plugin), the field is treated as visible, so it's validated as before.
+	 *
+	 * @since 7.19.1
+	 * @param int   $field_id   Field ID.
+	 * @param array $slug_to_id Field slug => field ID for this form.
+	 * @return bool
+	 */
+	public function is_field_conditionally_visible( $field_id, $slug_to_id ) {
+		if ( ! get_post_meta( $field_id, 'ccf_field_conditionalsEnabled', true ) ) {
+			return true;
+		}
+
+		$conditions = get_post_meta( $field_id, 'ccf_attached_conditionals', true );
+		if ( empty( $conditions ) || ! is_array( $conditions ) ) {
+			return true;
+		}
+
+		$readable_types = array( 'single-line-text', 'paragraph-text', 'dropdown', 'checkboxes', 'radio', 'email', 'name', 'date', 'website', 'phone', 'address', 'hidden', 'rating', 'slider' );
+
+		$met_all = true;
+		$met_any = false;
+
+		foreach ( $conditions as $condition ) {
+			if ( ! is_array( $condition ) || empty( $condition['field'] ) ) {
+				continue;
+			}
+
+			$source_slug = $condition['field'];
+			$source_id   = isset( $slug_to_id[ $source_slug ] ) ? $slug_to_id[ $source_slug ] : 0;
+			$source_type = $source_id ? get_post_meta( $source_id, 'ccf_field_type', true ) : '';
+
+			$values = apply_filters( 'ccf_conditional_source_values', null, $source_slug, $source_type, $source_id );
+
+			if ( null === $values ) {
+				if ( ! in_array( $source_type, $readable_types, true ) ) {
+					return true;
+				}
+
+				$values = $this->get_posted_values( $source_slug );
+			}
+
+			$state = $this->condition_met(
+				isset( $condition['compare'] ) ? $condition['compare'] : 'is',
+				(array) $values,
+				isset( $condition['value'] ) ? (string) $condition['value'] : ''
+			);
+
+			$met_all = $met_all && $state;
+			$met_any = $met_any || $state;
+		}
+
+		$overall = ( 'any' === get_post_meta( $field_id, 'ccf_field_conditionalFieldsRequired', true ) ) ? $met_any : $met_all;
+
+		if ( 'hide' === get_post_meta( $field_id, 'ccf_field_conditionalType', true ) ) {
+			$overall = ! $overall;
+		}
+
+		return $overall;
+	}
+
+	/**
+	 * All submitted values for a field, as a flat list of strings.
+	 *
+	 * @since 7.19.1
+	 * @param string $slug Field slug.
+	 * @return array
+	 */
+	private function get_posted_values( $slug ) {
+		$key = 'ccf_field_' . $slug;
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is checked in submit_listen() before processing.
+		if ( ! isset( $_POST[ $key ] ) ) {
+			return array();
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidationSanitization.InputNotSanitized -- Sanitized below.
+		$raw = wp_unslash( $_POST[ $key ] );
+
+		if ( ! is_array( $raw ) ) {
+			return array( sanitize_text_field( (string) $raw ) );
+		}
+
+		$values = array();
+
+		array_walk_recursive(
+			$raw,
+			function ( $value ) use ( &$values ) {
+				$values[] = sanitize_text_field( (string) $value );
+			}
+		);
+
+		return $values;
+	}
+
+	/**
+	 * Check one condition against a field's values, the same way form.js does.
+	 *
+	 * @since 7.19.1
+	 * @param string $compare  is, is-not, greater-than, less-than or contains.
+	 * @param array  $values   The source field's values.
+	 * @param string $expected The value set in the condition.
+	 * @return bool
+	 */
+	private function condition_met( $compare, $values, $expected ) {
+		switch ( $compare ) {
+			case 'is-not':
+				return ! in_array( $expected, $values, true );
+			case 'greater-than':
+				foreach ( $values as $value ) {
+					if ( is_numeric( $value ) && (int) $value > (int) $expected ) {
+						return true;
+					}
+				}
+				return false;
+			case 'less-than':
+				foreach ( $values as $value ) {
+					if ( is_numeric( $value ) && (int) $value < (int) $expected ) {
+						return true;
+					}
+				}
+				return false;
+			case 'contains':
+				if ( '' === $expected ) {
+					return false;
+				}
+				foreach ( $values as $value ) {
+					if ( false !== strpos( $value, $expected ) ) {
+						return true;
+					}
+				}
+				return false;
+			case 'is':
+			default:
+				return in_array( $expected, $values, true );
+		}
 	}
 
 	/**

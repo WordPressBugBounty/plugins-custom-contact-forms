@@ -4,7 +4,7 @@
  * Plugin URI: https://customformspro.com/
  * Description: Build custom forms with a drag-and-drop builder. Saved entries, a forms dashboard, signatures, Mailchimp, webhooks, and modern spam protection.
  * Author: Dmitry Alexander
- * Version: 7.19.0
+ * Version: 7.19.1
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.19.0' );
+define( 'CCF_VERSION', '7.19.1' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
