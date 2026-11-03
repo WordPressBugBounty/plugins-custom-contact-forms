@@ -349,8 +349,15 @@ class CCF_Email_Summary {
 	</td></tr>
 
 	<?php if ( ! defined( 'CCFP_VERSION' ) ) : ?>
+	<?php $ccf_promo = ccf_pro_promo(); ?>
 	<tr><td style="padding:0 24px 20px;">
 		<div style="border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:6px;padding:12px 14px;font-size:13px;line-height:1.5;">
+			<?php if ( ! empty( $ccf_promo['text'] ) ) : ?>
+			<p style="margin:0 0 8px;padding:8px 10px;border-radius:4px;background:#fff7e6;color:#7a4b00;font-weight:600;">
+				<?php echo esc_html( $ccf_promo['text'] ); ?>
+				<a href="<?php echo esc_url( ccf_pro_link( 'weekly-summary' ) ); ?>" style="color:#7a4b00;"><?php esc_html_e( 'Get the deal', 'custom-contact-forms' ); ?></a>
+			</p>
+			<?php endif; ?>
 			<strong><?php esc_html_e( 'Do more with your forms:', 'custom-contact-forms' ); ?></strong>
 			<?php esc_html_e( 'take Stripe and PayPal payments, send PDF receipts, record signed agreements and build multi-step forms with Custom Contact Forms Pro.', 'custom-contact-forms' ); ?>
 			<a href="<?php echo esc_url( ccf_pro_url( 'weekly-summary' ) ); ?>" style="color:<?php echo esc_attr( $accent ); ?>;"><?php esc_html_e( 'See Pro', 'custom-contact-forms' ); ?></a>

@@ -153,7 +153,8 @@ class CCF_Form_Manager {
 			<div class="ccf-form-settings"></div>
 
 			<?php if ( class_exists( 'CCF_AI_Form_Builder' ) ) : ?>
-				<div class="ccf-ai-builder-cta">
+				<?php // Hidden until the AI script's styles load. They only load on the Forms screens, so the strip never appears where its button would do nothing. ?>
+				<div class="ccf-ai-builder-cta" hidden>
 					<span class="ccf-ai-builder-cta-text"><?php esc_html_e( 'Not sure where to start?', 'custom-contact-forms' ); ?></span>
 					<button type="button" class="button button-primary ccf-ai-open">&#10024; <?php esc_html_e( 'Build with AI', 'custom-contact-forms' ); ?></button>
 				</div>
@@ -2544,26 +2545,117 @@ class CCF_Form_Manager {
 			// Pro field teasers (only when the Pro add-on is not active).
 			if ( ! defined( 'CCFP_VERSION' ) ) {
 				wp_enqueue_script( 'ccf-pro-teaser', plugins_url( '/assets/js/pro-teaser.js', dirname( __FILE__ ) ), array( 'ccf-form-manager' ), CCF_VERSION, true );
-				wp_localize_script( 'ccf-pro-teaser', 'ccfProTeaser', array(
-					'url'     => ccf_pro_url( 'field-teaser' ),
-					'badge'   => esc_html__( 'Pro', 'custom-contact-forms' ),
-					'cta'     => esc_html__( 'Get Custom Contact Forms Pro', 'custom-contact-forms' ),
-					'dismiss' => esc_html__( 'Maybe later', 'custom-contact-forms' ),
-					'fields'  => array(
-						array( 'name' => esc_html__( 'Product', 'custom-contact-forms' ), 'desc' => esc_html__( 'Sell items with fixed prices, dropdown options, or customer-chosen amounts.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Stripe Card', 'custom-contact-forms' ), 'desc' => esc_html__( 'Take card, Apple Pay and Google Pay payments right on the form.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'PayPal', 'custom-contact-forms' ), 'desc' => esc_html__( 'Let visitors pay with PayPal without leaving your form.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Total', 'custom-contact-forms' ), 'desc' => esc_html__( 'Live order total that updates as visitors choose products.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Coupon', 'custom-contact-forms' ), 'desc' => esc_html__( 'Discount codes with percentage or fixed amounts.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Consent / Terms', 'custom-contact-forms' ), 'desc' => esc_html__( 'Scrollable terms with an agreement checkbox and versioned proof of consent.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Survey', 'custom-contact-forms' ), 'desc' => esc_html__( 'Likert-style survey grids with questions and answer scales.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Rating', 'custom-contact-forms' ), 'desc' => esc_html__( 'Star ratings for quick feedback.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Page Break', 'custom-contact-forms' ), 'desc' => esc_html__( 'Multi-step forms with progress bar and per-step validation.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Section Break', 'custom-contact-forms' ), 'desc' => esc_html__( 'Titled dividers to organize long forms.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'File Upload Pro', 'custom-contact-forms' ), 'desc' => esc_html__( 'Advanced uploads with type and size rules.', 'custom-contact-forms' ) ),
-						array( 'name' => esc_html__( 'Email Opt-in', 'custom-contact-forms' ), 'desc' => esc_html__( 'A ready-made consent checkbox, plus MailerLite, Brevo, Kit, ActiveCampaign and MailPoet.', 'custom-contact-forms' ) ),
+				$ccf_teaser_fields = array(
+					array(
+						'slug'   => 'product',
+						'name'   => esc_html__( 'Product', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Sell items right on your form.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'Fixed prices, dropdown options or customer-chosen amounts', 'custom-contact-forms' ),
+							esc_html__( 'Quantities, images and coupons', 'custom-contact-forms' ),
+							esc_html__( 'Works with conditional logic', 'custom-contact-forms' ),
+						),
 					),
-				) );
+					array(
+						'slug'   => 'stripe',
+						'name'   => esc_html__( 'Stripe Card', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Take card payments on the form itself, with no redirect.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'Apple Pay, Google Pay and Link appear on eligible devices', 'custom-contact-forms' ),
+							esc_html__( 'The pay button shows the live total', 'custom-contact-forms' ),
+							esc_html__( 'No added transaction fees from us', 'custom-contact-forms' ),
+						),
+					),
+					array(
+						'slug'   => 'paypal',
+						'name'   => esc_html__( 'PayPal', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Let visitors pay with PayPal without leaving your form.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'Buyers approve the payment in a PayPal window on your page', 'custom-contact-forms' ),
+							esc_html__( 'Use it on its own or alongside Stripe', 'custom-contact-forms' ),
+							esc_html__( 'No added transaction fees from us', 'custom-contact-forms' ),
+						),
+					),
+					array(
+						'slug'   => 'total',
+						'name'   => esc_html__( 'Total', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'A live order total that updates as visitors choose.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'Updates with products, quantities and coupons', 'custom-contact-forms' ),
+							esc_html__( 'Checked again on your server before anyone is charged', 'custom-contact-forms' ),
+						),
+					),
+					array(
+						'slug'   => 'coupon',
+						'name'   => esc_html__( 'Coupon', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Discount codes with percentage or fixed amounts.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'The total updates as soon as a code is applied', 'custom-contact-forms' ),
+						),
+					),
+					array(
+						'slug'   => 'consent',
+						'name'   => esc_html__( 'Consent / Terms', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Scrollable terms with an agreement checkbox.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'Every submission records which version of the terms was agreed to', 'custom-contact-forms' ),
+							esc_html__( 'Pairs with the free Signature field for waivers and contracts', 'custom-contact-forms' ),
+						),
+					),
+					array(
+						'slug'   => 'survey',
+						'name'   => esc_html__( 'Survey', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Likert-style survey grids.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'Rows of questions with a shared answer scale', 'custom-contact-forms' ),
+						),
+					),
+					array(
+						'slug'   => 'rating',
+						'name'   => esc_html__( 'Rating', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Star ratings for quick feedback.', 'custom-contact-forms' ),
+						'points' => array(),
+					),
+					array(
+						'slug'   => 'page-break',
+						'name'   => esc_html__( 'Page Break', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Split long forms into steps.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'A progress bar shows how far along visitors are', 'custom-contact-forms' ),
+							esc_html__( 'Each step is checked before moving on', 'custom-contact-forms' ),
+						),
+					),
+					array(
+						'slug'   => 'section-break',
+						'name'   => esc_html__( 'Section Break', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Titled dividers to organize long forms.', 'custom-contact-forms' ),
+						'points' => array(),
+					),
+					array(
+						'slug'   => 'file-upload-pro',
+						'name'   => esc_html__( 'File Upload Pro', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'Advanced uploads with type and size rules.', 'custom-contact-forms' ),
+						'points' => array(),
+					),
+					array(
+						'slug'   => 'email-opt-in',
+						'name'   => esc_html__( 'Email Opt-in', 'custom-contact-forms' ),
+						'desc'   => esc_html__( 'A ready-made consent checkbox for your email list.', 'custom-contact-forms' ),
+						'points' => array(
+							esc_html__( 'Connects to MailerLite, Brevo, Kit, ActiveCampaign and MailPoet', 'custom-contact-forms' ),
+							esc_html__( 'Mailchimp is already included free', 'custom-contact-forms' ),
+						),
+					),
+				);
+
+				foreach ( $ccf_teaser_fields as $ccf_i => $ccf_teaser_field ) {
+					$ccf_teaser_fields[ $ccf_i ]['url'] = ccf_pro_link( 'lock-' . $ccf_teaser_field['slug'] );
+				}
+
+				$ccf_teaser_config           = ccf_pro_teaser_config( 'field-teaser' );
+				$ccf_teaser_config['fields'] = $ccf_teaser_fields;
+
+				wp_localize_script( 'ccf-pro-teaser', 'ccfProTeaser', $ccf_teaser_config );
 			}
 			wp_localize_script( 'ccf-field-search', 'ccfFieldSearch', array(
 				'placeholder' => esc_html__( 'Search for a field…', 'custom-contact-forms' ),

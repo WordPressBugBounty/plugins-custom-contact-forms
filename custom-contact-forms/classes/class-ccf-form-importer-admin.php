@@ -65,6 +65,12 @@ class CCF_Form_Importer_Admin {
 		$wpforms = new CCF_Importer_WPForms();
 		$importers[ $wpforms->get_id() ] = $wpforms;
 
+		$ninja = new CCF_Importer_Ninja_Forms();
+		$importers[ $ninja->get_id() ] = $ninja;
+
+		$fluent = new CCF_Importer_Fluent_Forms();
+		$importers[ $fluent->get_id() ] = $fluent;
+
 		/**
 		 * Filter the available form importers.
 		 *

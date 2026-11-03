@@ -46,6 +46,12 @@ class CCF_Pro_Notice {
 			return false;
 		}
 
+		// During a Pro sale the sale banner takes this notice's place, so
+		// Custom Contact Forms screens never show two Pro banners at once.
+		if ( class_exists( 'CCF_Sale_Banner' ) && CCF_Sale_Banner::factory()->is_showing() ) {
+			return false;
+		}
+
 		// Keep the block editor clean - notices get relocated awkwardly there.
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( $screen && ! empty( $screen->is_block_editor ) ) {

@@ -4,7 +4,7 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 7.19.1
+Stable tag: 7.20.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -37,9 +37,9 @@ Add a signature field to any form. Visitors sign with a mouse, finger or stylus,
 
 Conditional logic is included free: show or hide fields and sections based on answers. Accept file uploads, lay fields out in columns, send multiple email notifications per form, and create a WordPress post from a submission.
 
-= Switch From Contact Form 7 in One Step =
+= Switch Form Plugins in One Step =
 
-Contact Form 7 does not save submissions. Import your Contact Form 7 and WPForms forms with their labels, fields and notification email under Forms → Import. Your original forms are only read, never changed.
+Moving from Contact Form 7, WPForms, Ninja Forms or Fluent Forms? Import your forms with their labels, fields, choices and notification email under Forms → Import, and anything that can't be converted is listed in a report. Your original forms are only read, never changed, and you can still import after the other plugin is deactivated. Contact Form 7 does not save submissions, so switching also means every new entry is kept.
 
 = AI That Stays On Your Site =
 
@@ -79,7 +79,7 @@ The drag-and-drop builder lives inside the media manager, so there are no separa
 * Gutenberg block, shortcode, widget, and PHP template support
 * Multiple form themes plus per-field width controls and custom CSS
 * AJAX form submission: no page reloads
-* Import your forms from Contact Form 7 and WPForms: fields, labels, required flags, placeholders, and choices, with a report of anything that needs your attention
+* Import your forms from Contact Form 7, WPForms, Ninja Forms and Fluent Forms: fields, labels, required flags, placeholders, and choices, with a report of anything that needs your attention
 * Export submissions to CSV, and import submissions from CSV with automatic column mapping
 * Import and export forms via WordPress XML
 * Cloudflare Turnstile, hCaptcha, reCAPTCHA, and simple captcha options
@@ -103,10 +103,11 @@ The drag-and-drop builder lives inside the media manager, so there are no separa
 
 = Customize More with Pro =
 
-Custom Contact Forms Pro turns the builder you already know into forms that sell, book, and sign, with no e-commerce stack required: Stripe and PayPal payment forms, donation forms, deposit and booking forms, and waivers with signed PDF records.
+Custom Contact Forms Pro turns the builder you already know into forms that sell, book, and sign, with no e-commerce stack required: Stripe and PayPal payment forms, monthly memberships and other subscriptions, donation forms, deposit and booking forms, and waivers with signed PDF records.
 
 * **Stripe payments on the form**: cards, Apple Pay, Google Pay, and Link, with a live "Pay $25.00" button and server-verified totals
 * **PayPal payments**: pay in place without leaving your form, with the same server-verified totals
+* **Subscriptions and recurring payments**: charge weekly, monthly or yearly through Stripe, such as memberships, classes or retainers. The form shows what renews and when, and subscribers get a link to update their card or cancel
 * **Product & pricing fields**: fixed price, multiple options, or customer-chooses-amount, with quantities, images, and enforced minimums
 * **Coupons & live totals**: percentage or fixed discounts, order total updates as visitors choose
 * **Signatures in PDF receipts**: the signature appears in the PDF receipt, alongside consent records and waiver and agreement templates
@@ -287,6 +288,11 @@ The Custom Contact Forms widget on the WordPress Dashboard and the Forms Dashboa
 
 == Changelog ==
 
+= 7.20.0 =
+* New: Import forms from Ninja Forms and Fluent Forms under Forms > Import, alongside Contact Form 7 and WPForms. Fields, labels, required settings, placeholders, help text, choices, the submit button text, the thank-you message and the first email notification come across. Anything that can't be converted is listed in a report, and your original forms are only read, never changed. Forms can still be imported after the other plugin is deactivated.
+* Tweak: The popups on Pro fields and Pro templates now say what each feature does, the price, and the 14-day money-back guarantee, with a link for anyone who has already bought Pro. During a Pro sale, the popups and the weekly summary email show the offer, and the button opens checkout with the discount already applied. Administrators on sites without Pro also see a sale banner with a countdown at the top of Custom Contact Forms screens only. One click on the X hides it for good, and it disappears on its own when the sale ends.
+* Fix: In the form builder, the "Build with AI" bar no longer covers the field list and the "Drag fields here" area. It now sits at the top of the form area, and only appears where its button works.
+
 = 7.19.1 =
 * Fix: Fields with a width setting (such as half width) now hide correctly when conditional logic hides them.
 * Fix: A required field hidden by conditional logic no longer stops the form from being submitted. Hidden fields, and fields in a hidden section, are skipped when the form is checked and are not saved with the entry.
@@ -464,6 +470,9 @@ The Custom Contact Forms widget on the WordPress Dashboard and the Forms Dashboa
 * [current_date_time] notification variable
 
 == Upgrade Notice ==
+
+= 7.20.0 =
+Import your Ninja Forms and Fluent Forms forms in one step under Forms > Import. Also fixes the "Build with AI" bar covering the form builder. No changes to your forms or entries.
 
 = 7.19.1 =
 Fixes conditional logic: hidden fields with a width setting now hide, hidden required fields no longer block submissions, and checkbox rules work as expected. Also fixes Pro survey grid answers and slider values. No changes to your forms or entries.

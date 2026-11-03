@@ -4,7 +4,7 @@
  * Plugin URI: https://customformspro.com/
  * Description: Build custom forms with a drag-and-drop builder. Saved entries, a forms dashboard, signatures, Mailchimp, webhooks, and modern spam protection.
  * Author: Dmitry Alexander
- * Version: 7.19.1
+ * Version: 7.20.0
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.19.1' );
+define( 'CCF_VERSION', '7.20.0' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -52,10 +52,13 @@ require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-templates.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-importer.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-importer-cf7.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-importer-wpforms.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-importer-ninja-forms.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-importer-fluent-forms.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-importer-admin.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-review-request.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-feedback.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-pro-notice.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-sale-banner.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-dashboard-widget.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-pro-modal.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-ai-form-builder.php';
@@ -84,6 +87,7 @@ CCF_Field_CPT::factory();
 CCF_Choice_CPT::factory();
 CCF_Form_Manager::factory();
 CCF_Pro_Notice::factory();
+CCF_Sale_Banner::factory();
 CCF_Dashboard_Widget::factory();
 CCF_Signature_Field::factory();
 CCF_Stats::factory();
@@ -195,6 +199,95 @@ function ccf_pro_url( $source, $path = '/' ) {
 	 * @param string $source Prompt identifier.
 	 */
 	return apply_filters( 'ccf_pro_upgrade_url', $url, $source );
+}
+
+/**
+ * The current Pro sale, if one is running.
+ *
+ * Dates are checked against the site's own clock, so the offer appears and
+ * disappears on its own without a plugin update.
+ *
+ * @since 7.20.0
+ * @return array Empty when no sale is running, otherwise 'code', 'ends' (timestamp) and 'text'.
+ */
+function ccf_pro_promo() {
+	$promo = array();
+
+	// Black Friday sale 2026: live as soon as 7.20 is installed, ends Dec 1, site time.
+	$now = current_time( 'Y-m-d H:i' );
+	if ( $now >= '2026-11-02 00:00' && $now <= '2026-12-01 23:59' ) {
+		$ends  = new DateTimeImmutable( '2026-12-01 23:59:59', wp_timezone() );
+		$promo = array(
+			'code' => 'BLACKFRIDAY30',
+			'ends' => $ends->getTimestamp(),
+			'text' => esc_html__( 'Black Friday: 30% off Pro with code BLACKFRIDAY30, applied for you at checkout.', 'custom-contact-forms' ),
+		);
+	}
+
+	/**
+	 * Filter the current Pro sale.
+	 *
+	 * @since 7.20.0
+	 * @param array $promo Empty, or 'code' and 'text'.
+	 */
+	return apply_filters( 'ccf_pro_promo', $promo );
+}
+
+/**
+ * Link for a Pro upgrade button.
+ *
+ * Normally the Pro home page. While a sale is running, the button goes
+ * straight to checkout with the sale's coupon already applied.
+ *
+ * @since 7.20.0
+ * @param string $source Prompt identifier for tracking.
+ * @return string
+ */
+function ccf_pro_link( $source ) {
+	$promo = ccf_pro_promo();
+
+	if ( empty( $promo['code'] ) ) {
+		return ccf_pro_url( $source );
+	}
+
+	return add_query_arg( 'coupon', rawurlencode( $promo['code'] ), ccf_pro_url( $source . '-sale', '/buy/custom-contact-forms-pro/' ) );
+}
+
+/**
+ * Shared settings for the Pro upgrade popups.
+ *
+ * The same price, guarantee and "already bought Pro?" line appear in every
+ * popup, so they live in one place.
+ *
+ * @since 7.20.0
+ * @param string $source Prompt identifier for tracking, e.g. 'field-teaser'.
+ * @return array
+ */
+function ccf_pro_teaser_config( $source ) {
+	$promo = ccf_pro_promo();
+
+	$config = array(
+		'url'           => ccf_pro_link( $source ),
+		'badge'         => esc_html__( 'Pro', 'custom-contact-forms' ),
+		'cta'           => esc_html__( 'Get Custom Contact Forms Pro', 'custom-contact-forms' ),
+		/* translators: %s: name of the Pro field or template. */
+		'ctaPattern'    => esc_html__( 'Unlock %s with Pro', 'custom-contact-forms' ),
+		'dismiss'       => esc_html__( 'Maybe later', 'custom-contact-forms' ),
+		'price'         => esc_html__( '$80/year, unlimited sites', 'custom-contact-forms' ),
+		'guarantee'     => esc_html__( '14-day money-back guarantee, no questions asked.', 'custom-contact-forms' ),
+		'purchasedText' => esc_html__( 'Already bought Pro? See how to install it', 'custom-contact-forms' ),
+		'purchasedUrl'  => ccf_pro_url( 'already-purchased', '/docs/' ),
+		'promo'         => empty( $promo['text'] ) ? '' : $promo['text'],
+	);
+
+	/**
+	 * Filter the shared Pro popup settings.
+	 *
+	 * @since 7.20.0
+	 * @param array  $config Popup settings.
+	 * @param string $source Prompt identifier.
+	 */
+	return apply_filters( 'ccf_pro_teaser_config', $config, $source );
 }
 
 /**

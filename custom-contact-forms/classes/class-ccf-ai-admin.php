@@ -228,6 +228,14 @@ class CCF_AI_Admin {
 		.ccf-ai-pro-intro { margin-top: 0; font-weight: 600; }
 		.ccf-ai-pro ul { margin: 0 0 12px 18px; list-style: disc; }
 		.ccf-ai-builder-cta { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; padding: 12px 16px; background: linear-gradient(135deg,#f3f0ff,#eef4ff); border: 1px solid #d8d3f5; border-radius: 6px; }
+		/* In the builder every column is absolutely positioned, so the strip
+		   has to be placed too. Before 7.20 it sat in the normal flow and was
+		   drawn over the field list and the "Drag fields here" box. It now
+		   takes the top of the middle column and the form area starts below. */
+		.ccf-main-modal .ccf-form-pane .ccf-ai-builder-cta { display: flex !important; position: absolute; top: 0; left: 25%; right: 35%; z-index: 1; height: 56px; margin: 0; padding: 0 21px; box-sizing: border-box; border-width: 0 0 1px; border-radius: 0; flex-wrap: nowrap; overflow: hidden; }
+		.ccf-main-modal .ccf-form-pane .ccf-ai-builder-cta .ccf-ai-builder-cta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+		.ccf-main-modal .ccf-form-pane .ccf-ai-builder-cta .button { flex: none; }
+		.ccf-main-modal .ccf-form-pane .ccf-ai-builder-cta ~ .form-content { top: 56px; }
 		.ccf-ai-builder-cta-text { font-weight: 600; color: #3c366b; }
 		.ccf-ai-callout { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 16px 18px; background: linear-gradient(135deg,#f3f0ff,#eef4ff); border: 1px solid #d8d3f5; border-radius: 6px; margin: 12px 0; }
 		.ccf-ai-callout p { margin: 0; }

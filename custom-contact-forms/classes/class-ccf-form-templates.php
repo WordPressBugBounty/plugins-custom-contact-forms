@@ -545,12 +545,7 @@ class CCF_Form_Templates {
 	public function render_page() {
 		if ( ! defined( 'CCFP_VERSION' ) ) {
 			wp_enqueue_script( 'ccf-pro-teaser', plugins_url( '/assets/js/pro-teaser.js', dirname( __FILE__ ) ), array(), CCF_VERSION, true );
-			wp_localize_script( 'ccf-pro-teaser', 'ccfProTeaser', array(
-				'url'     => ccf_pro_url( 'template-picker' ),
-				'badge'   => esc_html__( 'Pro', 'custom-contact-forms' ),
-				'cta'     => esc_html__( 'Get Custom Contact Forms Pro', 'custom-contact-forms' ),
-				'dismiss' => esc_html__( 'Maybe later', 'custom-contact-forms' ),
-			) );
+			wp_localize_script( 'ccf-pro-teaser', 'ccfProTeaser', ccf_pro_teaser_config( 'template-picker' ) );
 		}
 
 		$templates = $this->get_templates();
@@ -640,7 +635,7 @@ class CCF_Form_Templates {
 						array( 'title' => __( 'Tip Jar', 'custom-contact-forms' ), 'desc' => __( 'Preset tips with Apple Pay and Google Pay support.', 'custom-contact-forms' ), 'icon' => 'coffee', 'color' => '#b45309' ),
 					);
 					foreach ( $ccf_pro_templates as $ccf_pro_tpl ) : ?>
-				<div class="ccf-tpl ccf-tpl-locked ccf-pro-teaser" data-pro-name="<?php echo esc_attr( $ccf_pro_tpl['title'] ); ?>" data-pro-desc="<?php echo esc_attr( $ccf_pro_tpl['desc'] ); ?>">
+				<div class="ccf-tpl ccf-tpl-locked ccf-pro-teaser" data-pro-name="<?php echo esc_attr( $ccf_pro_tpl['title'] ); ?>" data-pro-desc="<?php echo esc_attr( $ccf_pro_tpl['desc'] ); ?>" data-pro-url="<?php echo esc_url( ccf_pro_link( 'lock-tpl-' . sanitize_title( $ccf_pro_tpl['title'] ) ) ); ?>">
 					<span class="ccf-tpl-chip" style="background:<?php echo esc_attr( $ccf_pro_tpl['color'] ); ?>;">
 						<span class="dashicons dashicons-<?php echo esc_attr( $ccf_pro_tpl['icon'] ); ?>" style="color:#fff;font-size:27px;width:27px;height:27px;"></span>
 					</span>
