@@ -1,0 +1,119 @@
+/* Forms > Our Plugins (7.21.0) */
+.ccf-our-plugins-intro {
+	font-size: 14px;
+	color: #50575e;
+	margin: 4px 0 20px;
+}
+
+.ccf-our-plugins-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 600px));
+	gap: 20px;
+	max-width: 1100px;
+}
+
+.ccf-our-plugin {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	padding: 20px 22px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.ccf-our-plugin > p {
+	font-size: 13px;
+	line-height: 1.6;
+	margin: 0 0 12px;
+}
+
+.ccf-our-plugin-head {
+	display: flex;
+	gap: 14px;
+	align-items: center;
+	margin-bottom: 14px;
+}
+
+.ccf-our-plugin-icon {
+	width: 64px;
+	height: 64px;
+	border-radius: 12px;
+	flex-shrink: 0;
+}
+
+.ccf-our-plugin-head h2 {
+	font-size: 17px;
+	margin: 0 0 4px;
+	padding: 0;
+}
+
+.ccf-our-plugin-tagline {
+	margin: 0;
+	color: #50575e;
+}
+
+.ccf-our-plugin-badge {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 6px;
+	padding: 2px 8px;
+	border-radius: 10px;
+	background: #e7f6ec;
+	color: #00733a;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.6;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.ccf-our-plugin-points {
+	margin: 0 0 18px;
+	padding: 0;
+	list-style: none;
+}
+
+.ccf-our-plugin-points li {
+	position: relative;
+	padding-left: 22px;
+	margin-bottom: 6px;
+}
+
+.ccf-our-plugin-points li::before {
+	content: "\f147";
+	font-family: dashicons;
+	position: absolute;
+	left: 0;
+	top: -1px;
+	font-size: 18px;
+	color: #00a32a;
+}
+
+.ccf-our-plugin-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 14px;
+	margin-top: auto;
+	padding-top: 14px;
+	border-top: 1px solid #f0f0f1;
+}
+
+.ccf-our-plugin-actions .button.updating-message::before {
+	margin-top: 4px;
+}
+
+.ccf-our-plugin-status {
+	font-weight: 600;
+	color: #00733a;
+}
+
+.ccf-our-plugin-note {
+	color: #50575e;
+}
+
+.ccf-our-plugin-error {
+	margin: 12px 0 0;
+	color: #b32d2e;
+}

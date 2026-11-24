@@ -58,10 +58,12 @@ class CCF_Gutenberg_Block {
 			CCF_VERSION
 		);
 
+		CCF_Form_Styles::factory()->register();
+
 		wp_register_style(
 			'ccf-modern-editor',
 			plugins_url( '/build/css/ccf-modern.css', dirname( __FILE__ ) ),
-			array( 'ccf-form-editor' ),
+			array( 'ccf-form-editor', 'ccf-styles' ),
 			CCF_VERSION
 		);
 

@@ -61,6 +61,17 @@ class CCF_Form_Templates {
 		$form_id = $this->create_form_from_template( $template );
 
 		if ( $form_id ) {
+			/**
+			 * Fires after a form is created from a template, so add-ons can
+			 * save their own form settings for it.
+			 *
+			 * @since 7.21.0
+			 * @param int    $form_id      New form ID.
+			 * @param string $template_key Template key.
+			 * @param array  $template     Template definition.
+			 */
+			do_action( 'ccf_form_created_from_template', $form_id, $template_key, $template );
+
 			wp_safe_redirect( admin_url( 'post.php?post=' . $form_id . '&action=edit' ) );
 			exit;
 		}

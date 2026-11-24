@@ -1,0 +1,420 @@
+/**
+ * Custom Contact Forms - style presets (7.21.0)
+ * Match my site, Clean, Rounded and Bold.
+ *
+ * Each preset is a class on the form (ccf-theme-*). Rules are written with
+ * extra specificity so they win over the base styles in ccf-modern.css no
+ * matter which file loads first.
+ */
+
+.ccf-form-wrapper {
+  --ccf-accent: #2563eb;
+  --ccf-accent-text: #ffffff;
+}
+
+/* ========================================
+   Shared by all presets
+   ======================================== */
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="checkbox"],
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="radio"],
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="checkbox"],
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="radio"],
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="checkbox"],
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="radio"],
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="checkbox"],
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="radio"] {
+  accent-color: var(--ccf-accent);
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .ccf-submit-button:focus-visible,
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .ccf-submit-button:focus-visible,
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .ccf-submit-button:focus-visible,
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .ccf-submit-button:focus-visible {
+  outline: 2px solid var(--ccf-accent);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   Match my site
+   Fonts, sizes and text colors come from the theme. Fields use a border
+   that works on light and dark backgrounds.
+   ======================================== */
+
+.ccf-form-wrapper.ccf-style-match {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .form-title,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field label.main-label,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field .choice label,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field.field-type-section-header .heading {
+  color: inherit;
+  font-family: inherit;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .form-description,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field .sub-label,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field .field-description,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field .help-block,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field.field-type-section-header .subheading {
+  color: inherit;
+  opacity: 0.75;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="text"],
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="email"],
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="url"],
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="tel"],
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="number"],
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="password"],
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input.field-input,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field textarea,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field select {
+  background-color: transparent;
+  color: inherit;
+  border: 1px solid rgba(128, 128, 128, 0.5);
+  border-radius: var(--ccf-field-radius, 4px);
+  font-family: inherit;
+  font-size: 1em;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field select option {
+  color: #1e1e1e;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field textarea:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field select:focus {
+  border-color: var(--ccf-accent);
+  box-shadow: 0 0 0 1px var(--ccf-accent);
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .field input[type="file"] {
+  background: transparent;
+  color: inherit;
+  border-color: rgba(128, 128, 128, 0.5);
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .form-submit .ccf-submit-button,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .form-submit input.ccf-submit-button {
+  background: var(--ccf-accent) !important;
+  color: var(--ccf-accent-text) !important;
+  border-radius: var(--ccf-button-radius, 4px);
+  font-family: inherit;
+  font-size: 1em;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-match .form-submit .ccf-submit-button:hover,
+.ccf-form-wrapper .ccf-form.ccf-theme-match .form-submit input.ccf-submit-button:hover {
+  background: var(--ccf-accent) !important;
+  opacity: 0.88;
+}
+
+/* ========================================
+   Clean
+   Light borders, soft shadow, roomy fields.
+   ======================================== */
+
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .form-title {
+  font-weight: 650;
+  color: #101828;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field label.main-label {
+  font-weight: 500;
+  color: #344054;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="text"],
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="email"],
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="url"],
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="tel"],
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="number"],
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="password"],
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input.field-input,
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field textarea,
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field select {
+  padding-top: 0.7em;
+  padding-bottom: 0.7em;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field textarea:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field select:focus {
+  border-color: var(--ccf-accent);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ccf-accent) 18%, transparent);
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .field input[type="file"] {
+  border: 1px dashed #d0d5dd;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .form-submit .ccf-submit-button,
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .form-submit input.ccf-submit-button {
+  background: var(--ccf-accent) !important;
+  color: var(--ccf-accent-text) !important;
+  border-radius: 8px;
+  padding: 0.75em 1.75em;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08);
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .form-submit .ccf-submit-button:hover,
+.ccf-form-wrapper .ccf-form.ccf-theme-clean .form-submit input.ccf-submit-button:hover {
+  background: var(--ccf-accent) !important;
+  opacity: 0.9;
+}
+
+/* ========================================
+   Rounded
+   Soft filled fields and pill buttons.
+   ======================================== */
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field label.main-label {
+  padding-left: 0.9em;
+  color: #1f2937;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field.field-type-checkboxes label.main-label,
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field.field-type-radio label.main-label {
+  padding-left: 0;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="text"],
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="email"],
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="url"],
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="tel"],
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="number"],
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="password"],
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input.field-input,
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field select {
+  padding: 0.75em 1.15em;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background-color: #f2f4f7;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field select {
+  padding-right: 2.5em;
+  background-position: right 1.1em center;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field select[multiple] {
+  border-radius: 18px;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field textarea {
+  padding: 0.85em 1.15em;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background-color: #f2f4f7;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field textarea:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field select:focus {
+  background-color: #ffffff;
+  border-color: var(--ccf-accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ccf-accent) 18%, transparent);
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .field input[type="file"] {
+  border-radius: 18px;
+  background: #f2f4f7;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .form-submit .ccf-submit-button,
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .form-submit input.ccf-submit-button {
+  background: var(--ccf-accent) !important;
+  color: var(--ccf-accent-text) !important;
+  border-radius: 999px;
+  padding: 0.8em 2.25em;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .form-submit .ccf-submit-button:hover,
+.ccf-form-wrapper .ccf-form.ccf-theme-rounded .form-submit input.ccf-submit-button:hover {
+  background: var(--ccf-accent) !important;
+  opacity: 0.9;
+}
+
+/* ========================================
+   Bold
+   Strong outlines, square corners, offset shadow.
+   ======================================== */
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .form-title {
+  font-size: 1.75em;
+  font-weight: 800;
+  color: #111111;
+  letter-spacing: -0.02em;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field label.main-label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #111111;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="text"],
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="email"],
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="url"],
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="tel"],
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="number"],
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="password"],
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input.field-input,
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field textarea,
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field select {
+  padding-top: 0.75em;
+  padding-bottom: 0.75em;
+  border: 2px solid #111111;
+  border-radius: 0;
+  background-color: #ffffff;
+  color: #111111;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field textarea:focus,
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field select:focus {
+  border-color: #111111;
+  box-shadow: 4px 4px 0 var(--ccf-accent);
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field input[type="file"] {
+  border: 2px dashed #111111;
+  border-radius: 0;
+  background: #ffffff;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .field.field-type-section-header .heading {
+  border-bottom: 2px solid #111111;
+  font-weight: 800;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .form-submit .ccf-submit-button,
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .form-submit input.ccf-submit-button {
+  background: var(--ccf-accent) !important;
+  color: var(--ccf-accent-text) !important;
+  border: 2px solid #111111 !important;
+  border-radius: 0;
+  padding: 0.75em 2em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 800;
+  box-shadow: 4px 4px 0 #111111;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .form-submit .ccf-submit-button:hover,
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .form-submit input.ccf-submit-button:hover {
+  background: var(--ccf-accent) !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 #111111;
+}
+
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .form-submit .ccf-submit-button:active,
+.ccf-form-wrapper .ccf-form.ccf-theme-bold .form-submit input.ccf-submit-button:active {
+  background: var(--ccf-accent) !important;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #111111;
+}
+
+/* ========================================
+   Schedule and entry limit messages
+   ======================================== */
+
+.ccf-form-closed {
+  padding: 1.25em 1.5em;
+  border-radius: 6px;
+  font-size: 0.95em;
+  line-height: 1.6;
+  max-width: 640px;
+  background: #f6f7f7;
+  border: 1px solid #c3c4c7;
+  color: #1e1e1e;
+}
+
+.ccf-form-wrapper .ccf-form-remaining {
+  display: inline-block;
+  margin: 0 0 1.25em 0;
+  padding: 0.3em 0.8em;
+  border-radius: 999px;
+  background: #fcf9e8;
+  border: 1px solid #f0c33c;
+  color: #50400e;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+/* ========================================
+   Login form
+   ======================================== */
+
+.ccf-login-wrapper .ccf-login-notice {
+  margin: 0 0 1.25em 0;
+  padding: 0.75em 1em;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+.ccf-login-wrapper .ccf-login-notice.is-error {
+  background: #fcf0f1;
+  border: 1px solid #f86368;
+  color: #8a2424;
+}
+
+.ccf-login-wrapper .ccf-login-notice.is-success {
+  background: #edfaef;
+  border: 1px solid #68de7c;
+  color: #1e4620;
+}
+
+.ccf-login-wrapper .ccf-login-remember label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 0.925em;
+}
+
+.ccf-login-wrapper .ccf-login-remember input[type="checkbox"] {
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0;
+  accent-color: var(--ccf-accent);
+}
+
+.ccf-login-wrapper .ccf-login-links {
+  margin-top: 1em;
+  font-size: 0.9em;
+}
+
+.ccf-login-wrapper .ccf-login-links a + a::before {
+  content: "\00b7";
+  display: inline-block;
+  margin: 0 0.6em;
+  color: #8c8f94;
+}
+
+.ccf-login-wrapper .ccf-logged-in {
+  padding: 1em 1.25em;
+  border-radius: 6px;
+  background: #f0f6fc;
+  border: 1px solid #72aee6;
+  color: #0a4b78;
+  max-width: 640px;
+}

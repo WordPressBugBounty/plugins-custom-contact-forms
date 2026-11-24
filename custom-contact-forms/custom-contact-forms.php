@@ -4,7 +4,7 @@
  * Plugin URI: https://customformspro.com/
  * Description: Build custom forms with a drag-and-drop builder. Saved entries, a forms dashboard, signatures, Mailchimp, webhooks, and modern spam protection.
  * Author: Dmitry Alexander
- * Version: 7.20.0
+ * Version: 7.21.0
  * Text Domain: custom-contact-forms
  * Domain Path: /languages
  * Author URI: https://oiopublisher.com/
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CCF_VERSION', '7.20.0' );
+define( 'CCF_VERSION', '7.21.0' );
 define( 'CCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -72,12 +72,19 @@ require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-provider.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-provider-mailchimp.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-marketing.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-webhooks.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-zapier.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-integrations.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-hcaptcha.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-spam.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-email-summary.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-integrations-page.php';
 require_once CCF_PLUGIN_DIR . 'classes/class-ccf-newsletter.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-styles.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-availability.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-entry-cleanup.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-login-form.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-form-settings-extras.php';
+require_once CCF_PLUGIN_DIR . 'classes/class-ccf-our-plugins.php';
 
 CCF_Custom_Contact_Forms::factory();
 CCF_Constants::factory();
@@ -103,6 +110,11 @@ if ( is_admin() ) {
 	// The one-time builder popup is now the tips and news signup (7.19.0).
 	CCF_Newsletter::factory();
 }
+CCF_Form_Styles::factory();
+CCF_Form_Availability::factory();
+CCF_Entry_Cleanup::factory();
+CCF_Login_Form::factory();
+CCF_Form_Settings_Extras::factory();
 CCF_Form_Renderer::factory();
 CCF_Field_Renderer::factory();
 CCF_Form_Handler::factory();
@@ -116,10 +128,12 @@ CCF_Hcaptcha::factory();
 CCF_Spam::factory();
 CCF_Email_Marketing::factory();
 CCF_Webhooks::factory();
+CCF_Zapier::factory();
 CCF_Form_Integrations::factory();
 CCF_Email_Summary::factory();
 if ( is_admin() ) {
 	CCF_Integrations_Page::factory();
+	CCF_Our_Plugins::factory();
 }
 CCF_Anti_Spam::factory();
 CCF_Email_Logger::factory();
@@ -364,6 +378,8 @@ function ccf_upgrade() {
 function ccf_deactivate() {
 	wp_clear_scheduled_hook( 'ccf_weekly_summary' );
 	wp_clear_scheduled_hook( 'ccf_spam_cleanup' );
+	wp_clear_scheduled_hook( 'ccf_entry_cleanup' );
+	wp_clear_scheduled_hook( 'ccf_entry_cleanup', array( 'more' ) );
 }
 register_deactivation_hook( __FILE__, 'ccf_deactivate' );
 register_activation_hook( __FILE__, 'ccf_flush_rewrites' );

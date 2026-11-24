@@ -842,6 +842,28 @@ class CCF_Form_Handler {
 			return array( 'error' => 'missing_form', 'success' => false );
 		}
 
+		/**
+		 * Paused, scheduled or full forms turn submissions away here too,
+		 * so a page served from a cache cannot get past them.
+		 *
+		 * @since 7.21.0
+		 */
+		if ( get_post_meta( $form_id, 'ccf_form_pause', true ) ) {
+			$pause_message = get_post_meta( $form_id, 'ccf_form_pause_message', true );
+
+			return array(
+				'error'   => 'form_closed',
+				'message' => $pause_message ? $pause_message : __( 'This form is paused right now. Check back later!', 'custom-contact-forms' ),
+				'success' => false,
+			);
+		}
+
+		$closed_message = CCF_Form_Availability::factory()->closed_message( $form_id );
+
+		if ( '' !== $closed_message ) {
+			return array( 'error' => 'form_closed', 'message' => $closed_message, 'success' => false );
+		}
+
 		// Cloudflare Turnstile verification
 		if ( class_exists( 'CCF_Turnstile' ) && CCF_Turnstile::factory()->is_active() ) {
 			$turnstile_token = isset( $_POST['cf-turnstile-response'] ) ? sanitize_text_field( wp_unslash( $_POST['cf-turnstile-response'] ) ) : '';

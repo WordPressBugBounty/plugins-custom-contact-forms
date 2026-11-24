@@ -4,7 +4,7 @@ Donate link: https://customformspro.com/
 Tags: contact form, form builder, custom form, spam protection, turnstile
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 7.20.0
+Stable tag: 7.21.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,6 +29,22 @@ Add people who fill in a form to a Mailchimp audience, with double opt-in and an
 
 Everything connects from one Integrations page: Mailchimp, webhooks, Akismet, hCaptcha, Cloudflare Turnstile and reCAPTCHA, each on its own card that shows whether it is connected. If a subscriber or webhook does not go through, the reason is listed under Recent problems, so you are not left guessing.
 
+= Forms That Look Like Your Site =
+
+Pick a look for each form: Match my site uses your theme's fonts, colors and button style, or choose Clean, Rounded or Bold, with your own accent color. Switch looks any time without touching CSS.
+
+= Open, Close and Cap Entries =
+
+Schedule a form to open and close on set dates, or stop taking entries after a maximum number, such as 50 spots for a class or workshop. Show "12 spots left" above the form, and write your own message for before it opens, after it closes and when it is full. The checks also run when a form is submitted, so a cached page can't get past them.
+
+= Keep Only What You Need =
+
+Have old entries, and their uploaded files, deleted automatically after 30 days, 90 days, a year or another period you choose, form by form. Keeping personal data only as long as you need it helps with privacy laws such as GDPR.
+
+= A Login Form for Any Page =
+
+Add the Login Form block, or the `[ccf_login]` shortcode, to let people log in from any page instead of the WordPress login screen. A wrong password brings them back to your page with a clear message, and you choose where they go after logging in.
+
 = Signatures, Free =
 
 Add a signature field to any form. Visitors sign with a mouse, finger or stylus, and the signature is saved with the entry and included in the notification email.
@@ -47,7 +63,7 @@ Describe the form you need, such as "a booking form for a dog grooming appointme
 
 = Spam Protection Built In =
 
-Cloudflare Turnstile, hCaptcha, reCAPTCHA, honeypot, time trap, rate limiting, disposable email blocking and a keyword blacklist, with every blocked attempt counted on the dashboard. If you use Akismet, entries it flags go to a spam folder instead of being thrown away, so a real message caught by mistake is never lost.
+Cloudflare Turnstile, hCaptcha, reCAPTCHA, simple captcha, honeypot, time trap, rate limiting, disposable email blocking and a keyword blacklist, with every blocked attempt counted on the dashboard. If you use Akismet, entries it flags go to a spam folder instead of being thrown away, so a real message caught by mistake is never lost.
 
 = Build Your Way =
 
@@ -58,34 +74,16 @@ The drag-and-drop builder lives inside the media manager, so there are no separa
 = What You Can Build =
 
 * Contact forms, quote requests, support forms, event registrations, newsletter signups, service agreements
-* Mailchimp newsletter signup forms with double opt-in and a consent checkbox
 * Signed agreements, release forms and waivers with a signature field
-* Forms that send every entry to Zapier, Make, n8n or your own app with webhooks
 * Text, paragraph, email (with optional confirmation), name, phone, website, address (US + international), date/time, dropdowns, checkboxes, radio buttons, file uploads, signatures, hidden fields, and HTML blocks
-* Conditional fields and sections: show/hide fields based on other field values
 * Multiple email notifications per form: customize recipients, subject, from name, reply-to, and body with field mapping
 * Post creation on submission: map form fields to post fields, meta, and taxonomies
 
-= Powerful Features, Included Free =
+= More Free Features =
 
-* Forms dashboard with entries, views, conversion rate and blocked spam for any date range
-* Weekly summary email with entries and views per form (easy to turn off)
-* Mailchimp: add subscribers to a different audience per form, with double opt-in
-* Webhooks: send each new entry as JSON to Zapier, Make, n8n or any URL
-* Signature field that works on phones, tablets and desktops
-* Drag-and-drop form builder with live preview in the media manager
-* Prebuilt form templates for the most common form types
-* Build a form by describing it, using your site's own AI connection
-* Gutenberg block, shortcode, widget, and PHP template support
-* Multiple form themes plus per-field width controls and custom CSS
 * AJAX form submission: no page reloads
-* Import your forms from Contact Form 7, WPForms, Ninja Forms and Fluent Forms: fields, labels, required flags, placeholders, and choices, with a report of anything that needs your attention
-* Export submissions to CSV, and import submissions from CSV with automatic column mapping
+* Import submissions from CSV with automatic column mapping
 * Import and export forms via WordPress XML
-* Cloudflare Turnstile, hCaptcha, reCAPTCHA, and simple captcha options
-* Akismet checks with a spam folder: move a flagged entry back with one click
-* Integrations page: every integration on one screen, with what is free, what needs Pro, and what is connected
-* Built-in spam protection: honeypot, time-based trap, IP rate limiting, disposable email blocking, keyword blacklist
 * Email diagnostics: send test emails and view delivery failure logs
 * Submissions widget on your WordPress dashboard
 * Restrict forms to logged-in users, or pause forms with a custom message
@@ -288,6 +286,16 @@ The Custom Contact Forms widget on the WordPress Dashboard and the Forms Dashboa
 
 == Changelog ==
 
+= 7.21.0 =
+* New: Style presets. Under Form Settings > Form Theme, choose Match my site (uses your theme's fonts, colors and button style), Clean, Rounded or Bold, and optionally pick your own accent color. The Gutenberg block can also set the look for each placement. Existing forms keep their current look.
+* New: Schedule a form to open and close on set dates, and set a maximum number of entries, under Form Settings > Schedule and Entry Limit. You can show how many spots are left and write your own message for before it opens, after it closes and when it is full. The checks also run when a form is submitted, so a page served from a cache can't get past them. Spam does not count toward the limit.
+* New: Automatic entry cleanup under Form Settings > Entry Cleanup. Choose to delete a form's entries, and their uploaded files, once they are older than 7 days to 2 years. It runs once a day and is off unless you turn it on.
+* New: A front-end login form, as the "Login Form (CCF)" block or the `[ccf_login]` shortcode, with options for the title, look, button text, where to go after logging in, and "Remember me", "Forgot your password?" and "Create an account" links. It posts to the normal WordPress login, so security plugins that watch logins keep working, and a wrong password returns visitors to your page with a message.
+* New: A Zapier connection under Forms > Integrations > Zapier. It gives the Custom Contact Forms app on Zapier a private key for your site, so a Zap can list your forms and receive each new entry without you pasting a webhook URL. Turning a Zap off removes its connection on your site. Creating a new key disconnects every existing Zap.
+* New: Forms > Our Plugins lists our other free plugins from WordPress.org, starting with Rehearsa Backup Tester, which tests a backup without touching your live site. Nothing is installed unless you click Install Now.
+* Note: Webhooks set on a form keep working exactly as before.
+* Fix: A paused form now turns away submissions sent from a page that was cached before it was paused.
+
 = 7.20.0 =
 * New: Import forms from Ninja Forms and Fluent Forms under Forms > Import, alongside Contact Form 7 and WPForms. Fields, labels, required settings, placeholders, help text, choices, the submit button text, the thank-you message and the first email notification come across. Anything that can't be converted is listed in a report, and your original forms are only read, never changed. Forms can still be imported after the other plugin is deactivated.
 * Tweak: The popups on Pro fields and Pro templates now say what each feature does, the price, and the 14-day money-back guarantee, with a link for anyone who has already bought Pro. During a Pro sale, the popups and the weekly summary email show the offer, and the button opens checkout with the discount already applied. Administrators on sites without Pro also see a sale banner with a countdown at the top of Custom Contact Forms screens only. One click on the X hides it for good, and it disappears on its own when the sale ends.
@@ -470,6 +478,9 @@ The Custom Contact Forms widget on the WordPress Dashboard and the Forms Dashboa
 * [current_date_time] notification variable
 
 == Upgrade Notice ==
+
+= 7.21.0 =
+Adds style presets, form scheduling and entry limits, automatic entry cleanup (off by default), a login form block, and the Zapier connection. Existing forms keep their look and settings, and webhooks are unchanged.
 
 = 7.20.0 =
 Import your Ninja Forms and Fluent Forms forms in one step under Forms > Import. Also fixes the "Build with AI" bar covering the form builder. No changes to your forms or entries.

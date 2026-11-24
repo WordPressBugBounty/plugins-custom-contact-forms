@@ -26,10 +26,14 @@
 	});
 
 	var themeOptions = [
-		{ value: "", label: "Default" },
-		{ value: "light", label: "Light" },
-		{ value: "dark", label: "Dark" },
-		{ value: "minimal", label: "Minimal" }
+		{ value: "", label: __( "Use the form's setting", "custom-contact-forms" ) },
+		{ value: "match", label: __( "Match my site", "custom-contact-forms" ) },
+		{ value: "clean", label: __( "Clean", "custom-contact-forms" ) },
+		{ value: "rounded", label: __( "Rounded", "custom-contact-forms" ) },
+		{ value: "bold", label: __( "Bold", "custom-contact-forms" ) },
+		{ value: "light", label: __( "Light", "custom-contact-forms" ) },
+		{ value: "dark", label: __( "Dark", "custom-contact-forms" ) },
+		{ value: "minimal", label: __( "Minimal", "custom-contact-forms" ) }
 	];
 
 	wp.blocks.registerBlockType("ccf/form-block", {

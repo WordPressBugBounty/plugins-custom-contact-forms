@@ -43,7 +43,7 @@ class CCF_Form_Renderer {
 			'button'   => array( 'type' => true, 'name' => true, 'value' => true, 'class' => true, 'id' => true ),
 			'iframe'   => array( 'id' => true, 'name' => true, 'class' => true, 'style' => true, 'src' => true ),
 			'img'      => array( 'src' => true, 'alt' => true, 'class' => true, 'style' => true, 'width' => true, 'height' => true ),
-			'div'      => array( 'class' => true, 'id' => true, 'style' => true, 'aria-hidden' => true, 'data-form-id' => true, 'data-conditionals' => true, 'data-field-type' => true, 'data-field-slug' => true, 'data-sitekey' => true, 'data-theme' => true ),
+			'div'      => array( 'class' => true, 'id' => true, 'style' => true, 'aria-hidden' => true, 'data-form-id' => true, 'data-conditionals' => true, 'data-field-type' => true, 'data-field-slug' => true, 'data-sitekey' => true, 'data-theme' => true, 'data-ccf-match' => true ),
 		);
 		return array_merge( $allowed, $form_tags );
 	}
@@ -129,6 +129,9 @@ class CCF_Form_Renderer {
 
 		wp_enqueue_style( 'ccf-form', plugins_url( $css_form_path, dirname( __FILE__ ) ), array(), CCF_VERSION );
 		wp_enqueue_style( 'ccf-modern', plugins_url( '/build/css/ccf-modern.css', dirname( __FILE__ ) ), array( 'ccf-form' ), CCF_VERSION );
+
+		/** @since 7.21.0 Style presets. */
+		CCF_Form_Styles::factory()->enqueue();
 
 		wp_enqueue_script( 'ccf-form', plugins_url( $js_path, dirname( __FILE__ ) ), array( 'jquery-ui-datepicker', 'underscore' ), CCF_VERSION, false );
 
@@ -260,6 +263,15 @@ class CCF_Form_Renderer {
 			</div>
 
 			<?php
+		} elseif ( '' !== ( $closed_message = CCF_Form_Availability::factory()->closed_message( $form_id ) ) ) {
+			/** @since 7.21.0 Scheduling and entry limits. */
+			?>
+
+			<div class="ccf-form-closed form-id-<?php echo (int) $form_id; ?>">
+				<?php echo nl2br( esc_html( $closed_message ) ); ?>
+			</div>
+
+			<?php
 		} else {
 			$contains_file = false;
 
@@ -306,11 +318,23 @@ class CCF_Form_Renderer {
 
 			$hide_title = get_post_meta( $form_id, 'ccf_form_hide_title', true );
 
+			// Style presets (7.21.0): wrapper class, accent color and the
+			// theme's own button class for "Match my site".
+			$styles       = CCF_Form_Styles::factory();
+			$style_vars   = $styles->inline_vars( $form_id, $theme );
+			$is_preset    = $styles->is_preset( $theme );
+			$needs_detect = 'match' === $theme && false === strpos( $style_vars, '--ccf-accent:' );
+			$button_class = 'btn btn-primary ccf-submit-button' . ( 'match' === $theme ? ' wp-element-button' : '' );
+
+			if ( $is_preset ) {
+				$styles->enqueue( $theme );
+			}
+
 			// SECURITY FIX: sanitize REQUEST_URI for use in form
 			$form_page_url = esc_url( untrailingslashit( site_url() ) . ( isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '' ) );
 			?>
 
-			<div class="ccf-form-wrapper form-id-<?php echo (int) $form_id; ?>" data-form-id="<?php echo (int) $form_id; ?>" data-conditionals="<?php echo esc_attr( wp_json_encode( $conditionals ) ); ?>">
+			<div class="ccf-form-wrapper form-id-<?php echo (int) $form_id; ?><?php echo $is_preset ? ' ccf-style-' . esc_attr( $theme ) : ''; ?>" data-form-id="<?php echo (int) $form_id; ?>"<?php if ( $style_vars ) : ?> style="<?php echo esc_attr( $style_vars ); ?>"<?php endif; ?><?php if ( $needs_detect ) : ?> data-ccf-match="1"<?php endif; ?> data-conditionals="<?php echo esc_attr( wp_json_encode( $conditionals ) ); ?>">
 				<form <?php if ( $contains_file ) : ?>enctype="multipart/form-data"<?php endif; ?> class="ccf-form ccf-theme-<?php echo esc_attr( $theme ); ?>" method="post" action="?v=<?php echo (int) time(); ?>" data-form-id="<?php echo (int) $form_id; ?>">
 
 					<?php if ( empty( $hide_title ) ) : ?>
@@ -327,6 +351,8 @@ class CCF_Form_Renderer {
 						</div>
 					<?php endif; ?>
 
+					<?php echo wp_kses_post( CCF_Form_Availability::factory()->remaining_html( $form_id ) ); ?>
+
 					<?php echo wp_kses( $fields_html, self::get_allowed_form_html() ); ?>
 
 					<?php
@@ -338,7 +364,7 @@ class CCF_Form_Renderer {
 					?>
 
 					<div class="form-submit <?php echo esc_attr( get_post_meta( $form_id, 'ccf_form_buttonClass', true ) ); ?>">
-						<input type="submit" class="btn btn-primary ccf-submit-button" value="<?php echo esc_attr( get_post_meta( $form_id, 'ccf_form_buttonText', true ) ); ?>">
+						<input type="submit" class="<?php echo esc_attr( $button_class ); ?>" value="<?php echo esc_attr( get_post_meta( $form_id, 'ccf_form_buttonText', true ) ); ?>">
 						<img class="loading-img" src="<?php echo esc_url( site_url( '/wp-admin/images/wpspin_light.gif' ) ); ?>">
 					</div>
 

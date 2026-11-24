@@ -376,7 +376,7 @@
 			$( datepickers[i] ).datepicker( options );
 		}
 
-		var forms = document.querySelectorAll( '.ccf-form-wrapper' );
+		var forms = document.querySelectorAll( '.ccf-form-wrapper[data-form-id]' );
 
 		if ( forms.length >= 1 ) {
 			_.each( forms, function( formWrapper ) {

@@ -312,7 +312,7 @@ class CCF_Webhooks {
 	 * @param int $form_id Form ID.
 	 * @return array
 	 */
-	private function sample_payload( $form_id ) {
+	public function sample_payload( $form_id ) {
 		$field_ids = get_post_meta( $form_id, 'ccf_attached_fields', true );
 		$fields    = array();
 		$flat      = array();
